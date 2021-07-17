@@ -1,6 +1,7 @@
 import {
   Box, Heading, LightMode, Stack, Text, useColorModeValue,
 } from '@chakra-ui/react';
+
 import { Card } from './Card';
 import { GoogleLoginButton } from './GoogleLoginButton';
 import { Logo } from './Logo';
@@ -23,7 +24,6 @@ const Login = () => (
         <LightMode>
           <GoogleLoginButton />
         </LightMode>
-        {/* <EmailLoginForm onSubmit={(e) => e.preventDefault()} /> */}
 
         <Box fontSize="sm">
           <Text fontWeight="medium" color={useColorModeValue('gray.600', 'gray.400')}>
