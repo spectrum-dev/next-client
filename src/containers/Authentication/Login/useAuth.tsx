@@ -5,6 +5,7 @@ import {
   useState,
 } from 'react';
 
+import { useToast } from '@chakra-ui/react';
 import { useGoogleLogin, useGoogleLogout } from 'react-google-login';
 
 import fetcher from 'app/fetcher';
@@ -14,6 +15,7 @@ import AuthContext, { AuthContextType } from 'app/contexts/auth';
 
 const CLIENT_ID = '127712187286-65rpilkupfcu9h7b87u944kcs5f6e3j6.apps.googleusercontent.com';
 
+const ERROR_SETTING_AUTHENTICATED_STATUS = 'There was an error setting the authenticated status of the user';
 const WHITELIST_RESPONSE_ERROR = 'This accounts has not been added to the whitelist. Please contact us if you feel this is an error.';
 const DJANGO_AUTHENTICATION_ERROR = 'There was an error sending the authentication token to the backend';
 
@@ -26,6 +28,8 @@ export function AuthProvider({
   const [error] = useState<any | null>();
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingInitial, setLoadingInitial] = useState<boolean>(true);
+
+  const toast = useToast();
 
   const getAuthenticationStatus = () => ({
     isAuthenticated: JSON.parse(localStorage.getItem('isAuthenticated') || 'false') === true,
@@ -50,7 +54,12 @@ export function AuthProvider({
         setUser(currentAuthenticationStatus);
       }
     } catch (e) {
-      console.error(e);
+      toast({
+        title: ERROR_SETTING_AUTHENTICATED_STATUS,
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
     } finally {
       setLoadingInitial(false);
     }
@@ -96,6 +105,12 @@ export function AuthProvider({
         accessToken: '',
         error: e,
       };
+      toast({
+        title: WHITELIST_RESPONSE_ERROR,
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
       setUser(errorResponse);
     } finally {
       setLoading(false);

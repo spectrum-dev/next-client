@@ -27,7 +27,7 @@ const Login = () => {
           </Stack>
 
           <LightMode>
-            <GoogleLoginButton onClick={() => signIn()} />
+            <GoogleLoginButton onClick={async () => { await signIn(); }} />
           </LightMode>
 
           <Box fontSize="sm">

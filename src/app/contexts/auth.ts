@@ -5,8 +5,8 @@ export interface AuthContextType {
   user: User;
   loading: boolean;
   error?: any;
-  signIn: () => void;
-  signOut: () => void;
+  signIn: Function;
+  signOut: Function;
 }
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
