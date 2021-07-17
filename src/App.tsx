@@ -13,12 +13,14 @@ import history from 'app/history';
 
 // Screens
 import Login from 'containers/Authentication/Login';
+import Dashboard from 'containers/Dashboard';
 
 export const App = () => (
   <ChakraProvider theme={theme}>
     <Router history={history}>
       <Switch>
         <Route path="/login" component={Login} />
+        <Route path="/dashboard" component={Dashboard} />
         <Redirect from="/" to="/login" />
       </Switch>
     </Router>
