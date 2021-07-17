@@ -14,7 +14,10 @@ jobs:
 
       - name: Run Install
         run: npm install
-      
+
+      - name: Run Test
+        run: npm run test
+
       - name: Run Code Lint
         run: npm run check-code-lint
 
