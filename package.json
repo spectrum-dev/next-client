@@ -76,7 +76,9 @@
       "react/react-in-jsx-scope": "off",
       "no-console": "off",
       "import/prefer-default-export": "off",
-      "react/jsx-props-no-spreading": "off"
+      "react/jsx-props-no-spreading": "off",
+      "react/no-unused-prop-types": "off",
+      "react/require-default-props": "off"
     }
   },
   "browserslist": {
