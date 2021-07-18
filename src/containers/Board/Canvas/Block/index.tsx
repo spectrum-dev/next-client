@@ -11,12 +11,16 @@ import {
   PopoverCloseButton,
   useDisclosure,
 } from '@chakra-ui/react';
+import nextId from 'react-id-generator';
 import FocusLock from 'react-focus-lock';
 import { Handle as RawHandle, Position } from 'react-flow-renderer';
 
 import styled from '@emotion/styled';
 
 import InputForm from './InputForm';
+
+// Hooks
+import useHandles from './useHandles';
 
 const Handle = styled(RawHandle)`
   /* Overrides for .react-flow__handle */
@@ -38,6 +42,8 @@ const Block = memo(({ id, data }: { id: string, data: any }) => {
   const { onOpen, onClose, isOpen } = useDisclosure();
   const firstFieldRef = useRef(null);
 
+  const { inputHandle, outputHandle } = useHandles({ validationData: data.metadata.validation });
+
   return (
     <Popover
       isOpen={isOpen}
@@ -49,11 +55,17 @@ const Block = memo(({ id, data }: { id: string, data: any }) => {
     >
       <PopoverTrigger>
         <Box width="350px" height="160px" borderRadius="25px" border={isOpen ? '3px solid #ed8936;' : '1px solid #1a202c;'} background="linear-gradient(0deg, #151a23 0% 40%, #1a202c 40% 100%)" textAlign="center">
-          <Handle
-            type="target"
-            position={Position.Left}
-            id={id}
-          />
+          {
+            inputHandle ? (
+              <Handle
+                type="target"
+                position={Position.Left}
+                id={`input_${nextId()}`}
+                onConnect={() => undefined}
+                isValidConnection={() => true}
+              />
+            ) : <></>
+          }
           <Text color="white" marginTop="20px" fontSize="32px">
             Block Name
           </Text>
@@ -61,11 +73,17 @@ const Block = memo(({ id, data }: { id: string, data: any }) => {
           <Text color="white" marginTop="28px" fontWeight="bold" fontSize="35px">
             Block Type
           </Text>
-          <Handle
-            type="source"
-            position={Position.Right}
-            id={id}
-          />
+          {
+            outputHandle ? (
+              <Handle
+                type="source"
+                position={Position.Right}
+                id={`output_${nextId()}`}
+                onConnect={() => undefined}
+                isValidConnection={() => true}
+              />
+            ) : <></>
+          }
         </Box>
       </PopoverTrigger>
       <PopoverContent p={5} margin="80px 0px 0px 170px" width="500px">
