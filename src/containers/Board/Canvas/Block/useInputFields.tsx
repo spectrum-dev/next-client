@@ -1,7 +1,6 @@
 /* eslint-disable no-prototype-builtins */
 import { useState, useContext } from 'react';
 import {
-  Select,
   FormControl,
   FormLabel,
   NumberInput,
@@ -14,6 +13,7 @@ import {
 // Custom Components
 import CustomSelect from 'components/Select';
 import DateRangePicker from 'components/DateRangePicker';
+import Dropdown from 'components/Dropdown';
 
 // Utils
 import fetcher from 'app/fetcher';
@@ -143,16 +143,19 @@ export default function useInputFields({ id }: { id: any }) {
           );
         }
         return (
-          <Select
+          <Dropdown
+            options={inputs?.[id]?.[inputField?.fieldVariableName].options}
             value={inputs?.[id]?.[inputField?.fieldVariableName].value}
-            onChange={(event) => {
+            onChange={(selectedItem: any) => {
+              // TODO: Retrieve additional metadata fields from orchestrator
+              // TODO: Render those form fields inside as additional form inputs
               if (inputs?.[id]?.[inputField?.fieldVariableName]?.hasOwnProperty('onChange')) {
                 handleOnChangeEvent(
                   id,
                   inputs?.[id].blockType,
                   inputs?.[id].blockId,
                   inputs?.[id]?.[inputField?.fieldVariableName]?.onChange,
-                  event.target.value,
+                  selectedItem.value,
                 );
               }
 
@@ -162,15 +165,12 @@ export default function useInputFields({ id }: { id: any }) {
                   ...inp[id],
                   [inputField?.fieldVariableName]: {
                     ...inp[id][inputField?.fieldVariableName],
-                    value: event.target.value,
+                    value: selectedItem.value,
                   },
                 },
               }));
-              event.preventDefault();
             }}
-          >
-            { options }
-          </Select>
+          />
         );
       case 'search':
         return (
