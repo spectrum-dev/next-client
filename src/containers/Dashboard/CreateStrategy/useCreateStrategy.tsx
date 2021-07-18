@@ -1,6 +1,5 @@
 import { useState } from 'react';
 
-import { useHistory } from 'react-router-dom';
 import { useToast } from '@chakra-ui/react';
 
 import fetcher from 'app/fetcher';
@@ -22,7 +21,6 @@ export default function useCreateStrategy(
   });
 
   const toast = useToast();
-  const history = useHistory();
 
   const onCreate = async () => {
     try {
@@ -30,7 +28,7 @@ export default function useCreateStrategy(
 
       if (saveStrategyResponse.status === 200) {
         const response = saveStrategyResponse.data;
-        history.push(`/board/${response.strategy_id}`);
+        window.location.assign(`https://board.imbue.dev/board/${response.strategy_id}?accessToken=${localStorage.getItem('accessToken')}`);
 
         return saveStrategyResponse.data;
       }
