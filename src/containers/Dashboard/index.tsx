@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import {
   Box, Circle, Flex, Stack, useColorModeValue as mode, useDisclosure,
 } from '@chakra-ui/react';
@@ -20,12 +22,36 @@ import { NavItem } from './Navbar/NavItem';
 // Create Strategy
 import { CreateStrategyModal } from './CreateStrategy/CreateStrategyModal';
 
+// Strategy List
+import { StrategyList } from './StrategyList';
+
+enum PageState {
+  GettingStarted = 'GETTING_STARTED',
+  Strategies = 'STRATEGIES',
+}
+
 const Dashboard = () => {
+  const [pageState, setPageState] = useState<String>(PageState.GettingStarted);
+
   const {
     isOpen: isCreateStrategyOpen,
     onOpen: onCreateStrategyOpen,
     onClose: onCreateStrategyClose,
   } = useDisclosure();
+
+  /**
+   * @returns Corresponding Page State
+   */
+  const renderPage = () => {
+    switch (pageState) {
+      case PageState.GettingStarted:
+        return <></>;
+      case PageState.Strategies:
+        return <StrategyList />;
+      default:
+        return <></>;
+    }
+  };
 
   return (
     <Box height="100vh" overflow="hidden" position="relative">
@@ -35,10 +61,10 @@ const Dashboard = () => {
             <AccountSwitcher />
             <Stack spacing="8" flex="1" overflow="auto" pt="8">
               <Stack spacing="1">
-                <NavItem active icon={<BiHome />} label="Get Started" />
+                <NavItem active={pageState === PageState.GettingStarted} icon={<BiHome />} label="Get Started" onClick={() => setPageState(PageState.GettingStarted)} />
               </Stack>
               <NavGroup label="Backtesting Tools">
-                <NavItem icon={<BsViewList />} label="Strategies" />
+                <NavItem active={pageState === PageState.Strategies} icon={<BsViewList />} label="Strategies" onClick={() => setPageState(PageState.Strategies)} />
                 {/* @ts-ignore */}
                 <NavItem icon={<BsFillGearFill />} label="Create Strategy" onClick={onCreateStrategyOpen} />
               </NavGroup>
@@ -56,18 +82,12 @@ const Dashboard = () => {
             </Box>
           </Flex>
         </Box>
-        <Box bg={mode('white', 'gray.800')} flex="1" p="6">
+        <Box bg={mode('gray.100', 'gray.800')} flex="1" p="6" py="12">
           <CreateStrategyModal
             isOpen={isCreateStrategyOpen}
             onClose={onCreateStrategyClose}
           />
-          <Box
-            w="full"
-            h="full"
-            rounded="lg"
-            border="3px dashed currentColor"
-            color={mode('gray.200', 'gray.700')}
-          />
+          { renderPage() }
         </Box>
       </Flex>
     </Box>
