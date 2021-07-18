@@ -9,11 +9,12 @@ interface NavItemProps {
   icon: React.ReactElement
   endElement?: React.ReactElement
   children?: React.ReactNode
+  onClick?: React.MouseEventHandler<HTMLDivElement>,
 }
 
 export const NavItem = (props: NavItemProps) => {
   const {
-    active, subtle, icon, children, label, endElement,
+    active, subtle, icon, children, label, endElement, onClick,
   } = props;
   return (
     <HStack
@@ -27,6 +28,7 @@ export const NavItem = (props: NavItemProps) => {
       bg={active ? 'gray.700' : undefined}
       _hover={{ bg: 'gray.700' }}
       _active={{ bg: 'gray.600' }}
+      onClick={onClick}
     >
       <Box fontSize="lg" color={active ? 'currentcolor' : 'gray.400'}>
         {icon}
