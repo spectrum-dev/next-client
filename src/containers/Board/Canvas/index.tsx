@@ -14,6 +14,7 @@ import Block from './Block';
 // Hooks
 import useBlockMetadataOnDrop from './SideDrawer/useBlockMetadataOnDrop';
 import useLoadStrategy from './useLoadStrategy';
+import useInputManager from './useInputManager';
 
 const Canvas = () => {
   const {
@@ -21,12 +22,15 @@ const Canvas = () => {
     inputs: loadedInputs,
     isLoaded: isStrategyLoaded,
   } = useLoadStrategy();
-
-  const [startId] = useState('0');
   const [reactFlowInstance, setReactFlowInstance] = useState();
   const [nodeTypes] = useState({
     block: Block,
   });
+
+  const { inputs, setInputs, startId } = useInputManager(
+    { elements, loadedInputs, isStrategyLoaded },
+  );
+
   const {
     isOpen: isSideDrawerOpen,
     onOpen: onSideDrawerOpen,

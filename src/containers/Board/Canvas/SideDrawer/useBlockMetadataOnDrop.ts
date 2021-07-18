@@ -11,7 +11,7 @@ interface State {
   onDrop: Function | undefined;
 }
 
-export default function useBlockMetadataOnDrop({ startId }: { startId: string }) {
+export default function useBlockMetadataOnDrop({ startId }: { startId: number }) {
   const [id, setId] = useState<number>(1);
   const [state] = useState<State>({
     isLoading: true,
@@ -23,7 +23,7 @@ export default function useBlockMetadataOnDrop({ startId }: { startId: string })
 
   useEffect(() => {
     if (startId) {
-      setId(parseInt(startId, 10) + 1);
+      setId(startId + 1);
     }
   }, [startId]);
 
