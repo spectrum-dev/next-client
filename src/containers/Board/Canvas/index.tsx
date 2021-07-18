@@ -11,6 +11,9 @@ import SideDrawer from './SideDrawer';
 // Blocks
 import Block from './Block';
 
+// Edges
+import FlowEdge from './Edge/FlowEdge';
+
 // Hooks
 import useBlockMetadataOnDrop from './SideDrawer/useBlockMetadataOnDrop';
 import useLoadStrategy from './useLoadStrategy';
@@ -25,6 +28,9 @@ const Canvas = () => {
   const [reactFlowInstance, setReactFlowInstance] = useState();
   const [nodeTypes] = useState({
     block: Block,
+  });
+  const [edgeTypes] = useState({
+    flowEdge: FlowEdge,
   });
 
   const { inputs, setInputs, startId } = useInputManager(
@@ -64,6 +70,7 @@ const Canvas = () => {
           elements={elements}
           // Element Types
           nodeTypes={nodeTypes}
+          edgeTypes={edgeTypes}
           // Functions
           onDrop={(event) => { onDrop(event, reactFlowInstance, setElements); }}
           onDragOver={onDragOver}
