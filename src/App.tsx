@@ -16,6 +16,7 @@ import useAuth, { AuthProvider } from 'containers/Authentication/Login/useAuth';
 // Screens
 import Login from 'containers/Authentication/Login';
 import Dashboard from 'containers/Dashboard';
+import Board from 'containers/Board';
 
 function AuthenticatedRoute(props: RouteProps) {
   const { user } = useAuth();
@@ -30,6 +31,7 @@ export const App = () => (
         <Switch>
           <Route path="/login" component={Login} />
           <AuthenticatedRoute path="/dashboard" component={Dashboard} />
+          <AuthenticatedRoute path="/nextBoard" component={Board} />
           <Redirect from="/" to="/login" />
         </Switch>
       </Router>
