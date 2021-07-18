@@ -4,12 +4,15 @@ import { memo, useRef } from 'react';
 import {
   Box,
   Text,
+  Button,
+  ButtonGroup,
   Popover,
   PopoverTrigger,
   PopoverContent,
   PopoverArrow,
   PopoverCloseButton,
   useDisclosure,
+  Stack,
 } from '@chakra-ui/react';
 import nextId from 'react-id-generator';
 import FocusLock from 'react-focus-lock';
@@ -17,10 +20,11 @@ import { Handle as RawHandle, Position } from 'react-flow-renderer';
 
 import styled from '@emotion/styled';
 
-import InputForm from './InputForm';
+// import InputForm from './InputForm';
 
 // Hooks
 import useHandles from './useHandles';
+import useInputField from './useInputFields';
 
 const Handle = styled(RawHandle)`
   /* Overrides for .react-flow__handle */
@@ -42,9 +46,12 @@ const Block = memo(({ id, data }: { id: string, data: any }) => {
   const { onOpen, onClose, isOpen } = useDisclosure();
   const firstFieldRef = useRef(null);
 
-  const { blockName, blockType, validation } = data.metadata;
+  const {
+    blockName, blockType, inputs, validation,
+  } = data.metadata;
 
   const { inputHandle, outputHandle } = useHandles({ validationData: validation });
+  const { renderInputFields } = useInputField({ id });
 
   return (
     <Popover
@@ -92,8 +99,14 @@ const Block = memo(({ id, data }: { id: string, data: any }) => {
         <FocusLock returnFocus persistentFocus={false}>
           <PopoverArrow />
           <PopoverCloseButton />
-          {/* @ts-ignore */}
-          <InputForm firstFieldRef={firstFieldRef} onCancel={onClose} />
+          <Stack spacing={4}>
+            { renderInputFields(inputs) }
+            <ButtonGroup d="flex" justifyContent="flex-end">
+              <Button variant="outline" onClick={onClose}>
+                Cancel
+              </Button>
+            </ButtonGroup>
+          </Stack>
         </FocusLock>
       </PopoverContent>
     </Popover>

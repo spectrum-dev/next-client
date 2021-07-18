@@ -4,6 +4,9 @@ import { Box, useDisclosure } from '@chakra-ui/react';
 
 import ReactFlow, { ReactFlowProvider, Background } from 'react-flow-renderer';
 
+// Contexts
+import InputContext from 'app/contexts/input';
+
 // Canvas Components
 import Controls from './Controls';
 import SideDrawer from './SideDrawer';
@@ -66,36 +69,38 @@ const Canvas = () => {
   return (
     <Box minH="100vh" h="100vh" as="section">
       <ReactFlowProvider>
-        <ReactFlow
-          elements={elements}
-          // Element Types
-          nodeTypes={nodeTypes}
-          edgeTypes={edgeTypes}
-          // Functions
-          onDrop={(event) => { onDrop(event, reactFlowInstance, setElements); }}
-          onDragOver={onDragOver}
-          onLoad={onLoad}
-          onNodeDragStop={onNodeDragStop}
-          // Canvas Formating
-          minZoom={0.5}
-          maxZoom={0.5}
-          defaultZoom={0.5}
-          snapToGrid
-          snapGrid={[1, 1]}
-        >
-          <Background
-            // @ts-ignore
-            variant="lines"
-            color="#5c6874"
-            gap={80}
-            style={{ backgroundColor: '#212B3B' }}
+        <InputContext.Provider value={{ inputs, setInputs }}>
+          <ReactFlow
+            elements={elements}
+            // Element Types
+            nodeTypes={nodeTypes}
+            edgeTypes={edgeTypes}
+            // Functions
+            onDrop={(event) => { onDrop(event, reactFlowInstance, setElements); }}
+            onDragOver={onDragOver}
+            onLoad={onLoad}
+            onNodeDragStop={onNodeDragStop}
+            // Canvas Formating
+            minZoom={0.5}
+            maxZoom={0.5}
+            defaultZoom={0.5}
+            snapToGrid
+            snapGrid={[1, 1]}
+          >
+            <Background
+              // @ts-ignore
+              variant="lines"
+              color="#5c6874"
+              gap={80}
+              style={{ backgroundColor: '#212B3B' }}
+            />
+          </ReactFlow>
+          <Controls onViewBlocks={onSideDrawerOpen} />
+          <SideDrawer
+            isOpen={isSideDrawerOpen}
+            onClose={onSideDrawerClose}
           />
-        </ReactFlow>
-        <Controls onViewBlocks={onSideDrawerOpen} />
-        <SideDrawer
-          isOpen={isSideDrawerOpen}
-          onClose={onSideDrawerClose}
-        />
+        </InputContext.Provider>
       </ReactFlowProvider>
     </Box>
   );
