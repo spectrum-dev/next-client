@@ -42,8 +42,9 @@ const Block = memo(({ id, data }: { id: string, data: any }) => {
   const { onOpen, onClose, isOpen } = useDisclosure();
   const firstFieldRef = useRef(null);
 
-  const { inputHandle, outputHandle } = useHandles({ validationData: data.metadata.validation });
-  const { blockName, blockType } = data.metadata;
+  const { blockName, blockType, validation } = data.metadata;
+
+  const { inputHandle, outputHandle } = useHandles({ validationData: validation });
 
   return (
     <Popover
