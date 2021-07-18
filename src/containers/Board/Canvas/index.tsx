@@ -3,6 +3,8 @@ import { Box } from '@chakra-ui/react';
 
 import ReactFlow, { ReactFlowProvider, Background } from 'react-flow-renderer';
 
+import Controls from './Controls';
+
 const Canvas = () => {
   const [elements] = useState([]);
 
@@ -25,6 +27,7 @@ const Canvas = () => {
             style={{ backgroundColor: '#212B3B' }}
           />
         </ReactFlow>
+        <Controls />
       </ReactFlowProvider>
     </Box>
   );
