@@ -10,6 +10,8 @@ import SideDrawer from './SideDrawer';
 
 // Blocks
 import Block from './Block';
+
+// Edges
 import FlowEdge from './Edge/FlowEdge';
 
 // Hooks
