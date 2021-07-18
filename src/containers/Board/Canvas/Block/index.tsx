@@ -20,8 +20,6 @@ import { Handle as RawHandle, Position } from 'react-flow-renderer';
 
 import styled from '@emotion/styled';
 
-// import InputForm from './InputForm';
-
 // Hooks
 import useHandles from './useHandles';
 import useInputField from './useInputFields';
@@ -51,7 +49,7 @@ const Block = memo(({ id, data }: { id: string, data: any }) => {
   } = data.metadata;
 
   const { inputHandle, outputHandle } = useHandles({ validationData: validation });
-  const { renderInputFields } = useInputField({ id });
+  const { renderInputFields, additionalInputs } = useInputField({ id });
 
   return (
     <Popover
@@ -101,6 +99,7 @@ const Block = memo(({ id, data }: { id: string, data: any }) => {
           <PopoverCloseButton />
           <Stack spacing={4}>
             { renderInputFields(inputs) }
+            { renderInputFields(additionalInputs) }
             <ButtonGroup d="flex" justifyContent="flex-end">
               <Button variant="outline" onClick={onClose}>
                 Cancel

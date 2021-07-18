@@ -1,4 +1,5 @@
-import { useContext } from 'react';
+/* eslint-disable no-prototype-builtins */
+import { useState, useContext } from 'react';
 import {
   Select,
   FormControl,
@@ -12,14 +13,18 @@ import {
 
 // Custom Components
 import CustomSelect from 'components/Select';
+import DateRangePicker from 'components/DateRangePicker';
 
 // Utils
 import fetcher from 'app/fetcher';
+import { formatDate } from 'app/utils';
 
 // Contexts
 import InputContext from 'app/contexts/input';
 
 export default function useInputFields({ id }: { id: any }) {
+  const [additionalInputs, setAdditionalInputs] = useState([]);
+
   // @ts-ignore
   const { inputs, setInputs } = useContext(InputContext);
 
@@ -44,6 +49,56 @@ export default function useInputFields({ id }: { id: any }) {
           },
         },
       }));
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleOnChangeEvent = async (
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    id: string,
+    blockType: string,
+    blockId: string,
+    url: string,
+    parameter: string,
+  ) => {
+    try {
+      const onChangeResponse = await fetcher(`/orchestration/${blockType}/${blockId}/${url}${parameter}`);
+
+      if (onChangeResponse.status === 200) {
+        setInputs((inp: any) => {
+          // eslint-disable-next-line @typescript-eslint/no-shadow
+          let additionalInputs = {};
+
+          for (const inputValue of onChangeResponse?.data?.response) {
+            if (inputValue.hasOwnProperty('fieldData') && inputValue?.fieldData.hasOwnProperty('options')) {
+              additionalInputs = {
+                ...additionalInputs,
+                [inputValue?.fieldVariableName]: {
+                  options: inputValue?.fieldData?.options,
+                  value: '',
+                },
+              };
+            } else {
+              additionalInputs = {
+                ...additionalInputs,
+                [inputValue?.fieldVariableName]: {
+                  value: '',
+                },
+              };
+            }
+          }
+
+          return {
+            ...inp,
+            [id]: {
+              ...inp?.[id],
+              ...additionalInputs,
+            },
+          };
+        });
+        setAdditionalInputs(onChangeResponse?.data?.response);
+      }
     } catch (e) {
       console.error(e);
     }
@@ -91,6 +146,16 @@ export default function useInputFields({ id }: { id: any }) {
           <Select
             value={inputs?.[id]?.[inputField?.fieldVariableName].value}
             onChange={(event) => {
+              if (inputs?.[id]?.[inputField?.fieldVariableName]?.hasOwnProperty('onChange')) {
+                handleOnChangeEvent(
+                  id,
+                  inputs?.[id].blockType,
+                  inputs?.[id].blockId,
+                  inputs?.[id]?.[inputField?.fieldVariableName]?.onChange,
+                  event.target.value,
+                );
+              }
+
               setInputs((inp: any) => ({
                 ...inp,
                 [id]: {
@@ -101,6 +166,7 @@ export default function useInputFields({ id }: { id: any }) {
                   },
                 },
               }));
+              event.preventDefault();
             }}
           >
             { options }
@@ -139,9 +205,34 @@ export default function useInputFields({ id }: { id: any }) {
         );
       case 'date_range':
         return (
-          <div>
-            Date Range
-          </div>
+          <DateRangePicker
+            startDate={inputs?.[id]?.[inputField?.fieldVariableNames[0]]?.rawValue}
+            endDate={inputs?.[id]?.[inputField?.fieldVariableNames[1]]?.rawValue}
+            onStartChange={(value: any) => {
+              setInputs((inp: any) => ({
+                ...inp,
+                [id]: {
+                  ...inp?.[id],
+                  [inputField?.fieldVariableNames[0]]: {
+                    rawValue: value,
+                    value: formatDate(value),
+                  },
+                },
+              }));
+            }}
+            onEndChange={(value: any) => {
+              setInputs((inp: any) => ({
+                ...inp,
+                [id]: {
+                  ...inp?.[id],
+                  [inputField?.fieldVariableNames[1]]: {
+                    rawValue: value,
+                    value: formatDate(value),
+                  },
+                },
+              }));
+            }}
+          />
         );
       default:
         return (
@@ -169,5 +260,6 @@ export default function useInputFields({ id }: { id: any }) {
 
   return {
     renderInputFields,
+    additionalInputs,
   };
 }
