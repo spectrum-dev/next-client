@@ -82,7 +82,7 @@ const Dashboard = () => {
             </Box>
           </Flex>
         </Box>
-        <Box bg={mode('gray.100', 'gray.800')} flex="1" p="6">
+        <Box bg={mode('gray.100', 'gray.800')} flex="1" p="6" overflow="scroll">
           <CreateStrategyModal
             isOpen={isCreateStrategyOpen}
             onClose={onCreateStrategyClose}

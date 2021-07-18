@@ -8,10 +8,18 @@ interface DescriptionProps {
   title: string
   children: React.ReactNode
   creationDate: string
+  strategyId: string
 }
 
 export const Description = (props: DescriptionProps) => {
-  const { title, children, creationDate } = props;
+  const {
+    title, children, creationDate, strategyId,
+  } = props;
+
+  const handleStrategyEdit = () => {
+    window.location.assign(`https://board.imbue.dev/board/${strategyId}`);
+  };
+
   return (
     <Box position="relative">
       <Box fontWeight="bold" maxW="xl">
@@ -30,7 +38,7 @@ export const Description = (props: DescriptionProps) => {
         insetEnd={{ sm: '0' }}
         mt={{ base: '4', sm: '0' }}
       >
-        <IconButton aria-label="Edit" icon={<HiPencilAlt />} rounded="full" size="sm" />
+        <IconButton aria-label="Edit" icon={<HiPencilAlt />} rounded="full" size="sm" onClick={() => handleStrategyEdit()} />
         <IconButton aria-label="Delete" icon={<HiTrash />} rounded="full" size="sm" />
       </HStack>
     </Box>
