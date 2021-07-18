@@ -68,7 +68,7 @@ const Block = memo(({ id, data }: { id: string, data: any }) => {
           />
         </Box>
       </PopoverTrigger>
-      <PopoverContent p={5} margin="80px 0px 0px 150px" width="500px">
+      <PopoverContent p={5} margin="80px 0px 0px 170px" width="500px">
         <FocusLock returnFocus persistentFocus={false}>
           <PopoverArrow />
           <PopoverCloseButton />
