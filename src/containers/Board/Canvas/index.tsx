@@ -54,6 +54,15 @@ const Canvas = () => {
     setReactFlowInstance(_reactFlowInstance);
   };
 
+  const onNodeDragStop = (event: any, node: any) => {
+    setElements((els) => els.map((el) => {
+      if (el.id === node.id) {
+        return node;
+      }
+      return el;
+    }));
+  };
+
   return (
     <Box minH="100vh" h="100vh" as="section">
       <ReactFlowProvider>
@@ -66,6 +75,7 @@ const Canvas = () => {
           onDrop={(event) => { onDrop(event, reactFlowInstance, setElements); }}
           onDragOver={onDragOver}
           onLoad={onLoad}
+          onNodeDragStop={onNodeDragStop}
           // Canvas Formating
           minZoom={0.5}
           maxZoom={0.5}
