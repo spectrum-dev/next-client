@@ -1,12 +1,18 @@
 import { useState } from 'react';
-import { Box } from '@chakra-ui/react';
+import { Box, useDisclosure } from '@chakra-ui/react';
 
 import ReactFlow, { ReactFlowProvider, Background } from 'react-flow-renderer';
 
 import Controls from './Controls';
+import SideDrawer from './SideDrawer';
 
 const Canvas = () => {
   const [elements] = useState([]);
+  const {
+    isOpen: isSideDrawerOpen,
+    onOpen: onSideDrawerOpen,
+    onClose: onSideDrawerClose,
+  } = useDisclosure();
 
   return (
     <Box minH="100vh" h="100vh" as="section">
@@ -27,7 +33,11 @@ const Canvas = () => {
             style={{ backgroundColor: '#212B3B' }}
           />
         </ReactFlow>
-        <Controls />
+        <Controls onViewBlocks={onSideDrawerOpen} />
+        <SideDrawer
+          isOpen={isSideDrawerOpen}
+          onClose={onSideDrawerClose}
+        />
       </ReactFlowProvider>
     </Box>
   );
