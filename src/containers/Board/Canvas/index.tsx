@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState } from 'react';
 import { Box, useDisclosure } from '@chakra-ui/react';
 
@@ -12,11 +13,17 @@ import Block from './Block';
 
 // Hooks
 import useBlockMetadataOnDrop from './SideDrawer/useBlockMetadataOnDrop';
+import useLoadStrategy from './useLoadStrategy';
 
 const Canvas = () => {
+  const {
+    elements, setElements,
+    inputs: loadedInputs,
+    isLoaded: isStrategyLoaded,
+  } = useLoadStrategy();
+
   const [startId] = useState('0');
   const [reactFlowInstance, setReactFlowInstance] = useState();
-  const [elements, setElements] = useState([]);
   const [nodeTypes] = useState({
     block: Block,
   });
