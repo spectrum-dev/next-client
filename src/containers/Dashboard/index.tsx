@@ -18,7 +18,6 @@ import { NavItem } from './NavItem';
 import { CreateStrategyModal } from './CreateStrategyModal';
 
 const Dashboard = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const {
     isOpen: isCreateStrategyOpen,
     onOpen: onCreateStrategyOpen,
