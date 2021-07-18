@@ -23,6 +23,18 @@ const SideDrawer = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void 
   const btnRef = useRef();
   const { blockMetadata: blockMetadataFromRetriever } = useBlockMetadataRetriever();
 
+  const onDrag = (
+    event: any,
+    blockType: string,
+    blockId: string,
+    blockMetadataEndpoint: string,
+  ) => {
+    event.dataTransfer.setData('application/reactflow', blockType);
+    event.dataTransfer.setData('application/reactflow-id', blockId);
+    event.dataTransfer.setData('application/reactflow-metadata-type', blockType);
+    event.dataTransfer.setData('application/reactflow-metadata-url', blockMetadataEndpoint);
+  };
+
   const renderBlockList = () => {
     if (!blockMetadataFromRetriever) {
       return [];
@@ -39,7 +51,7 @@ const SideDrawer = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void 
       for (const [blockId, blockData] of Object.entries(blockMetadata)) {
         blockList.push(
           // @ts-ignore
-          <GenericBlock key={`${blockType}-${blockId}`} blockName={blockData.blockName} blockType={formatBlockTypeHeader(blockType)} onDrag={onClose} />,
+          <GenericBlock key={`${blockType}-${blockId}`} blockName={blockData.blockName} blockType={formatBlockTypeHeader(blockType)} onDrag={async (event) => { await onClose(); await onDrag(event, blockType, blockId, blockData.blockMetadataEndpoint); }} />,
         );
       }
 
