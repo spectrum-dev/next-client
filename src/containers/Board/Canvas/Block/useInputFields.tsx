@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import {
+  Select,
   FormControl,
   FormLabel,
   NumberInput,
@@ -17,7 +18,7 @@ export default function useInputFields({ id }: { id: any }) {
   const { inputs, setInputs } = useContext(InputContext);
 
   const renderInputField = (inputField: any) => {
-    if (!inputField && !inputField.fieldType) {
+    if ((!inputField && !inputField.fieldType) || (inputs && Object.keys(inputs).length === 0)) {
       return <></>;
     }
 
@@ -45,10 +46,33 @@ export default function useInputFields({ id }: { id: any }) {
           </NumberInput>
         );
       case 'dropdown':
+        // eslint-disable-next-line no-case-declarations
+        const options = [];
+        for (const elem of inputs?.[id]?.[inputField?.fieldVariableName].options) {
+          options.push(
+            <option value={elem}>
+              { elem }
+            </option>,
+          );
+        }
         return (
-          <div>
-            Dropdown
-          </div>
+          <Select
+            value={inputs?.[id]?.[inputField?.fieldVariableName].value}
+            onChange={(event) => {
+              setInputs((inp: any) => ({
+                ...inp,
+                [id]: {
+                  ...inp[id],
+                  [inputField?.fieldVariableName]: {
+                    ...inp[id][inputField?.fieldVariableName],
+                    value: event.target.value,
+                  },
+                },
+              }));
+            }}
+          >
+            { options }
+          </Select>
         );
       case 'search':
         return (
