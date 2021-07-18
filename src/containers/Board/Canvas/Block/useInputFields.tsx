@@ -105,7 +105,14 @@ export default function useInputFields({ id }: { id: any }) {
   };
 
   const renderInputField = (inputField: any) => {
-    if ((!inputField && !inputField.fieldType) || (inputs && Object.keys(inputs).length === 0)) {
+    if (
+      (!inputField && !inputField.fieldType)
+      || (inputs && Object.keys(inputs).length === 0)
+    ) {
+      return <></>;
+    }
+
+    if (!inputs?.[id]) {
       return <></>;
     }
 
