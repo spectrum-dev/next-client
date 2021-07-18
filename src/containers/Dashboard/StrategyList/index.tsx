@@ -19,15 +19,19 @@ const StrategyList = () => {
 
   const renderStrategies = () => {
     if (allStrategies && Array.isArray(allStrategies)) {
-      return allStrategies.map((item) => (
-        <Description
-          title={item.strategy_name}
-          creationDate="July 18th, 2021 at 10:20 am"
-          strategyId={item.strategy_id}
-        >
-          No Strategy Description ...
-        </Description>
-      ));
+      return allStrategies.map((item) => {
+        const createdAtDate = new Date(item.created_at);
+
+        return (
+          <Description
+            title={item.strategy_name}
+            creationDate={`${createdAtDate.toDateString()} at ${createdAtDate.toTimeString()}`}
+            strategyId={item.strategy_id}
+          >
+            No Strategy Description ...
+          </Description>
+        );
+      });
     }
     return <></>;
   };
