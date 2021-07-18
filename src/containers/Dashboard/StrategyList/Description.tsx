@@ -17,7 +17,7 @@ export const Description = (props: DescriptionProps) => {
   } = props;
 
   const handleStrategyEdit = () => {
-    window.location.assign(`https://board.imbue.dev/board/${strategyId}`);
+    window.location.assign(`https://board.imbue.dev/board/${strategyId}?accessToken=${localStorage.getItem('accessToken')}`);
   };
 
   return (
