@@ -43,6 +43,7 @@ const Block = memo(({ id, data }: { id: string, data: any }) => {
   const firstFieldRef = useRef(null);
 
   const { inputHandle, outputHandle } = useHandles({ validationData: data.metadata.validation });
+  const { blockName, blockType } = data.metadata;
 
   return (
     <Popover
@@ -67,11 +68,11 @@ const Block = memo(({ id, data }: { id: string, data: any }) => {
             ) : <></>
           }
           <Text color="white" marginTop="20px" fontSize="32px">
-            Block Name
+            { blockName }
           </Text>
 
           <Text color="white" marginTop="28px" fontWeight="bold" fontSize="35px">
-            Block Type
+            { blockType.replace('_', ' ') }
           </Text>
           {
             outputHandle ? (
