@@ -26,6 +26,7 @@ const Canvas = () => {
   const [nodeTypes] = useState({
     block: Block,
   });
+
   const { inputs, setInputs, startId } = useInputManager(
     { elements, loadedInputs, isStrategyLoaded },
   );

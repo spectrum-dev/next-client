@@ -28,7 +28,6 @@ export default function useInputManager(
           },
         };
       case 'dropdown':
-        // eslint-disable-next-line no-await-in-loop
         const fieldData = await fetcher(`/orchestration/${blockType}/${blockId}${input?.fieldData?.base}`);
 
         if (fieldData.status === 200) {
@@ -76,7 +75,7 @@ export default function useInputManager(
     return {};
   };
 
-  const startIdCalculator = (responseObject: any) => Math.max(
+  const startIdCalculator = (responseObject: any): number => Math.max(
     ...Object.keys(responseObject).map((i) => {
       if (i.split('-').length === 1) {
         return Number(i);

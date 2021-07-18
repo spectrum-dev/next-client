@@ -52,7 +52,7 @@ export default function useLoadStrategy() {
           isLoading: false,
           isLoaded: true,
           hasError: true,
-          inputs: null,
+          inputs: {},
         };
       });
       toast({
