@@ -44,7 +44,7 @@ const SideDrawer = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void 
       }
 
       blockList.push(
-        <Divider />,
+        <Divider key={`divider-${blockType}`} />,
       );
     }
 
