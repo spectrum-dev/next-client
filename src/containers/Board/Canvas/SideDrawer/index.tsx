@@ -1,14 +1,16 @@
 import { useRef } from 'react';
 import {
-  Button,
+  Heading,
   Drawer,
   DrawerBody,
-  DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
   DrawerContent,
   DrawerCloseButton,
+  Divider,
 } from '@chakra-ui/react';
+
+import GenericBlock from './GenericBlock';
 
 const SideDrawer = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
   const btnRef = useRef();
@@ -27,16 +29,13 @@ const SideDrawer = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void 
           <DrawerCloseButton />
           <DrawerHeader>Drag a block</DrawerHeader>
 
-          <DrawerBody>
-            <div> Test Block </div>
+          <DrawerBody overflow="scroll">
+            <Heading as="h4" size="md">
+              Block Type
+            </Heading>
+            <GenericBlock onDrag={onClose} />
+            <Divider />
           </DrawerBody>
-
-          <DrawerFooter>
-            <Button variant="outline" mr={3} onClick={onClose}>
-              Cancel
-            </Button>
-            <Button colorScheme="blue">Save</Button>
-          </DrawerFooter>
         </DrawerContent>
       </Drawer>
     </>
