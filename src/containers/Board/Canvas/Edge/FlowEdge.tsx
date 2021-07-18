@@ -11,7 +11,6 @@ const FlowEdge = (
       fill="none"
       stroke="#ed8936"
       strokeWidth={5.5}
-      // className="animated"
       d={`M${sourceX},${sourceY} C ${sourceX} ${targetY} ${sourceX} ${targetY} ${targetX},${targetY}`}
     />
   </g>
