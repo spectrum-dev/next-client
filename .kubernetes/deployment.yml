@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spectrum-client
+  namespace: production
+  labels:
+    app: spectrum-client
+spec:
+  replicas: 1 # By default 1 pod only
+  selector:
+    matchLabels:
+      app: spectrum-client
+  template:
+    metadata:
+      labels:
+        app: spectrum-client
+    spec:
+      containers:
+        - name: spectrum-client
+          image: <CONTAINER_IMAGE_URL>
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              name: http
+          env:
+            - name: "REACT_APP_API_BASE_URL"
+              value: "https://api.imbue.dev"
+      imagePullSecrets:
+        - name: registry-spectrum
