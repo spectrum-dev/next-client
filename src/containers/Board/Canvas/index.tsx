@@ -3,22 +3,52 @@ import { Box, useDisclosure } from '@chakra-ui/react';
 
 import ReactFlow, { ReactFlowProvider, Background } from 'react-flow-renderer';
 
+// Canvas Components
 import Controls from './Controls';
 import SideDrawer from './SideDrawer';
 
+// Blocks
+import Block from './Block';
+
+// Hooks
+import useBlockMetadataOnDrop from './SideDrawer/useBlockMetadataOnDrop';
+
 const Canvas = () => {
-  const [elements] = useState([]);
+  const [startId] = useState('0');
+  const [reactFlowInstance, setReactFlowInstance] = useState();
+  const [elements, setElements] = useState([]);
+  const [nodeTypes] = useState({
+    block: Block,
+  });
   const {
     isOpen: isSideDrawerOpen,
     onOpen: onSideDrawerOpen,
     onClose: onSideDrawerClose,
   } = useDisclosure();
 
+  // Boilerplate
+  const { onDrop } = useBlockMetadataOnDrop({ startId });
+
+  const onDragOver = (event: any) => {
+    event.preventDefault();
+  };
+
+  const onLoad = (_reactFlowInstance: any) => {
+    setReactFlowInstance(_reactFlowInstance);
+  };
+
   return (
     <Box minH="100vh" h="100vh" as="section">
       <ReactFlowProvider>
         <ReactFlow
           elements={elements}
+          // Element Types
+          nodeTypes={nodeTypes}
+          // Functions
+          onDrop={(event) => { onDrop(event, reactFlowInstance, setElements); }}
+          onDragOver={onDragOver}
+          onLoad={onLoad}
+          // Canvas Formating
           minZoom={0.5}
           maxZoom={0.5}
           defaultZoom={0.5}
