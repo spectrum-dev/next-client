@@ -12,10 +12,13 @@ import {
   BsFillGearFill,
 } from 'react-icons/bs';
 
-import { AccountSwitcher } from './AccountSwitcher';
-import { NavGroup } from './NavGroup';
-import { NavItem } from './NavItem';
-import { CreateStrategyModal } from './CreateStrategyModal';
+// Navbar
+import { AccountSwitcher } from './Navbar/AccountSwitcher';
+import { NavGroup } from './Navbar/NavGroup';
+import { NavItem } from './Navbar/NavItem';
+
+// Create Strategy
+import { CreateStrategyModal } from './CreateStrategy/CreateStrategyModal';
 
 const Dashboard = () => {
   const {
