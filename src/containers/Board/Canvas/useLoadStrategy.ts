@@ -11,7 +11,7 @@ interface State {
   isLoading: boolean;
   isLoaded: boolean;
   hasError: boolean;
-  inputs: Record<any, any> | null;
+  inputs: Record<any, any> | {};
 }
 
 export default function useLoadStrategy() {
@@ -20,7 +20,7 @@ export default function useLoadStrategy() {
     isLoading: false,
     isLoaded: false,
     hasError: false,
-    inputs: null,
+    inputs: {},
   });
   const toast = useToast();
 
