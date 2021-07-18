@@ -19,7 +19,11 @@ import { CreateStrategyModal } from './CreateStrategyModal';
 
 const Dashboard = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isCreateStrategyOpen,
+    onOpen: onCreateStrategyOpen,
+    onClose: onCreateStrategyClose,
+  } = useDisclosure();
 
   return (
     <Box height="100vh" overflow="hidden" position="relative">
@@ -34,7 +38,7 @@ const Dashboard = () => {
               <NavGroup label="Backtesting Tools">
                 <NavItem icon={<BsViewList />} label="Strategies" />
                 {/* @ts-ignore */}
-                <NavItem icon={<BsFillGearFill />} label="Create Strategy" onClick={onOpen} />
+                <NavItem icon={<BsFillGearFill />} label="Create Strategy" onClick={onCreateStrategyOpen} />
               </NavGroup>
             </Stack>
             <Box>
@@ -52,8 +56,8 @@ const Dashboard = () => {
         </Box>
         <Box bg={mode('white', 'gray.800')} flex="1" p="6">
           <CreateStrategyModal
-            isOpen={isOpen}
-            onClose={onClose}
+            isOpen={isCreateStrategyOpen}
+            onClose={onCreateStrategyClose}
           />
           <Box
             w="full"
