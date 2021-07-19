@@ -11,9 +11,9 @@ import {
   useDisclosure,
   Stack,
 } from '@chakra-ui/react';
-import nextId from 'react-id-generator';
+
 import FocusLock from 'react-focus-lock';
-import { Handle as RawHandle, Position } from 'react-flow-renderer';
+import { Handle as RawHandle, Position, useUpdateNodeInternals } from 'react-flow-renderer';
 
 import styled from '@emotion/styled';
 
@@ -21,6 +21,7 @@ import styled from '@emotion/styled';
 import useHandles from './useHandles';
 import useInputField from './useInputFields';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Handle = styled(RawHandle)`
   /* Overrides for .react-flow__handle */
   width: 25px;
@@ -38,6 +39,7 @@ const Handle = styled(RawHandle)`
 `;
 
 const Block = memo(({ id, data }: { id: string, data: any }) => {
+  const updateNodeInternals = useUpdateNodeInternals();
   const { onOpen, onClose, isOpen } = useDisclosure();
   const firstFieldRef = useRef(null);
 
@@ -48,6 +50,7 @@ const Block = memo(({ id, data }: { id: string, data: any }) => {
   const { inputHandle, outputHandle } = useHandles({ validationData: validation });
   const { renderInputFields, additionalInputs } = useInputField({ id });
 
+  updateNodeInternals(id);
   return (
     <Popover
       isOpen={isOpen}
@@ -64,8 +67,8 @@ const Block = memo(({ id, data }: { id: string, data: any }) => {
               <Handle
                 type="target"
                 position={Position.Left}
-                id={`input_${nextId()}`}
-                onConnect={() => undefined}
+                id={`input_${id}`}
+                onConnect={() => null}
                 isValidConnection={() => true}
               />
             ) : <></>
@@ -82,8 +85,8 @@ const Block = memo(({ id, data }: { id: string, data: any }) => {
               <Handle
                 type="source"
                 position={Position.Right}
-                id={`output_${nextId()}`}
-                onConnect={() => undefined}
+                id={`output_${id}`}
+                onConnect={() => null}
                 isValidConnection={() => true}
               />
             ) : <></>

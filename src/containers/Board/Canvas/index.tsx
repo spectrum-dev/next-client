@@ -1,8 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState } from 'react';
 import { Box, useDisclosure } from '@chakra-ui/react';
 
-import ReactFlow, { ReactFlowProvider, Background } from 'react-flow-renderer';
+import ReactFlow, {
+  ReactFlowProvider, Background, addEdge, Edge, Connection,
+} from 'react-flow-renderer';
 
 // Contexts
 import InputContext from 'app/contexts/input';
@@ -53,6 +54,10 @@ const Canvas = () => {
     event.preventDefault();
   };
 
+  const onConnect = (params: Edge<any> | Connection) => {
+    setElements((els) => addEdge({ ...params, type: 'flowEdge' }, els));
+  };
+
   const onLoad = (_reactFlowInstance: any) => {
     setReactFlowInstance(_reactFlowInstance);
   };
@@ -75,9 +80,12 @@ const Canvas = () => {
             // Element Types
             nodeTypes={nodeTypes}
             edgeTypes={edgeTypes}
-            // Functions
+            // Drag Functions
             onDrop={(event) => { onDrop(event, reactFlowInstance, setElements); }}
             onDragOver={onDragOver}
+            // Connection Functions
+            connectionLineComponent={FlowEdge}
+            onConnect={onConnect}
             onLoad={onLoad}
             onNodeDragStop={onNodeDragStop}
             // Canvas Formating

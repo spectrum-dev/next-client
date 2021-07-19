@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 interface State {
   inputHandle: boolean;
@@ -11,7 +11,7 @@ export default function useHandles({ validationData }: { validationData: any }) 
     outputHandle: false,
   });
 
-  const renderHandles = () => {
+  const renderHandles = useCallback(() => {
     if (validationData) {
       // Determines if there are inputs, and if so render an input handle
       if (validationData.input.required.length > 0) {
@@ -23,12 +23,11 @@ export default function useHandles({ validationData }: { validationData: any }) 
         setState((prevState: State) => ({ ...prevState, outputHandle: true }));
       }
     }
-  };
+  }, [validationData]);
 
   useEffect(() => {
     renderHandles();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [validationData]);
+  }, [renderHandles, validationData]);
 
   return state;
 }

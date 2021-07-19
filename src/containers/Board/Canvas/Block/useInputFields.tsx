@@ -256,7 +256,7 @@ export default function useInputFields({ id }: { id: any }) {
     const formList = [];
     for (const selectedInputField of selectedInputFields) {
       formList.push(
-        <FormControl>
+        <FormControl key={`${id}_${selectedInputField.fieldName}_${selectedInputField.fieldName}`}>
           <FormLabel textColor="white" fontSize="25px">
             { selectedInputField.fieldName }
           </FormLabel>
