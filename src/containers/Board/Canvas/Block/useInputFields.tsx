@@ -38,7 +38,12 @@ export default function useInputFields({ id }: { id: any }) {
     parameter: string,
   ) => {
     try {
-      const onSearchResponse = await fetcher(`/orchestration/${blockType}/${blockId}${url}${parameter}`);
+      const onSearchResponse = await fetcher(`/orchestration/${blockType}/${blockId}${url}${parameter}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      });
+
       setInputs((inp: any) => ({
         ...inp,
         [id]: {
@@ -63,7 +68,11 @@ export default function useInputFields({ id }: { id: any }) {
     parameter: string,
   ) => {
     try {
-      const onChangeResponse = await fetcher(`/orchestration/${blockType}/${blockId}/${url}${parameter}`);
+      const onChangeResponse = await fetcher(`/orchestration/${blockType}/${blockId}/${url}${parameter}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      });
 
       if (onChangeResponse.status === 200) {
         setInputs((inp: any) => {

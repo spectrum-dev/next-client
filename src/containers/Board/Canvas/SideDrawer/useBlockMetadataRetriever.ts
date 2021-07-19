@@ -21,7 +21,11 @@ export default function useBlockMetadataRetriever() {
 
   const fetchData = useCallback(async () => {
     try {
-      const metadataResponse = await fetcher('/orchestration/metadata');
+      const metadataResponse = await fetcher('/orchestration/metadata', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      });
 
       if (metadataResponse.status === 200) {
         setState((element) => ({

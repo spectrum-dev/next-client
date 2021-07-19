@@ -49,7 +49,11 @@ export default function useValidateStrategy(
         edgeList,
       };
 
-      const runResponse = await fetcher.post('/orchestration/validate', requestBody);
+      const runResponse = await fetcher.post('/orchestration/validate', requestBody, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      });
 
       if (runResponse.status === 200) {
         setState((elems) => ({ ...elems, isValid: runResponse.data?.valid }));

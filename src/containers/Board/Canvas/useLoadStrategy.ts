@@ -28,7 +28,11 @@ export default function useLoadStrategy() {
 
   const fetchData = useCallback(async () => {
     try {
-      const getStrategyResponse = await fetcher.get(`/strategy/${strategyId}`);
+      const getStrategyResponse = await fetcher.get(`/strategy/${strategyId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      });
 
       if (getStrategyResponse.status === 200) {
         // @ts-ignore

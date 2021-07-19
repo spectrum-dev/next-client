@@ -21,7 +21,11 @@ export default function useGetAllStrategies() {
 
   const fetchData = useCallback(async () => {
     try {
-      const getStrategiesResponse = await fetcher('/strategy/getStrategies');
+      const getStrategiesResponse = await fetcher('/strategy/getStrategies', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      });
 
       if (getStrategiesResponse.status === 200) {
         setState((element) => ({
