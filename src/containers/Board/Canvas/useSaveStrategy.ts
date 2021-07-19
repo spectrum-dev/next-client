@@ -65,6 +65,7 @@ export default function useSaveStrategy(
         status: 'error',
         duration: 3000,
         isClosable: true,
+        position: 'top',
       });
       setState({ isLoading: false, hasError: true, hasSaved: false });
     }
