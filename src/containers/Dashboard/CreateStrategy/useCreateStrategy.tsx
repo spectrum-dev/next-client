@@ -26,7 +26,11 @@ export default function useCreateStrategy(
 
   const onCreate = async () => {
     try {
-      const saveStrategyResponse = await fetcher.post('/strategy/createStrategy', { strategy_name: strategyName });
+      const saveStrategyResponse = await fetcher.post('/strategy/createStrategy', { strategy_name: strategyName }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      });
 
       if (saveStrategyResponse.status === 200) {
         const response = saveStrategyResponse.data;

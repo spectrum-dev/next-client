@@ -28,7 +28,11 @@ export default function useInputManager(
           },
         };
       case 'dropdown':
-        const fieldData = await fetcher(`/orchestration/${blockType}/${blockId}${input?.fieldData?.base}`);
+        const fieldData = await fetcher(`/orchestration/${blockType}/${blockId}${input?.fieldData?.base}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+          },
+        });
 
         if (fieldData.status === 200) {
           if (input?.fieldData?.hasOwnProperty('onChange')) {

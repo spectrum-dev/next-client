@@ -52,7 +52,11 @@ export default function useRunStrategy(
         edgeList,
       };
 
-      const runResponse = await fetcher.post('/orchestration/run', requestBody);
+      const runResponse = await fetcher.post('/orchestration/run', requestBody, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      });
 
       if (runResponse.status === 200) {
         setState((elems) => ({ ...elems, outputs: runResponse?.data?.response }));

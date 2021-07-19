@@ -29,7 +29,11 @@ export default function useSaveStrategy(
 
   const saveStrategy = useCallback(async () => {
     try {
-      const commitIdResponse = await fetcher.get(`/strategy/${strategyId}/commitId`);
+      const commitIdResponse = await fetcher.get(`/strategy/${strategyId}/commitId`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      });
 
       if (commitIdResponse.status === 200) {
         const saveStrategyRequestBody = {
@@ -38,7 +42,11 @@ export default function useSaveStrategy(
           outputs,
         };
 
-        const saveStrategyResponse = await fetcher.post(`/strategy/${strategyId}/${commitIdResponse?.data?.commitId}`, saveStrategyRequestBody);
+        const saveStrategyResponse = await fetcher.post(`/strategy/${strategyId}/${commitIdResponse?.data?.commitId}`, saveStrategyRequestBody, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+          },
+        });
 
         if (saveStrategyResponse.status === 200) {
           toast({

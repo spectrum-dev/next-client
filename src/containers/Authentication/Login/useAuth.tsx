@@ -73,12 +73,22 @@ export function AuthProvider({
       const whitelistRequestBody = {
         email: res?.profileObj?.email,
       };
-      const whitelistResponse = await fetcher.post('authentication/validate', whitelistRequestBody);
+      const whitelistResponse = await fetcher.post('authentication/validate', whitelistRequestBody, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      });
+
       if (whitelistResponse.status === 200) {
         const authenticationRequestBody = {
           access_token: res.accessToken,
         };
-        const response = await fetcher.post('/rest-auth/google/', authenticationRequestBody);
+        const response = await fetcher.post('/rest-auth/google/', authenticationRequestBody, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+          },
+        });
+
         if (response.status === 200) {
           const responsePayload = {
             isAuthenticated: true,

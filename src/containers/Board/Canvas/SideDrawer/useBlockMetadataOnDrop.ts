@@ -40,7 +40,12 @@ export default function useBlockMetadataOnDrop({ startId }: { startId: number })
 
       const position = reactFlowInstance.project({ x: event.clientX, y: event.clientY - 40 });
 
-      const metadataResponse = await fetcher(`/orchestration/${blockType}/${blockId}/metadata`);
+      const metadataResponse = await fetcher(`/orchestration/${blockType}/${blockId}/metadata`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      });
+
       if (metadataResponse.status === 200) {
         const newNode: any = {
           id: generateID(),
