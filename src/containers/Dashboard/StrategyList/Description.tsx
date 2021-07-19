@@ -2,6 +2,7 @@ import {
   Box, HStack, IconButton, useColorModeValue as mode,
 } from '@chakra-ui/react';
 
+import { useHistory } from 'react-router';
 import { HiCalendar, HiPencilAlt, HiTrash } from 'react-icons/hi';
 
 interface DescriptionProps {
@@ -16,8 +17,10 @@ export const Description = (props: DescriptionProps) => {
     title, children, creationDate, strategyId,
   } = props;
 
+  const history = useHistory();
+
   const handleStrategyEdit = () => {
-    window.location.assign(`https://board.imbue.dev/board/${strategyId}?accessToken=${localStorage.getItem('accessToken')}`);
+    history.push(`/board/${strategyId}`);
   };
 
   return (
