@@ -1,11 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { memo, useRef } from 'react';
 
 import {
   Box,
   Text,
-  Button,
-  ButtonGroup,
   Popover,
   PopoverTrigger,
   PopoverContent,
@@ -77,7 +74,7 @@ const Block = memo(({ id, data }: { id: string, data: any }) => {
             { blockName }
           </Text>
 
-          <Text color="white" marginTop="35px" fontWeight="bold" fontSize="32px">
+          <Text color="white" marginTop="35px" fontWeight="bold" fontSize="27px">
             { blockType.replace('_', ' ') }
           </Text>
           {
