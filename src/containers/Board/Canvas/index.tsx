@@ -14,9 +14,11 @@ import SideDrawer from './SideDrawer';
 
 // Blocks
 import Block from './Block';
+import VisualizationBlock from './VisualizationBlock';
 
 // Edges
 import FlowEdge from './Edge/FlowEdge';
+import VisualizationEdge from './Edge/VisualizationEdge';
 
 // Hooks
 import useBlockMetadataOnDrop from './SideDrawer/useBlockMetadataOnDrop';
@@ -25,6 +27,7 @@ import useInputManager from './useInputManager';
 import useSaveStrategy from './useSaveStrategy';
 import useValidateStrategy from './useValidateStrategy';
 import useRunStrategy from './useRunStrategy';
+import useVisualizationEngine from './useVisualizationEngine';
 
 const Canvas = () => {
   const {
@@ -35,9 +38,11 @@ const Canvas = () => {
   const [reactFlowInstance, setReactFlowInstance] = useState();
   const [nodeTypes] = useState({
     block: Block,
+    visualizationBlock: VisualizationBlock,
   });
   const [edgeTypes] = useState({
     flowEdge: FlowEdge,
+    visualizationEdge: VisualizationEdge,
   });
 
   const { inputs, setInputs, startId } = useInputManager(
@@ -46,6 +51,9 @@ const Canvas = () => {
 
   const { isValid } = useValidateStrategy({ inputs, elements });
   const { outputs, invokeRun } = useRunStrategy({ inputs, elements });
+  useVisualizationEngine({
+    outputs, setElements, reactFlowInstance,
+  });
 
   const { saveStrategy } = useSaveStrategy({ elements, inputs, outputs });
 
