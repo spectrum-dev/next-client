@@ -40,9 +40,10 @@ import Dropdown from 'components/Dropdown';
 import useVisualizationData from './visualizations/useVisualizationData';
 import useGraphTypeValidation, { VisualizationType } from './visualizations/useGraphTypeValidation';
 
-// Graphs
+// Visualizations
 import LineGraph from './visualizations/LineGraph';
 import CandlestickGraph from './visualizations/CandlestickGraph';
+import DataTable from './visualizations/DataTable';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Handle = styled(RawHandle)`
@@ -190,7 +191,7 @@ export default memo(({ id, data: rawData }: { id: string, data: any }) => {
         );
       case VisualizationType.DataTable:
         return (
-          <div> Needs to be implemented </div>
+          <DataTable data={rawData} />
         );
       default:
         return (
