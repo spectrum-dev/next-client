@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { forwardRef } from 'react';
 
+import { Box, Text } from '@chakra-ui/react';
 import DatePicker from 'react-datepicker';
 
 import 'react-datepicker/dist/react-datepicker.css';
@@ -30,7 +31,10 @@ const DateRangePicker = (
   },
 ) => (
   <>
-    <div>
+    <Box>
+      <Text textColor="white" fontSize="23px">
+        Start Date
+      </Text>
       <DatePicker
         selected={new Date(startDate)}
         onChange={onStartChange}
@@ -41,8 +45,11 @@ const DateRangePicker = (
         popperPlacement="right"
         popperClassName={styles.popperCustomerClass}
       />
-    </div>
-    <div>
+    </Box>
+    <Box>
+      <Text textColor="white" fontSize="23px">
+        End Date
+      </Text>
       <DatePicker
         selected={new Date(endDate)}
         onChange={onEndChange}
@@ -54,7 +61,7 @@ const DateRangePicker = (
         popperPlacement="right"
         popperClassName={styles.popperCustomerClass}
       />
-    </div>
+    </Box>
   </>
 );
 

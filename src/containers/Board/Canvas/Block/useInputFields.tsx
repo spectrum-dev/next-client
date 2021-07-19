@@ -131,6 +131,9 @@ export default function useInputFields({ id }: { id: any }) {
               }));
             }}
             min={0}
+            backgroundColor="#2D3748"
+            borderColor="#2D3748"
+            textColor="white"
           >
             <NumberInputField />
             <NumberInputStepper>
@@ -255,7 +258,7 @@ export default function useInputFields({ id }: { id: any }) {
     for (const selectedInputField of selectedInputFields) {
       formList.push(
         <FormControl>
-          <FormLabel>
+          <FormLabel textColor="white" fontSize="25px">
             { selectedInputField.fieldName }
           </FormLabel>
           {renderInputField(selectedInputField)}

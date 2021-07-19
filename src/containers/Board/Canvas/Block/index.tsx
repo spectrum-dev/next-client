@@ -77,7 +77,7 @@ const Block = memo(({ id, data }: { id: string, data: any }) => {
             { blockName }
           </Text>
 
-          <Text color="white" marginTop="28px" fontWeight="bold" fontSize="35px">
+          <Text color="white" marginTop="35px" fontWeight="bold" fontSize="32px">
             { blockType.replace('_', ' ') }
           </Text>
           {
@@ -93,18 +93,13 @@ const Block = memo(({ id, data }: { id: string, data: any }) => {
           }
         </Box>
       </PopoverTrigger>
-      <PopoverContent p={5} margin="80px 0px 0px 170px" width="500px">
+      <PopoverContent p={5} margin="80px 0px 0px 170px" width="500px" background="#151a23" borderColor="#151a23">
         <FocusLock returnFocus persistentFocus={false}>
           <PopoverArrow />
           <PopoverCloseButton />
           <Stack spacing={4}>
             { renderInputFields(inputs) }
             { renderInputFields(additionalInputs) }
-            <ButtonGroup d="flex" justifyContent="flex-end">
-              <Button variant="outline" onClick={onClose}>
-                Cancel
-              </Button>
-            </ButtonGroup>
           </Stack>
         </FocusLock>
       </PopoverContent>

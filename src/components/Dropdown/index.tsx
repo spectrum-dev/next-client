@@ -12,7 +12,6 @@ const StyledDropdownComponent = styled(Dropdown)`
         color: white;
         height: 40px;
         border-radius: 5px;
-        font-family: "Gotham Bold";
         font-size: 18px;
     }
 
@@ -38,7 +37,6 @@ const StyledDropdownComponent = styled(Dropdown)`
         width: 100%;
         z-index: 1000;
         border-radius: 5px;
-        font-family: "Gotham Bold";
         font-size: 18px;
     }
 `;

@@ -4,7 +4,6 @@ import Select from 'react-select';
 
 const StyledSelect = styled(Select)`
     line-height: 30px;
-    font-family: "Gotham Bold";
     font-size: 18px;
 
     .react-select-container {
