@@ -23,6 +23,7 @@ import useBlockMetadataOnDrop from './SideDrawer/useBlockMetadataOnDrop';
 import useLoadStrategy from './useLoadStrategy';
 import useInputManager from './useInputManager';
 import useSaveStrategy from './useSaveStrategy';
+import useValidateStrategy from './useValidateStrategy';
 
 const Canvas = () => {
   const {
@@ -43,6 +44,7 @@ const Canvas = () => {
   );
 
   const { saveStrategy } = useSaveStrategy({ elements, inputs, outputs: {} });
+  const { isValid } = useValidateStrategy({ inputs, elements });
 
   const {
     isOpen: isSideDrawerOpen,
@@ -110,6 +112,7 @@ const Canvas = () => {
           <Controls
             onViewBlocks={onSideDrawerOpen}
             onSaveStrategy={saveStrategy}
+            isStrategyValid={isValid}
           />
           <SideDrawer
             isOpen={isSideDrawerOpen}
