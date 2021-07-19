@@ -24,6 +24,7 @@ import useLoadStrategy from './useLoadStrategy';
 import useInputManager from './useInputManager';
 import useSaveStrategy from './useSaveStrategy';
 import useValidateStrategy from './useValidateStrategy';
+import useRunStrategy from './useRunStrategy';
 
 const Canvas = () => {
   const {
@@ -43,8 +44,10 @@ const Canvas = () => {
     { elements, loadedInputs, isStrategyLoaded },
   );
 
-  const { saveStrategy } = useSaveStrategy({ elements, inputs, outputs: {} });
   const { isValid } = useValidateStrategy({ inputs, elements });
+  const { outputs, invokeRun } = useRunStrategy({ inputs, elements });
+
+  const { saveStrategy } = useSaveStrategy({ elements, inputs, outputs });
 
   const {
     isOpen: isSideDrawerOpen,
@@ -113,6 +116,7 @@ const Canvas = () => {
             onViewBlocks={onSideDrawerOpen}
             onSaveStrategy={saveStrategy}
             isStrategyValid={isValid}
+            onRunStrategy={invokeRun}
           />
           <SideDrawer
             isOpen={isSideDrawerOpen}
