@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 
 // Custom Components
-import CustomSelect from 'components/Select';
+import Select from 'components/Select';
 import DateRangePicker from 'components/DateRangePicker';
 import Dropdown from 'components/Dropdown';
 
@@ -184,8 +184,7 @@ export default function useInputFields({ id }: { id: any }) {
         );
       case 'search':
         return (
-          <CustomSelect
-            title={inputField?.fieldName}
+          <Select
             placeholder="Type here to start search"
             options={inputs?.[id]?.[inputField?.fieldVariableName].options}
             // value={inputs?.[id]?.[input?.fieldVariableName].value}

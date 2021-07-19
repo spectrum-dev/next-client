@@ -1,13 +1,12 @@
-import { StyledSelect } from './index.styles';
+import Select from 'react-select';
 
-const Select = (
+const CustomSelect = (
   {
     placeholder,
     options,
     onInputChange,
     onChange,
   }: {
-    title: string;
     placeholder: string;
     options: Array<any>,
     onInputChange: any,
@@ -31,15 +30,13 @@ const Select = (
     return processedOptions;
   };
   return (
-    <StyledSelect
+    <Select
       placeholder={placeholder}
       options={transformOptions()}
-      className="react-select-container"
-      classNamePrefix="react-select"
       onInputChange={onInputChange}
       onChange={onChange}
     />
   );
 };
 
-export default Select;
+export default CustomSelect;

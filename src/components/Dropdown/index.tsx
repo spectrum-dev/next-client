@@ -3,8 +3,6 @@ import 'react-dropdown/style.css';
 
 import styled from '@emotion/styled';
 
-import style from './index.module.css';
-
 const StyledDropdownComponent = styled(Dropdown)`
     .Dropdown-control {
         background-color: #2D3748;
@@ -15,15 +13,6 @@ const StyledDropdownComponent = styled(Dropdown)`
         font-size: 18px;
     }
 
-    /* .Dropdown-menu {
-        background-color: #848485;
-        border: none;
-        color: white;
-        height: 40px;
-        border-radius: 5px;
-        font-family: "Gotham Bold";
-        font-size: 18px;
-    } */
     .Dropdown-menu {
         background-color: #848485;
         border: none;
@@ -52,15 +41,11 @@ const StyledDropdown = (
     onChange: any
   },
 ) => (
-  <>
-    <div className={style.dropdown}>
-      <StyledDropdownComponent
-        options={options}
-        value={value}
-        onChange={onChange}
-      />
-    </div>
-  </>
+  <StyledDropdownComponent
+    options={options}
+    value={value}
+    onChange={onChange}
+  />
 );
 
 export default StyledDropdown;
