@@ -60,6 +60,7 @@ export default function useLoadStrategy() {
         status: 'error',
         duration: 3000,
         isClosable: true,
+        position: 'top',
       });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps

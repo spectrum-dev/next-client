@@ -22,6 +22,7 @@ import FlowEdge from './Edge/FlowEdge';
 import useBlockMetadataOnDrop from './SideDrawer/useBlockMetadataOnDrop';
 import useLoadStrategy from './useLoadStrategy';
 import useInputManager from './useInputManager';
+import useSaveStrategy from './useSaveStrategy';
 
 const Canvas = () => {
   const {
@@ -40,6 +41,8 @@ const Canvas = () => {
   const { inputs, setInputs, startId } = useInputManager(
     { elements, loadedInputs, isStrategyLoaded },
   );
+
+  const { saveStrategy } = useSaveStrategy({ elements, inputs, outputs: {} });
 
   const {
     isOpen: isSideDrawerOpen,
@@ -104,7 +107,10 @@ const Canvas = () => {
               style={{ backgroundColor: '#212B3B' }}
             />
           </ReactFlow>
-          <Controls onViewBlocks={onSideDrawerOpen} />
+          <Controls
+            onViewBlocks={onSideDrawerOpen}
+            onSaveStrategy={saveStrategy}
+          />
           <SideDrawer
             isOpen={isSideDrawerOpen}
             onClose={onSideDrawerClose}
