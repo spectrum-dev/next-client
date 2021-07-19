@@ -1,4 +1,4 @@
-import { memo, useRef } from 'react';
+import { memo, useRef, useEffect } from 'react';
 
 import {
   Box,
@@ -50,7 +50,9 @@ const Block = memo(({ id, data }: { id: string, data: any }) => {
   const { inputHandle, outputHandle } = useHandles({ validationData: validation });
   const { renderInputFields, additionalInputs } = useInputField({ id });
 
-  updateNodeInternals(id);
+  useEffect(() => {
+    updateNodeInternals(id);
+  }, [id, inputHandle, outputHandle, updateNodeInternals]);
 
   return (
     <Popover
