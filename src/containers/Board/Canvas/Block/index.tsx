@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { memo, useRef } from 'react';
 
 import {
@@ -10,6 +9,7 @@ import {
   PopoverArrow,
   PopoverCloseButton,
   useDisclosure,
+  Stack,
 } from '@chakra-ui/react';
 import nextId from 'react-id-generator';
 import FocusLock from 'react-focus-lock';
@@ -17,10 +17,9 @@ import { Handle as RawHandle, Position } from 'react-flow-renderer';
 
 import styled from '@emotion/styled';
 
-import InputForm from './InputForm';
-
 // Hooks
 import useHandles from './useHandles';
+import useInputField from './useInputFields';
 
 const Handle = styled(RawHandle)`
   /* Overrides for .react-flow__handle */
@@ -42,7 +41,12 @@ const Block = memo(({ id, data }: { id: string, data: any }) => {
   const { onOpen, onClose, isOpen } = useDisclosure();
   const firstFieldRef = useRef(null);
 
-  const { inputHandle, outputHandle } = useHandles({ validationData: data.metadata.validation });
+  const {
+    blockName, blockType, inputs, validation,
+  } = data.metadata;
+
+  const { inputHandle, outputHandle } = useHandles({ validationData: validation });
+  const { renderInputFields, additionalInputs } = useInputField({ id });
 
   return (
     <Popover
@@ -67,11 +71,11 @@ const Block = memo(({ id, data }: { id: string, data: any }) => {
             ) : <></>
           }
           <Text color="white" marginTop="20px" fontSize="32px">
-            Block Name
+            { blockName }
           </Text>
 
-          <Text color="white" marginTop="28px" fontWeight="bold" fontSize="35px">
-            Block Type
+          <Text color="white" marginTop="35px" fontWeight="bold" fontSize="27px">
+            { blockType.replace('_', ' ') }
           </Text>
           {
             outputHandle ? (
@@ -86,12 +90,14 @@ const Block = memo(({ id, data }: { id: string, data: any }) => {
           }
         </Box>
       </PopoverTrigger>
-      <PopoverContent p={5} margin="80px 0px 0px 170px" width="500px">
+      <PopoverContent p={5} margin="80px 0px 0px 170px" width="500px" background="#151a23" borderColor="#151a23">
         <FocusLock returnFocus persistentFocus={false}>
           <PopoverArrow />
           <PopoverCloseButton />
-          {/* @ts-ignore */}
-          <InputForm firstFieldRef={firstFieldRef} onCancel={onClose} />
+          <Stack spacing={4}>
+            { renderInputFields(inputs) }
+            { renderInputFields(additionalInputs) }
+          </Stack>
         </FocusLock>
       </PopoverContent>
     </Popover>

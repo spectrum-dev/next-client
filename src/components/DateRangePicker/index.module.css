@@ -1,0 +1,15 @@
+.dateInputButton {
+  background-color: #2d3748;
+  color: #b4bbc6;
+  border: none;
+  width: 460px;
+  height: 40px;
+  border-radius: 5px;
+  margin-top: 10px;
+  font-size: 25px;
+}
+
+.popperCustomerClass {
+  margin-top: 350px;
+  margin-left: 200px;
+}
