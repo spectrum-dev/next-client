@@ -14,4 +14,33 @@ const formatDate = (date: Date) => {
   return `${year}-${month}-${day}`;
 };
 
-export { formatBlockTypeHeader, formatDate };
+interface CheckKeys {
+  isValid: boolean;
+  values: Array<any>;
+}
+
+const checkKeys = (dataArray: any, validateKeys: any): CheckKeys => {
+  if (!Array.isArray(dataArray)) {
+    return {
+      isValid: false,
+      values: [],
+    };
+  }
+
+  const values = [];
+  // eslint-disable-next-line no-restricted-syntax
+  for (const key of validateKeys) {
+    if (dataArray.length > 0) {
+      if (Object.keys(dataArray[0]).includes(key)) {
+        values.push(key);
+      }
+    }
+  }
+
+  return {
+    isValid: true,
+    values,
+  };
+};
+
+export { formatBlockTypeHeader, formatDate, checkKeys };
