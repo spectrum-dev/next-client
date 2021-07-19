@@ -14,7 +14,7 @@ import useGetAllStrategies from './useGetAllStrategies';
 
 import { Description } from './Description';
 
-const StrategyList = () => {
+const StrategyList = ({ onCreateStrategyOpen }: { onCreateStrategyOpen: Function }) => {
   const { allStrategies } = useGetAllStrategies();
 
   const renderStrategies = () => {
@@ -51,7 +51,7 @@ const StrategyList = () => {
             <Text as="h3" fontWeight="bold" fontSize="lg">
               Strategies
             </Text>
-            <Button colorScheme="blue" minW="20" leftIcon={<HiPlus />}>
+            <Button colorScheme="blue" minW="20" leftIcon={<HiPlus />} onClick={() => onCreateStrategyOpen()}>
               Create
             </Button>
           </Flex>

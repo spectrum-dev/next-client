@@ -47,7 +47,7 @@ const Dashboard = () => {
       case PageState.GettingStarted:
         return <></>;
       case PageState.Strategies:
-        return <StrategyList />;
+        return <StrategyList onCreateStrategyOpen={onCreateStrategyOpen} />;
       default:
         return <></>;
     }
