@@ -86,6 +86,7 @@ const Canvas = () => {
             // Connection Functions
             connectionLineComponent={FlowEdge}
             onConnect={onConnect}
+            // Loading and Node Updating Functions
             onLoad={onLoad}
             onNodeDragStop={onNodeDragStop}
             // Canvas Formating

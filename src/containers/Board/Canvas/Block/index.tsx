@@ -51,6 +51,7 @@ const Block = memo(({ id, data }: { id: string, data: any }) => {
   const { renderInputFields, additionalInputs } = useInputField({ id });
 
   updateNodeInternals(id);
+
   return (
     <Popover
       isOpen={isOpen}
