@@ -10,11 +10,12 @@ interface DescriptionProps {
   children: React.ReactNode
   creationDate: string
   strategyId: string
+  onDelete: Function
 }
 
 export const Description = (props: DescriptionProps) => {
   const {
-    title, children, creationDate, strategyId,
+    title, children, creationDate, strategyId, onDelete,
   } = props;
 
   const history = useHistory();
@@ -42,7 +43,7 @@ export const Description = (props: DescriptionProps) => {
         mt={{ base: '4', sm: '0' }}
       >
         <IconButton aria-label="Edit" icon={<HiPencilAlt />} rounded="full" size="sm" onClick={() => handleStrategyEdit()} />
-        <IconButton aria-label="Delete" icon={<HiTrash />} rounded="full" size="sm" />
+        <IconButton aria-label="Delete" icon={<HiTrash />} rounded="full" size="sm" onClick={() => onDelete(strategyId)} />
       </HStack>
     </Box>
   );

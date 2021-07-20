@@ -10,12 +10,16 @@ import {
 } from '@chakra-ui/react';
 import { HiPlus } from 'react-icons/hi';
 
+// Hooks
 import useGetAllStrategies from './useGetAllStrategies';
+import useDeleteStrategy from './useDeleteStrategy';
 
+// Components
 import { Description } from './Description';
 
 const StrategyList = ({ onCreateStrategyOpen }: { onCreateStrategyOpen: Function }) => {
-  const { allStrategies } = useGetAllStrategies();
+  const [allStrategies, setAllStrategies] = useGetAllStrategies();
+  const { onDelete } = useDeleteStrategy({ setAllStrategies });
 
   const renderStrategies = () => {
     if (allStrategies && Array.isArray(allStrategies)) {
@@ -27,6 +31,7 @@ const StrategyList = ({ onCreateStrategyOpen }: { onCreateStrategyOpen: Function
             title={item.strategy_name}
             creationDate={`${createdAtDate.toDateString()} at ${createdAtDate.toTimeString()}`}
             strategyId={item.strategy_id}
+            onDelete={onDelete}
           >
             No Strategy Description ...
           </Description>
