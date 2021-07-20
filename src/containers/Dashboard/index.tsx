@@ -31,7 +31,7 @@ enum PageState {
 }
 
 const Dashboard = () => {
-  const [pageState, setPageState] = useState<String>(PageState.GettingStarted);
+  const [pageState, setPageState] = useState<String>(PageState.Strategies);
 
   const {
     isOpen: isCreateStrategyOpen,
