@@ -90,19 +90,13 @@ export default function useValidateStrategy(
   }, [inputs]);
 
   useEffect(() => {
-    // TODO: Theory - there are still a bunch of validates
-    // being called in succession, and I think its because
-    // of the equity_name endpoint being invoked
-    // @ts-ignore
     if (
       (elements && elements.length > 0)
       // @ts-ignore
-      && (inputs && Object.keys(inputs) > 0)
+      && (inputs && Object.keys(inputs).length > 0)
     ) {
-      console.log('Fetching Data: TRUE');
       fetchData();
     }
-    console.log('Fetching Data: FALSE');
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputs]);
 
