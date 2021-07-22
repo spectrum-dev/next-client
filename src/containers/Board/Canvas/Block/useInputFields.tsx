@@ -203,14 +203,16 @@ export default function useInputFields({ id }: { id: any }) {
             options={inputs?.[id]?.[inputField?.fieldVariableName].options}
             // value={inputs?.[id]?.[input?.fieldVariableName].value}
             onInputChange={(inputtedQuery: any) => {
-              handleOnSearchEvent(
-                id,
-                inputs?.[id].blockType,
-                inputs?.[id].blockId,
-                inputField?.fieldData?.base,
-                inputField?.fieldVariableName,
-                inputtedQuery,
-              );
+              if (inputtedQuery !== '') {
+                handleOnSearchEvent(
+                  id,
+                  inputs?.[id].blockType,
+                  inputs?.[id].blockId,
+                  inputField?.fieldData?.base,
+                  inputField?.fieldVariableName,
+                  inputtedQuery,
+                );
+              }
             }}
             onChange={(selectedItem: any) => {
               setInputs((inp: any) => ({
