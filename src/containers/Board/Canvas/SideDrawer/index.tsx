@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import {
+  Center,
   Heading,
   Drawer,
   DrawerBody,
@@ -43,15 +44,17 @@ const SideDrawer = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void 
     const blockList = [];
     for (const [blockType, blockMetadata] of Object.entries(blockMetadataFromRetriever)) {
       blockList.push(
-        <Heading key={blockType} as="h4" size="md">
+        <Heading key={blockType} as="h4" size="md" marginTop="20px">
           {formatBlockTypeHeader(blockType)}
         </Heading>,
       );
 
       for (const [blockId, blockData] of Object.entries(blockMetadata)) {
         blockList.push(
-          // @ts-ignore
-          <GenericBlock key={`${blockType}-${blockId}`} blockName={blockData.blockName} blockType={formatBlockTypeHeader(blockType)} onDrag={async (event) => { await onClose(); await onDrag(event, blockType, blockId, blockData.blockMetadataEndpoint); }} />,
+          <Center key={`${blockType}-${blockId}`}>
+            {/* @ts-ignore */}
+            <GenericBlock key={`${blockType}-${blockId}`} blockName={blockData.blockName} blockType={formatBlockTypeHeader(blockType)} onDrag={async (event) => { await onClose(); await onDrag(event, blockType, blockId, blockData.blockMetadataEndpoint); }} />
+          </Center>,
         );
       }
 
@@ -73,11 +76,11 @@ const SideDrawer = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void 
         finalFocusRef={btnRef}
       >
         <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>Drag a block</DrawerHeader>
+        <DrawerContent backgroundColor="#212838" margin="30px 20px 30px 0px" borderRadius="40px">
+          <DrawerCloseButton textColor="white" />
+          <DrawerHeader textColor="white" textAlign="center">Drag a block</DrawerHeader>
 
-          <DrawerBody overflow="scroll">
+          <DrawerBody overflow="scroll" textColor="white" justifyContent="center">
             { renderBlockList() }
           </DrawerBody>
         </DrawerContent>
