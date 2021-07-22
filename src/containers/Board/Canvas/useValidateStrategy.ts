@@ -8,6 +8,7 @@ import fetcher from 'app/fetcher';
 const NON_NODE_OR_EDGE_VALUE = 'There was an error validating this strategy. Please try again.';
 const POST_RUN_STRATEGY_500 = 'There was an error validating this strategy. Please try again.';
 
+const BreakException = {};
 interface State {
   isLoading: boolean;
   hasError: boolean;
@@ -24,6 +25,16 @@ export default function useValidateStrategy(
   });
   const toast = useToast();
 
+  const checkInputsValid = (blockInputs: any) => {
+    for (const blockInput of Object.keys(blockInputs)) {
+      // @ts-ignore
+      if (blockInput !== 'blockType' && blockInput !== 'blockId' && blockInputs?.[blockInput]?.value === '') {
+        return false;
+      }
+    }
+    return true;
+  };
+
   const fetchData = useCallback(async () => {
     try {
       const nodeList = {};
@@ -31,6 +42,10 @@ export default function useValidateStrategy(
       for (const element of elements) {
         if (isNode(element)) {
           if (element?.id.split('-').length === 1) {
+            if (!checkInputsValid(inputs[element?.id])) {
+              // eslint-disable-next-line @typescript-eslint/no-throw-literal
+              throw BreakException;
+            }
             // @ts-ignore
             nodeList[element?.id] = inputs[element?.id];
           }
@@ -61,20 +76,35 @@ export default function useValidateStrategy(
         throw new Error(POST_RUN_STRATEGY_500);
       }
     } catch (e) {
-      toast({
-        title: POST_RUN_STRATEGY_500,
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
+      if (e !== BreakException) {
+        toast({
+          title: POST_RUN_STRATEGY_500,
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+      }
       setState({ isLoading: false, hasError: true, isValid: false });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [elements, inputs]);
+  }, [inputs]);
 
   useEffect(() => {
-    fetchData();
-  }, [elements, inputs, fetchData]);
+    // TODO: Theory - there are still a bunch of validates
+    // being called in succession, and I think its because
+    // of the equity_name endpoint being invoked
+    // @ts-ignore
+    if (
+      (elements && elements.length > 0)
+      // @ts-ignore
+      && (inputs && Object.keys(inputs) > 0)
+    ) {
+      console.log('Fetching Data: TRUE');
+      fetchData();
+    }
+    console.log('Fetching Data: FALSE');
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inputs]);
 
   return state;
 }
