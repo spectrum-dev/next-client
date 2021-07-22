@@ -98,28 +98,31 @@ export default function useInputManager(
         && (element?.id.split('-').length === 1)
       ) {
         // @ts-ignore
-        mergedInputs[element.id] = {};
-        // @ts-ignore
-        mergedInputs[element.id].blockType = element?.data?.metadata?.blockType;
-        // @ts-ignore
-        mergedInputs[element.id].blockId = element?.data?.metadata?.blockId;
-        for (const input of element?.data?.metadata?.inputs) {
-          // eslint-disable-next-line no-await-in-loop
-          const inputValue = await handleInputByType(
-            input.fieldType,
-            input,
-            element?.data?.metadata?.blockType,
-            element?.data?.metadata?.blockId,
-          );
+        if (!inputs?.[element.id]) {
           // @ts-ignore
-          mergedInputs = {
-            ...mergedInputs,
-            [element.id]: {
-              // @ts-ignore
-              ...mergedInputs?.[element.id],
-              ...inputValue,
-            },
-          };
+          mergedInputs[element.id] = {};
+          // @ts-ignore
+          mergedInputs[element.id].blockType = element?.data?.metadata?.blockType;
+          // @ts-ignore
+          mergedInputs[element.id].blockId = element?.data?.metadata?.blockId;
+          for (const input of element?.data?.metadata?.inputs) {
+            // eslint-disable-next-line no-await-in-loop
+            const inputValue = await handleInputByType(
+              input.fieldType,
+              input,
+              element?.data?.metadata?.blockType,
+              element?.data?.metadata?.blockId,
+            );
+            // @ts-ignore
+            mergedInputs = {
+              ...mergedInputs,
+              [element.id]: {
+                // @ts-ignore
+                ...mergedInputs?.[element.id],
+                ...inputValue,
+              },
+            };
+          }
         }
       } else if (
         // @ts-ignore
@@ -165,7 +168,7 @@ export default function useInputManager(
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loadedInputs, elements, isStrategyLoaded]);
+  }, [loadedInputs, elements.length, isStrategyLoaded]);
 
   return { inputs, setInputs, startId };
 }

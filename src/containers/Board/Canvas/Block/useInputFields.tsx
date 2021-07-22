@@ -154,13 +154,18 @@ export default function useInputFields({ id }: { id: any }) {
       case 'dropdown':
         // eslint-disable-next-line no-case-declarations
         const options = [];
-        for (const elem of inputs?.[id]?.[inputField?.fieldVariableName].options) {
-          options.push(
-            <option value={elem}>
-              { elem }
-            </option>,
-          );
+        // Used as in transition, as sometimes the options
+        // won't exist as the metric used doesn't have any options
+        if (inputs?.[id]?.[inputField?.fieldVariableName].options) {
+          for (const elem of inputs?.[id]?.[inputField?.fieldVariableName].options) {
+            options.push(
+              <option value={elem}>
+                { elem }
+              </option>,
+            );
+          }
         }
+
         return (
           <Dropdown
             options={inputs?.[id]?.[inputField?.fieldVariableName].options}

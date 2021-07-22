@@ -1,4 +1,6 @@
-import { memo, useRef, useEffect } from 'react';
+import {
+  memo, useState, useRef, useEffect, useContext,
+} from 'react';
 
 import {
   Box,
@@ -16,6 +18,9 @@ import FocusLock from 'react-focus-lock';
 import { Handle as RawHandle, Position, useUpdateNodeInternals } from 'react-flow-renderer';
 
 import styled from '@emotion/styled';
+
+// Contexts
+import InputContext from 'app/contexts/input';
 
 // Hooks
 import useHandles from './useHandles';
@@ -42,6 +47,10 @@ const Block = memo(({ id, data }: { id: string, data: any }) => {
   const updateNodeInternals = useUpdateNodeInternals();
   const { onOpen, onClose, isOpen } = useDisclosure();
   const firstFieldRef = useRef(null);
+  // @ts-ignore
+  const { inputs: managedInputs } = useContext(InputContext);
+
+  const [renderedInputFields, setRenderedInputFields] = useState([]);
 
   const {
     blockName, blockType, inputs, validation,
@@ -52,7 +61,16 @@ const Block = memo(({ id, data }: { id: string, data: any }) => {
 
   useEffect(() => {
     updateNodeInternals(id);
-  }, [id, inputHandle, outputHandle, updateNodeInternals]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, inputHandle, outputHandle]);
+
+  useEffect(() => {
+    const normalFields = renderInputFields(inputs);
+    const additionalFields = renderInputFields(additionalInputs);
+    // @ts-ignore
+    setRenderedInputFields(normalFields.concat(additionalFields));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, managedInputs?.[id], additionalInputs]);
 
   return (
     <Popover
@@ -101,8 +119,7 @@ const Block = memo(({ id, data }: { id: string, data: any }) => {
           <PopoverArrow />
           <PopoverCloseButton />
           <Stack spacing={4}>
-            { renderInputFields(inputs) }
-            { renderInputFields(additionalInputs) }
+            { renderedInputFields }
           </Stack>
         </FocusLock>
       </PopoverContent>
