@@ -28,6 +28,7 @@ const StrategyList = ({ onCreateStrategyOpen }: { onCreateStrategyOpen: Function
 
         return (
           <Description
+            key={item.strategy_id}
             title={item.strategy_name}
             creationDate={`${createdAtDate.toDateString()} at ${createdAtDate.toTimeString()}`}
             strategyId={item.strategy_id}
