@@ -15,7 +15,7 @@ const CustomSelect = (
 ) => {
   const transformOptions = () => {
     const processedOptions = [];
-    if (options) {
+    if (options && typeof options[0] === 'string') {
       // eslint-disable-next-line no-restricted-syntax
       for (const option of options) {
         processedOptions.push(
@@ -25,9 +25,10 @@ const CustomSelect = (
           },
         );
       }
-    }
 
-    return processedOptions;
+      return processedOptions;
+    }
+    return options;
   };
   return (
     <Select
