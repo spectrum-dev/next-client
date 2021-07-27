@@ -123,6 +123,7 @@ const Canvas = () => {
           <Controls
             onViewBlocks={onSideDrawerOpen}
             onSaveStrategy={saveStrategy}
+            hasStartedStrategy={elements.length !== 0}
             isStrategyValid={isValid}
             onRunStrategy={invokeRun}
           />
