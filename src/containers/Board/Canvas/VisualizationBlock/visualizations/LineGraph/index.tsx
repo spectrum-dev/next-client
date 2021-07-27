@@ -32,8 +32,8 @@ const LineGraph = (
   >
     <Chart id={1} yExtents={yExtents}>
       <LineSeries yAccessor={yAccessor} />
-      <XAxis strokeStyle="white" tickLabelFill="white" tickStrokeStyle="white" tickStrokeWidth={2} zoomEnabled={false} />
-      <YAxis strokeStyle="white" tickLabelFill="white" tickStrokeStyle="white" tickStrokeWidth={2} zoomEnabled={false} />
+      <XAxis strokeStyle="white" tickLabelFill="white" tickStrokeStyle="white" tickStrokeWidth={2} zoomEnabled={false} fontSize={20} />
+      <YAxis strokeStyle="white" tickLabelFill="white" tickStrokeStyle="white" tickStrokeWidth={2} zoomEnabled={false} fontSize={20} />
     </Chart>
   </ChartCanvas>
 );
