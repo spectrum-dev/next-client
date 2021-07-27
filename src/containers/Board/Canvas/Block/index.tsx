@@ -29,18 +29,9 @@ import useInputField from './useInputFields';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Handle = styled(RawHandle)`
   /* Overrides for .react-flow__handle */
-  width: 25px;
-  height: 25px;
-  border: 2px solid white;
-  background: '#ed8936';
-  
-  /* Overrides for .react-flow__handle-left */
-  .react-flow__handle .react-flow__handle-left {
-    left: -12px;
-  }
-  .react-flow__handle .react-flow__handle-right {
-    right: -12px;
-  }
+  width: 30px;
+  height: 30px;
+  border: 3px solid white;
 `;
 
 const Block = memo(({ id, data }: { id: string, data: any }) => {
@@ -91,6 +82,7 @@ const Block = memo(({ id, data }: { id: string, data: any }) => {
                 id={`input_${id}`}
                 onConnect={() => null}
                 isValidConnection={() => true}
+                style={{ backgroundColor: '#ed8936', left: '-12px', marginTop: '-2px' }}
               />
             ) : <></>
           }
@@ -109,6 +101,7 @@ const Block = memo(({ id, data }: { id: string, data: any }) => {
                 id={`output_${id}`}
                 onConnect={() => null}
                 isValidConnection={() => true}
+                style={{ backgroundColor: '#ed8936', right: '-12px', marginTop: '-2px' }}
               />
             ) : <></>
           }
