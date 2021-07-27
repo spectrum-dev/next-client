@@ -106,8 +106,8 @@ const Canvas = () => {
             onLoad={onLoad}
             onNodeDragStop={onNodeDragStop}
             // Canvas Formating
-            minZoom={0.5}
             maxZoom={0.5}
+            zoomOnScroll={false}
             defaultZoom={0.5}
             snapToGrid
             snapGrid={[1, 1]}
