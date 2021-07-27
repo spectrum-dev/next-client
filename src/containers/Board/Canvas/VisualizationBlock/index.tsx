@@ -164,7 +164,7 @@ export default memo(({ id, data: rawData }: { id: string, data: any }) => {
         return (
           <LineGraph
             height={graphHeight}
-            width={graphWidth}
+            width={graphWidth - 15}
             ratio={graphRatio}
             xScale={xScale}
             xAccessor={xAccessor}
@@ -179,7 +179,7 @@ export default memo(({ id, data: rawData }: { id: string, data: any }) => {
         return (
           <CandlestickGraph
             height={graphHeight}
-            width={graphWidth}
+            width={graphWidth - 15}
             ratio={graphRatio}
             xScale={xScale}
             xAccessor={xAccessor}
@@ -197,7 +197,7 @@ export default memo(({ id, data: rawData }: { id: string, data: any }) => {
         return (
           <LineGraph
             height={graphHeight}
-            width={graphWidth}
+            width={graphWidth - 15}
             ratio={graphRatio}
             xScale={xScale}
             xAccessor={xAccessor}
