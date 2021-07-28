@@ -49,7 +49,7 @@ const Canvas = () => {
     { elements, loadedInputs, isStrategyLoaded },
   );
 
-  const { isValid } = useValidateStrategy({ inputs, elements });
+  const { isValid, edgeValidation } = useValidateStrategy({ inputs, elements });
   const { outputs, invokeRun } = useRunStrategy({ inputs, elements });
   useVisualizationEngine({
     outputs, setElements, reactFlowInstance,
@@ -90,7 +90,7 @@ const Canvas = () => {
   return (
     <Box minH="100vh" h="100vh" as="section">
       <ReactFlowProvider>
-        <InputContext.Provider value={{ inputs, setInputs }}>
+        <InputContext.Provider value={{ inputs, setInputs, edgeValidation }}>
           <ReactFlow
             elements={elements}
             // Element Types

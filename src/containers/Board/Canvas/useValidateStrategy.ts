@@ -13,6 +13,7 @@ interface State {
   isLoading: boolean;
   hasError: boolean;
   isValid: boolean;
+  edgeValidation: Record<string, Boolean>;
 }
 
 export default function useValidateStrategy(
@@ -22,6 +23,7 @@ export default function useValidateStrategy(
     isLoading: false,
     hasError: false,
     isValid: false,
+    edgeValidation: {},
   });
   const toast = useToast();
 
@@ -71,7 +73,9 @@ export default function useValidateStrategy(
       });
 
       if (runResponse.status === 200) {
-        setState((elems) => ({ ...elems, isValid: runResponse.data?.valid }));
+        setState((elems) => ({
+          ...elems, isValid: runResponse.data?.valid, edgeValidation: runResponse.data?.edges,
+        }));
       } else {
         throw new Error(POST_RUN_STRATEGY_500);
       }
@@ -84,7 +88,9 @@ export default function useValidateStrategy(
           isClosable: true,
         });
       }
-      setState({ isLoading: false, hasError: true, isValid: false });
+      setState({
+        isLoading: false, hasError: true, isValid: false, edgeValidation: {},
+      });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputs]);
