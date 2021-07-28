@@ -53,7 +53,7 @@ const FlowEdge = (
       return (
         <Tooltip
           hasArrow
-          label={`The ${edgeValidation?.[id]?.target_block} block can only be connected to from the ${edgeValidation?.[id]?.allowed_connections.join(', ')} ${edgeValidation?.[id]?.allowed_connections.length === 1 ? 'block' : 'blocks'}`}
+          label={`The ${edgeValidation?.[id]?.target_block} block only can connect from the ${edgeValidation?.[id]?.allowed_connections.join(', ')} ${edgeValidation?.[id]?.allowed_connections.length === 1 ? 'block' : 'blocks'}`}
           bg="#1a202c"
           color="white"
           textAlign="center"
