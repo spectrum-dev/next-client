@@ -1,5 +1,7 @@
 import { useContext } from 'react';
 
+import { Tooltip } from '@chakra-ui/react';
+
 // Contexts
 import InputContext from 'app/contexts/input';
 
@@ -37,7 +39,7 @@ const FlowEdge = (
         return '#ed8936';
       }
 
-      if (edgeValidation[id]) {
+      if (edgeValidation[id].status) {
         return '#48bb79';
       }
 
@@ -46,19 +48,47 @@ const FlowEdge = (
     return '#ed8936';
   };
 
-  return (
-    <g>
-      <path
-        id={id}
-        className="react-flow_flow-edge-path"
-        fill="none"
-        stroke={renderEdgeColor()}
-        strokeWidth={5.5}
-        d={edgePath}
-        markerEnd={markerEnd}
-      />
-    </g>
-  );
+  const renderTooltip = () => {
+    if (edgeValidation && edgeValidation?.[id] && !edgeValidation?.[id].status) {
+      return (
+        <Tooltip
+          hasArrow
+          label={`The ${edgeValidation?.[id]?.target_block} block can only be connected to from the ${edgeValidation?.[id]?.allowed_connections.join(', ')} ${edgeValidation?.[id]?.allowed_connections.length === 1 ? 'block' : 'blocks'}`}
+          bg="#1a202c"
+          color="white"
+          textAlign="center"
+        >
+          <g>
+            <path
+              id={id}
+              className="react-flow_flow-edge-path"
+              fill="none"
+              stroke={renderEdgeColor()}
+              strokeWidth={5.5}
+              d={edgePath}
+              markerEnd={markerEnd}
+            />
+          </g>
+        </Tooltip>
+      );
+    }
+
+    return (
+      <g>
+        <path
+          id={id}
+          className="react-flow_flow-edge-path"
+          fill="none"
+          stroke={renderEdgeColor()}
+          strokeWidth={5.5}
+          d={edgePath}
+          markerEnd={markerEnd}
+        />
+      </g>
+    );
+  };
+
+  return renderTooltip();
 };
 
 export default FlowEdge;

@@ -88,9 +88,9 @@ export default function useValidateStrategy(
           isClosable: true,
         });
       }
-      setState({
-        isLoading: false, hasError: true, isValid: false, edgeValidation: {},
-      });
+      setState((elems: any) => ({
+        ...elems, isLoading: false, hasError: true, isValid: false,
+      }));
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputs]);
