@@ -65,7 +65,7 @@ const Handle = styled(RawHandle)`
 export default memo(({ id, data: rawData }: { id: string, data: any }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [[graphHeight, graphWidth, graphRatio]] = useState<[number, number, number]>(
-    [650, 1080, 1.0],
+    [750, 1340, 1.0],
   );
   const [transformedData, setTransformedData] = useState(rawData);
 
@@ -164,7 +164,7 @@ export default memo(({ id, data: rawData }: { id: string, data: any }) => {
         return (
           <LineGraph
             height={graphHeight}
-            width={graphWidth - 15}
+            width={graphWidth}
             ratio={graphRatio}
             xScale={xScale}
             xAccessor={xAccessor}
@@ -179,7 +179,7 @@ export default memo(({ id, data: rawData }: { id: string, data: any }) => {
         return (
           <CandlestickGraph
             height={graphHeight}
-            width={graphWidth - 15}
+            width={graphWidth}
             ratio={graphRatio}
             xScale={xScale}
             xAccessor={xAccessor}
@@ -197,7 +197,7 @@ export default memo(({ id, data: rawData }: { id: string, data: any }) => {
         return (
           <LineGraph
             height={graphHeight}
-            width={graphWidth - 15}
+            width={graphWidth}
             ratio={graphRatio}
             xScale={xScale}
             xAccessor={xAccessor}
@@ -213,7 +213,7 @@ export default memo(({ id, data: rawData }: { id: string, data: any }) => {
 
   return (
     <>
-      <Box width="1100px" height="700px" borderRadius="25px" border="1px solid #1a202c" background="#1a202c" textAlign="center" insetBlockEnd="TEST">
+      <Box width="1300px" height="800px" borderRadius="25px" border="1px solid #1a202c" background="#1a202c" textAlign="center" insetBlockEnd="TEST">
         <Flex margin="10px 0px 0px 0px">
           <Spacer />
           <Heading textColor="white" size="xl" textAlign="center">
