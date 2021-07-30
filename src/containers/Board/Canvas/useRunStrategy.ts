@@ -7,7 +7,7 @@ import fetcher from 'app/fetcher';
 
 const NON_NODE_OR_EDGE_VALUE = 'There was an error running this strategy. Please try again.';
 const POST_RUN_STRATEGY_500 = 'There was an error running this strategy. Please try again.';
-const STRATEGY_RUN_SUCCESS = 'The strategy was run successfully';
+const STRATEGY_RUN_SUCCESS = 'The strategy was run successfully.';
 
 interface State {
   isLoading: boolean;
