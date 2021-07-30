@@ -24,44 +24,45 @@ export default function useVisualizationEngine({
       const splitKey = key.split('-');
       const BLOCK_ID_IN_FLOW = splitKey[2];
 
-      const position = reactFlowInstance.project({ x: 100, y: 100 });
+        const position = reactFlowInstance.project({ x: 100, y: 100 });
 
-      const newNode: any = {
-        id: key,
-        type: 'visualizationBlock',
-        position,
-        data: value,
-      };
+        const newNode: any = {
+          id: key,
+          type: 'visualizationBlock',
+          position,
+          data: value,
+        };
 
-      const edge: any = {
-        source: BLOCK_ID_IN_FLOW,
-        sourceHandle: `output_${BLOCK_ID_IN_FLOW}`,
-        target: key,
-        targetHandle: `input_${key}`,
-        type: 'visualizationEdge',
-        id: `reactflow__edge-${key}output_id${BLOCK_ID_IN_FLOW}-2input_id${key}`,
-      };
+        const edge: any = {
+          source: BLOCK_ID_IN_FLOW,
+          sourceHandle: `output_${BLOCK_ID_IN_FLOW}`,
+          target: key,
+          targetHandle: `input_${key}`,
+          type: 'visualizationEdge',
+          id: `reactflow__edge-${key}output_id${BLOCK_ID_IN_FLOW}-2input_id${key}`,
+        };
 
-      setElements((es: any) => {
-        let idExists = false;
-        for (const tempElem of es) {
-          if (tempElem.id === key) {
-            idExists = true;
-          }
-        }
-
-        if (idExists) {
-          return es.map((el: any) => {
-            if (el?.id === key) {
-              // eslint-disable-next-line no-param-reassign
-              el.data = value;
+        setElements((es: any) => {
+          let idExists = false;
+          for (const tempElem of es) {
+            if (tempElem.id === key) {
+              idExists = true;
             }
+          }
 
-            return el;
-          });
-        }
-        return es.concat([newNode, edge]);
-      });
+          if (idExists) {
+            return es.map((el: any) => {
+              if (el?.id === key) {
+                // eslint-disable-next-line no-param-reassign
+                el.data = value;
+              }
+
+              return el;
+            });
+          }
+          return es.concat([newNode, edge]);
+        });
+      }
     }
   };
 

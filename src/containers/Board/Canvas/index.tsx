@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, useDisclosure } from '@chakra-ui/react';
+import { Box, Center, useDisclosure } from '@chakra-ui/react';
 
 import ReactFlow, {
   ReactFlowProvider, Background, addEdge, Edge, Connection,
@@ -11,6 +11,7 @@ import InputContext from 'app/contexts/input';
 // Canvas Components
 import Controls from './Controls';
 import SideDrawer from './SideDrawer';
+import ResultsDrawer from './ResultsDrawer';
 
 // Blocks
 import Block from './Block';
@@ -50,7 +51,7 @@ const Canvas = () => {
   );
 
   const { isValid, edgeValidation } = useValidateStrategy({ inputs, elements });
-  const { outputs, invokeRun } = useRunStrategy({ inputs, elements });
+  const { outputs, invokeRun, showResults } = useRunStrategy({ inputs, elements });
   useVisualizationEngine({
     outputs, setElements, reactFlowInstance,
   });
@@ -61,6 +62,12 @@ const Canvas = () => {
     isOpen: isSideDrawerOpen,
     onOpen: onSideDrawerOpen,
     onClose: onSideDrawerClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: isResultsDrawerOpen,
+    onOpen: onResultsDrawerOpen,
+    onClose: onResultsDrawerClose,
   } = useDisclosure();
 
   // Boilerplate
@@ -120,16 +127,25 @@ const Canvas = () => {
               style={{ backgroundColor: '#212B3B' }}
             />
           </ReactFlow>
-          <Controls
-            onViewBlocks={onSideDrawerOpen}
-            onSaveStrategy={saveStrategy}
-            hasStartedStrategy={elements.length !== 0}
-            isStrategyValid={isValid}
-            onRunStrategy={invokeRun}
-          />
+          <Center>
+            <Controls
+              onViewBlocks={onSideDrawerOpen}
+              showResults={showResults}
+              onResultsPane={onResultsDrawerOpen}
+              onSaveStrategy={saveStrategy}
+              hasStartedStrategy={elements.length !== 0}
+              isStrategyValid={isValid}
+              onRunStrategy={invokeRun}
+            />
+          </Center>
           <SideDrawer
             isOpen={isSideDrawerOpen}
             onClose={onSideDrawerClose}
+          />
+          <ResultsDrawer
+            isOpen={isResultsDrawerOpen}
+            onClose={onResultsDrawerClose}
+            outputs={outputs}
           />
         </InputContext.Provider>
       </ReactFlowProvider>

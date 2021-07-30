@@ -14,6 +14,7 @@ interface State {
   hasError: boolean;
   invokeRun: Function | undefined;
   outputs: Record<any, any> | undefined;
+  showResults: boolean;
 }
 
 export default function useRunStrategy(
@@ -24,6 +25,7 @@ export default function useRunStrategy(
     hasError: false,
     invokeRun: undefined,
     outputs: {},
+    showResults: false,
   });
   const toast = useToast();
 
@@ -67,7 +69,7 @@ export default function useRunStrategy(
           isClosable: true,
           position: 'top',
         });
-        setState((elems) => ({ ...elems, outputs: runResponse?.data?.response }));
+        setState((elems) => ({ ...elems, outputs: runResponse?.data?.response, showResults: Object.keys(runResponse?.data?.response).includes('results') }));
       } else {
         throw new Error(POST_RUN_STRATEGY_500);
       }
@@ -80,7 +82,11 @@ export default function useRunStrategy(
         position: 'top',
       });
       setState({
-        isLoading: false, hasError: true, invokeRun: undefined, outputs: undefined,
+        isLoading: false,
+        hasError: true,
+        invokeRun: undefined,
+        outputs: undefined,
+        showResults: false,
       });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps

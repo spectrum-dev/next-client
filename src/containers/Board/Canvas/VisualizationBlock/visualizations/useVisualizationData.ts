@@ -18,6 +18,19 @@ export default function useVisualizationData({
     hasError: false,
   });
 
+  if (!rawData) {
+    return {
+      isLoading: false,
+      hasError: true,
+      data: undefined,
+      xScale: undefined,
+      xAccessor: undefined,
+      xExtents: undefined,
+      displayXAccessor: undefined,
+      yAccessor: undefined,
+      yExtents: undefined,
+    };
+  }
   // Case where json is getting passed in and there
   // are multiple returned outputs is getting passed in
   if (!Array.isArray(rawData)) {
