@@ -7,6 +7,7 @@ import fetcher from 'app/fetcher';
 
 const NON_NODE_OR_EDGE_VALUE = 'There was an error running this strategy. Please try again.';
 const POST_RUN_STRATEGY_500 = 'There was an error running this strategy. Please try again.';
+const STRATEGY_RUN_SUCCESS = 'The strategy was run successfully';
 
 interface State {
   isLoading: boolean;
@@ -59,6 +60,13 @@ export default function useRunStrategy(
       });
 
       if (runResponse.status === 200) {
+        toast({
+          title: STRATEGY_RUN_SUCCESS,
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+          position: 'top',
+        });
         setState((elems) => ({ ...elems, outputs: runResponse?.data?.response }));
       } else {
         throw new Error(POST_RUN_STRATEGY_500);
