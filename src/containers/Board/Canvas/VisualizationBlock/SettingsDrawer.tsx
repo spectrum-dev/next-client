@@ -110,27 +110,33 @@ const SideDrawer = (
                   </Box>
                 ) : <></>
             }
-            <Box>
-              <FormLabel htmlFor="visualizationType">
-                X Value
-              </FormLabel>
-              <Dropdown
-                options={[xValue]}
-                value={xValue}
-                onChange={() => undefined}
-              />
-            </Box>
+            {
+              graphType === VisualizationType.Line ? (
+                <>
+                  <Box>
+                    <FormLabel htmlFor="visualizationType">
+                      X Value
+                    </FormLabel>
+                    <Dropdown
+                      options={[xValue]}
+                      value={xValue}
+                      onChange={() => undefined}
+                    />
+                  </Box>
 
-            <Box>
-              <FormLabel htmlFor="visualizationType">
-                Y Value
-              </FormLabel>
-              <Dropdown
-                options={yValues}
-                value={inputs?.[id]?.yValue}
-                onChange={(selectedItem: any) => setYValue(selectedItem.value)}
-              />
-            </Box>
+                  <Box>
+                    <FormLabel htmlFor="visualizationType">
+                      Y Value
+                    </FormLabel>
+                    <Dropdown
+                      options={yValues}
+                      value={inputs?.[id]?.yValue}
+                      onChange={(selectedItem: any) => setYValue(selectedItem.value)}
+                    />
+                  </Box>
+                </>
+              ) : <></>
+            }
           </Stack>
         </DrawerBody>
       </DrawerContent>
