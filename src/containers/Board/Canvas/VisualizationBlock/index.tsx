@@ -9,18 +9,10 @@ import {
   Flex,
   Text,
   Spacer,
-  Stack,
   IconButton,
   useDisclosure,
-  FormControl,
-  FormLabel,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalCloseButton,
 } from '@chakra-ui/react';
+
 import styled from '@emotion/styled';
 
 import { BsGear } from 'react-icons/bs';
@@ -33,12 +25,12 @@ import { formatBlockTypeHeader } from 'app/utils';
 // Contexts
 import InputContext from 'app/contexts/input';
 
-// Custom UI
-import Dropdown from 'components/Dropdown';
-
 // Hooks
 import useVisualizationData from './visualizations/useVisualizationData';
 import useGraphTypeValidation, { VisualizationType } from './visualizations/useGraphTypeValidation';
+
+// Drawer
+import SettingsDrawer from './SettingsDrawer';
 
 // Visualizations
 import LineGraph from './visualizations/LineGraph';
@@ -240,73 +232,20 @@ export default memo(({ id, data: rawData }: { id: string, data: any }) => {
           }
         </Box>
       </Box>
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent backgroundColor="#1a202c" textColor="white">
-          <ModalHeader textAlign="center"> Configure - Visualization Block </ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Stack spacing={4}>
-              <FormControl key="graph-type">
-                <FormLabel textColor="white" fontSize="20px">
-                  Form Label
-                </FormLabel>
-                <Dropdown
-                  options={
-                    candlestickSupported ? [
-                      VisualizationType.Line,
-                      VisualizationType.Candlestick,
-                      VisualizationType.DataTable,
-                    ] : [VisualizationType.Line, VisualizationType.DataTable]
-                  }
-                  value={graphType}
-                  onChange={(selectedItem: any) => {
-                    setGraphType(selectedItem.value);
-                  }}
-                />
-              </FormControl>
-              {
-                inputs?.[id]?.dataKeys ? (
-                  <FormControl key="data-key">
-                    <FormLabel textColor="white" fontSize="20px">
-                      Data Key
-                    </FormLabel>
-                    <Dropdown
-                      options={inputs?.[id]?.dataKeys}
-                      value={inputs?.[id]?.dataKey}
-                      onChange={(selectedItem: any) => {
-                        setDataKey(selectedItem.value);
-                        setTransformedData(rawData[selectedItem.value]);
-                      }}
-                    />
-                  </FormControl>
-                ) : <></>
-              }
-              <FormControl key="x-value">
-                <FormLabel textColor="white" fontSize="20px">
-                  X Value
-                </FormLabel>
-                <Dropdown
-                  options={[xValue]}
-                  value={xValue}
-                  onChange={() => undefined}
-                />
-              </FormControl>
-
-              <FormControl key="y-value">
-                <FormLabel textColor="white" fontSize="20px">
-                  Y Value
-                </FormLabel>
-                <Dropdown
-                  options={yValues}
-                  value={inputs?.[id]?.yValue}
-                  onChange={(selectedItem: any) => setYValue(selectedItem.value)}
-                />
-              </FormControl>
-            </Stack>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+      <SettingsDrawer
+        id={id}
+        isOpen={isOpen}
+        onClose={onClose}
+        graphType={graphType}
+        setGraphType={setGraphType}
+        candlestickSupported={candlestickSupported}
+        xValue={xValue}
+        yValues={yValues}
+        setYValue={setYValue}
+        setDataKey={setDataKey}
+        setTransformedData={setTransformedData}
+        rawData={rawData}
+      />
     </>
   );
 });
