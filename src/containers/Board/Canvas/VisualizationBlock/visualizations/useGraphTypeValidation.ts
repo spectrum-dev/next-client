@@ -2,9 +2,9 @@ import { useState, useEffect, useCallback } from 'react';
 import { checkKeys } from 'app/utils';
 
 export enum VisualizationType {
-  Line = 'line',
-  Candlestick = 'candlestick',
-  DataTable = 'dataTable',
+  Line = 'Line Graph',
+  Candlestick = 'Candlestick Graph',
+  DataTable = 'Data Table',
 }
 
 interface State {
