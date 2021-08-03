@@ -31,7 +31,13 @@ const Handle = styled(RawHandle)`
   border: 3px solid white;
 `;
 
-const Block = memo(({ id, data }: { id: string, data: any }) => {
+const Block = memo((
+  props: any,
+) => {
+  const {
+    id, data,
+  } = props;
+
   const updateNodeInternals = useUpdateNodeInternals();
   const { onOpen, onClose, isOpen } = useDisclosure();
 
@@ -69,12 +75,9 @@ const Block = memo(({ id, data }: { id: string, data: any }) => {
         border={isOpen ? '3px solid #ed8936;' : '1px solid #1a202c;'}
         background="linear-gradient(0deg, #151a23 0% 40%, #1a202c 40% 100%)"
         textAlign="center"
-        onClick={() => onOpen()}
-        onDrag={() => onClose()}
-        onDragEnd={() => onClose()}
-        onDragExit={() => onClose()}
-        onDragStart={() => onClose()}
-        onDragEnter={() => onClose()}
+        onClick={(e) => {
+          onOpen();
+        }}
       >
         {
           inputHandle ? (
