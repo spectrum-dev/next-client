@@ -2,14 +2,14 @@
   background-color: #2d3748;
   color: #b4bbc6;
   border: none;
-  width: 460px;
+  width: 270px;
   height: 40px;
   border-radius: 5px;
   margin-top: 10px;
-  font-size: 25px;
+  margin-bottom: 5px;
+  font-size: 18px;
 }
 
 .popperCustomerClass {
-  margin-top: 350px;
-  margin-left: 200px;
+  z-index: 1000;
 }

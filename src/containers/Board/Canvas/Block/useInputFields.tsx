@@ -1,6 +1,7 @@
 /* eslint-disable no-prototype-builtins */
 import { useState, useContext } from 'react';
 import {
+  Box,
   FormControl,
   FormLabel,
   NumberInput,
@@ -273,10 +274,12 @@ export default function useInputFields({ id }: { id: any }) {
     for (const selectedInputField of selectedInputFields) {
       formList.push(
         <FormControl key={`${id}_${selectedInputField.fieldName}_${selectedInputField.fieldName}`}>
-          <FormLabel textColor="white" fontSize="25px">
+          <FormLabel textColor="white">
             { selectedInputField.fieldName }
           </FormLabel>
-          {renderInputField(selectedInputField)}
+          <Box>
+            {renderInputField(selectedInputField)}
+          </Box>
         </FormControl>,
       );
     }

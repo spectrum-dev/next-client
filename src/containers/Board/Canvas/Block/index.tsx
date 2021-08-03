@@ -1,20 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
-  memo, useState, useRef, useEffect, useContext,
+  memo, useState, useEffect, useContext,
 } from 'react';
 
 import {
   Box,
   Text,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverArrow,
-  PopoverCloseButton,
   useDisclosure,
-  Stack,
 } from '@chakra-ui/react';
 
-import FocusLock from 'react-focus-lock';
 import { Handle as RawHandle, Position, useUpdateNodeInternals } from 'react-flow-renderer';
 
 import styled from '@emotion/styled';
@@ -26,6 +20,9 @@ import InputContext from 'app/contexts/input';
 import useHandles from './useHandles';
 import useInputField from './useInputFields';
 
+// UI Component
+import SettingsDrawer from './SettingsDrawer';
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Handle = styled(RawHandle)`
   /* Overrides for .react-flow__handle */
@@ -34,10 +31,16 @@ const Handle = styled(RawHandle)`
   border: 3px solid white;
 `;
 
-const Block = memo(({ id, data }: { id: string, data: any }) => {
+const Block = memo((
+  props: any,
+) => {
+  const {
+    id, data,
+  } = props;
+
   const updateNodeInternals = useUpdateNodeInternals();
   const { onOpen, onClose, isOpen } = useDisclosure();
-  const firstFieldRef = useRef(null);
+
   // @ts-ignore
   const { inputs: managedInputs } = useContext(InputContext);
 
@@ -64,59 +67,56 @@ const Block = memo(({ id, data }: { id: string, data: any }) => {
   }, [id, managedInputs?.[id], additionalInputs]);
 
   return (
-    <Popover
-      isOpen={isOpen}
-      initialFocusRef={firstFieldRef}
-      onOpen={onOpen}
-      onClose={onClose}
-      placement="bottom"
-      closeOnBlur={false}
-    >
-      <PopoverTrigger>
-        <Box width="350px" height="160px" borderRadius="25px" border={isOpen ? '3px solid #ed8936;' : '1px solid #1a202c;'} background="linear-gradient(0deg, #151a23 0% 40%, #1a202c 40% 100%)" textAlign="center">
-          {
-            inputHandle ? (
-              <Handle
-                type="target"
-                position={Position.Left}
-                id={`input_${id}`}
-                onConnect={() => null}
-                isValidConnection={() => true}
-                style={{ backgroundColor: '#ed8936', left: '-12px', marginTop: '-2px' }}
-              />
-            ) : <></>
-          }
-          <Text color="white" marginTop="20px" fontSize="32px">
-            { blockName }
-          </Text>
+    <>
+      <Box
+        width="350px"
+        height="160px"
+        borderRadius="25px"
+        border={isOpen ? '3px solid #ed8936;' : '1px solid #1a202c;'}
+        background="linear-gradient(0deg, #151a23 0% 40%, #1a202c 40% 100%)"
+        textAlign="center"
+        onClick={(e) => {
+          onOpen();
+        }}
+      >
+        {
+          inputHandle ? (
+            <Handle
+              type="target"
+              position={Position.Left}
+              id={`input_${id}`}
+              onConnect={() => null}
+              isValidConnection={() => true}
+              style={{ backgroundColor: '#ed8936', left: '-12px', marginTop: '-2px' }}
+            />
+          ) : <></>
+        }
+        <Text color="white" marginTop="20px" fontSize="32px">
+          { blockName }
+        </Text>
 
-          <Text color="white" marginTop="35px" fontWeight="bold" fontSize="27px">
-            { blockType.replace('_', ' ') }
-          </Text>
-          {
-            outputHandle ? (
-              <Handle
-                type="source"
-                position={Position.Right}
-                id={`output_${id}`}
-                onConnect={() => null}
-                isValidConnection={() => true}
-                style={{ backgroundColor: '#ed8936', right: '-12px', marginTop: '-2px' }}
-              />
-            ) : <></>
-          }
-        </Box>
-      </PopoverTrigger>
-      <PopoverContent p={5} margin="80px 0px 0px 170px" width="500px" background="#151a23" borderColor="#151a23">
-        <FocusLock returnFocus persistentFocus={false}>
-          <PopoverArrow />
-          <PopoverCloseButton />
-          <Stack spacing={4}>
-            { renderedInputFields }
-          </Stack>
-        </FocusLock>
-      </PopoverContent>
-    </Popover>
+        <Text color="white" marginTop="35px" fontWeight="bold" fontSize="27px">
+          { blockType.replace('_', ' ') }
+        </Text>
+        {
+          outputHandle ? (
+            <Handle
+              type="source"
+              position={Position.Right}
+              id={`output_${id}`}
+              onConnect={() => null}
+              isValidConnection={() => true}
+              style={{ backgroundColor: '#ed8936', right: '-12px', marginTop: '-2px' }}
+            />
+          ) : <></>
+        }
+      </Box>
+      <SettingsDrawer
+        isOpen={isOpen}
+        onClose={onClose}
+        renderedInputFields={renderedInputFields}
+      />
+    </>
   );
 });
 
