@@ -1,5 +1,6 @@
 {
   "name": "next-client",
+  "homepage": "https://spectrum.imbue.dev/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
