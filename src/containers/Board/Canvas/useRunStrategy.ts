@@ -69,7 +69,16 @@ export default function useRunStrategy(
           isClosable: true,
           position: 'top',
         });
-        setState((elems) => ({ ...elems, outputs: runResponse?.data?.response, showResults: Object.keys(runResponse?.data?.response).includes('results') }));
+        // TODO: Having an issue with outputs being undefined
+        if (runResponse?.data?.response) {
+          setState((elems) => ({ ...elems, outputs: runResponse?.data?.response, showResults: Object.keys(runResponse?.data?.response).includes('results') }));
+        } else {
+          setState((elems) => ({
+            ...elems,
+            outputs: runResponse?.data?.response,
+            showResults: false,
+          }));
+        }
       } else {
         throw new Error(POST_RUN_STRATEGY_500);
       }
