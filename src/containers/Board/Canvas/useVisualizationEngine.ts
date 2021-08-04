@@ -16,6 +16,11 @@ export default function useVisualizationEngine({
 
   const runVisualization = async () => {
     for (const [key, value] of Object.entries(outputs)) {
+      // Will not create graphs when results key comes up
+      if (key === 'results') {
+        return;
+      }
+
       const splitKey = key.split('-');
       const BLOCK_ID_IN_FLOW = splitKey[2];
 
