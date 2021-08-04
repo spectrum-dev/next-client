@@ -28,7 +28,7 @@ function AuthenticatedRoute(props: RouteProps) {
 export const App = () => (
   <ChakraProvider theme={theme}>
     <AuthProvider>
-      <HashRouter basename="spectrum">
+      <HashRouter>
         <Switch>
           <Route path="/login" component={Login} />
           <AuthenticatedRoute path="/dashboard" component={Dashboard} />
