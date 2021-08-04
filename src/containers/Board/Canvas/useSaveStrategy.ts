@@ -1,6 +1,8 @@
 import { useCallback, useState } from 'react';
 import { useToast } from '@chakra-ui/react';
-import { useParams } from 'react-router-dom';
+import queryString from 'query-string';
+// import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 import fetcher from 'app/fetcher';
 
@@ -25,11 +27,12 @@ export default function useSaveStrategy(
   });
   const toast = useToast();
 
-  const { strategyId } = useParams<any>();
+  const { search } = useLocation<any>();
+  const values = queryString.parse(search);
 
   const saveStrategy = useCallback(async () => {
     try {
-      const commitIdResponse = await fetcher.get(`/strategy/${strategyId}/commitId`, {
+      const commitIdResponse = await fetcher.get(`/strategy/${values.strategyId}/commitId`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
         },
@@ -42,7 +45,7 @@ export default function useSaveStrategy(
           outputs,
         };
 
-        const saveStrategyResponse = await fetcher.post(`/strategy/${strategyId}/${commitIdResponse?.data?.commitId}`, saveStrategyRequestBody, {
+        const saveStrategyResponse = await fetcher.post(`/strategy/${values.strategyId}/${commitIdResponse?.data?.commitId}`, saveStrategyRequestBody, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
           },
@@ -78,7 +81,7 @@ export default function useSaveStrategy(
       setState({ isLoading: false, hasError: true, hasSaved: false });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [elements, inputs, outputs, strategyId]);
+  }, [elements, inputs, outputs, search]);
 
   return {
     ...state,

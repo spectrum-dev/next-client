@@ -1,6 +1,6 @@
 FROM node:16-alpine as build
 
-ARG REACT_APP_API_BASE_URL
+ARG REACT_APP_API_BASE_URL="http://localhost:8080"
 ENV REACT_APP_API_BASE_URL ${REACT_APP_API_BASE_URL}
 
 # Build
@@ -11,16 +11,13 @@ COPY . ./
 RUN npm install
 RUN npm run build
 
-RUN npm install -g serve
-CMD ["serve", "-s", "build", "-l", "80"]
-
 # Stage - Production
-# FROM nginx:1.17
+FROM nginx:1.17
 
-# RUN rm -rf /etc/nginx/conf.d
-# COPY .nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
-# COPY .nginx/conf.d/timeout.conf /etc/nginx/conf.d/timeout.conf
+RUN rm -rf /etc/nginx/conf.d
+COPY .nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
+COPY .nginx/conf.d/timeout.conf /etc/nginx/conf.d/timeout.conf
 
-# COPY --from=build /usr/src/app/build /usr/share/nginx/html
-# EXPOSE 80
-# CMD ["nginx", "-g", "daemon off;"]
+COPY --from=build /usr/src/app/build /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

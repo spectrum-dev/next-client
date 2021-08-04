@@ -34,7 +34,7 @@ export default function useCreateStrategy(
 
       if (saveStrategyResponse.status === 200) {
         const response = saveStrategyResponse.data;
-        history.push(`/board/${response.strategy_id}`);
+        history.push(`/board?strategyId=${response.strategy_id}`);
 
         return saveStrategyResponse.data;
       }

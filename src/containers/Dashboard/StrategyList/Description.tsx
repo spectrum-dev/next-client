@@ -29,7 +29,7 @@ export const Description = (props: DescriptionProps) => {
   const history = useHistory();
 
   const handleStrategyEdit = () => {
-    history.push(`/board/${strategyId}`);
+    history.push(`/board?strategyId=${strategyId}`);
   };
 
   return (

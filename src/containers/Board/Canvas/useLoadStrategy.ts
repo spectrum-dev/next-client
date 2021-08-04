@@ -1,7 +1,9 @@
 /* eslint-disable no-restricted-syntax */
+import queryString from 'query-string';
 import { useCallback, useEffect, useState } from 'react';
 import { useToast } from '@chakra-ui/react';
-import { useParams } from 'react-router-dom';
+// import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 import fetcher from 'app/fetcher';
 
@@ -24,11 +26,12 @@ export default function useLoadStrategy() {
   });
   const toast = useToast();
 
-  const { strategyId } = useParams<any>();
+  const { search } = useLocation<any>();
+  const values = queryString.parse(search);
 
   const fetchData = useCallback(async () => {
     try {
-      const getStrategyResponse = await fetcher.get(`/strategy/${strategyId}`, {
+      const getStrategyResponse = await fetcher.get(`/strategy/${values.strategyId}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
         },
@@ -68,12 +71,12 @@ export default function useLoadStrategy() {
       });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [strategyId]);
+  }, [search]);
 
   useEffect(() => {
     fetchData();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [strategyId]);
+  }, [search]);
 
   return {
     ...state,

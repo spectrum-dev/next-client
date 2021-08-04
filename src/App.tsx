@@ -31,7 +31,7 @@ export const App = () => (
         <Switch>
           <Route path="/login" component={Login} />
           <AuthenticatedRoute path="/dashboard" component={Dashboard} />
-          <AuthenticatedRoute path="/board/:strategyId" component={Board} />
+          <AuthenticatedRoute path="/board" component={Board} />
           <Redirect from="/" to="/login" />
         </Switch>
       </Router>
