@@ -1,5 +1,6 @@
 import {
-  Router,
+  // Router,
+  HashRouter,
   Redirect,
   Switch,
   Route,
@@ -10,7 +11,7 @@ import {
   theme,
 } from '@chakra-ui/react';
 
-import history from 'app/history';
+// import history from 'app/history';
 import useAuth, { AuthProvider } from 'containers/Authentication/Login/useAuth';
 
 // Screens
@@ -27,14 +28,14 @@ function AuthenticatedRoute(props: RouteProps) {
 export const App = () => (
   <ChakraProvider theme={theme}>
     <AuthProvider>
-      <Router history={history}>
+      <HashRouter basename="spectrum">
         <Switch>
           <Route path="/login" component={Login} />
           <AuthenticatedRoute path="/dashboard" component={Dashboard} />
           <AuthenticatedRoute path="/board" component={Board} />
           <Redirect from="/" to="/login" />
         </Switch>
-      </Router>
+      </HashRouter>
     </AuthProvider>
   </ChakraProvider>
 );
