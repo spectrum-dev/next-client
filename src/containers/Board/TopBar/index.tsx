@@ -4,8 +4,12 @@ import {
 import { useHistory } from 'react-router';
 import { IoIosArrowBack } from 'react-icons/io';
 
+import useGetStrategyInformation from './useGetStrategyInformation';
+
 const TopBar = () => {
   const history = useHistory();
+
+  const { strategyInformation } = useGetStrategyInformation();
 
   return (
     <Flex w="full" justifyContent="space-evenly">
@@ -23,7 +27,7 @@ const TopBar = () => {
 
       <Flex>
         <Heading fontSize="18">
-          Strategy Name
+          { strategyInformation?.strategy_name ? strategyInformation.strategy_name : 'Strategy' }
         </Heading>
       </Flex>
 
