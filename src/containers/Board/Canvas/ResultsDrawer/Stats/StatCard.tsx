@@ -1,9 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react/destructuring-assignment */
 import {
-  Box, Flex, Stack, Text, Center, useColorModeValue as mode,
+  Box, Flex, Text, Center,
 } from '@chakra-ui/react';
-import { Indicator } from './Indicator';
 
 export interface StatCardProps {
   data: {
