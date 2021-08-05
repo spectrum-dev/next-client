@@ -75,7 +75,7 @@ const SideDrawer = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void 
       finalFocusRef={btnRef}
     >
       <DrawerOverlay />
-      <DrawerContent backgroundColor="#212838" margin="30px 20px 30px 0px" borderRadius="40px">
+      <DrawerContent backgroundColor="#212838" margin="75px 20px 30px 0px" borderRadius="40px">
         <DrawerCloseButton textColor="white" />
         <DrawerHeader textColor="white" textAlign="center">Drag a block</DrawerHeader>
 
