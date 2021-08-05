@@ -18,7 +18,7 @@ const TopBar = () => {
           fontSize={23}
           onClick={() => history.push('/dashboard')}
         />
-        <Tag variantColor="red" marginLeft="20px">
+        <Tag marginLeft="20px">
           Alpha
         </Tag>
       </Flex>
