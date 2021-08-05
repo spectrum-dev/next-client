@@ -38,6 +38,13 @@ export default function useBlockMetadataOnDrop({ startId }: { startId: number })
       // Extracts data from headers
       const blockType = event.dataTransfer.getData('application/reactflow');
       const blockId = event.dataTransfer.getData('application/reactflow-id');
+      const flowBlockType = event.dataTransfer.getData('application/reactflow-flow-block-type');
+
+      if (flowBlockType === 'resultsBlock') {
+        return;
+      }
+
+      console.log('Continuing Here');
 
       const position = reactFlowInstance.project({ x: event.clientX, y: event.clientY - 40 });
 

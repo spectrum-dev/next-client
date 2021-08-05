@@ -16,6 +16,7 @@ import ResultsDrawer from './ResultsDrawer';
 // Blocks
 import Block from './Block';
 import VisualizationBlock from './VisualizationBlock';
+import ResultBlock from './ResultBlock';
 
 // Edges
 import FlowEdge from './Edge/FlowEdge';
@@ -23,6 +24,7 @@ import VisualizationEdge from './Edge/VisualizationEdge';
 
 // Hooks
 import useBlockMetadataOnDrop from './SideDrawer/useBlockMetadataOnDrop';
+import useResultsOnDrop from './ResultsDrawer/useResultsOnDrop';
 import useLoadStrategy from './useLoadStrategy';
 import useInputManager from './useInputManager';
 import useSaveStrategy from './useSaveStrategy';
@@ -41,6 +43,7 @@ const Canvas = () => {
   const [nodeTypes] = useState({
     block: Block,
     visualizationBlock: VisualizationBlock,
+    resultBlock: ResultBlock,
   });
   const [edgeTypes] = useState({
     flowEdge: FlowEdge,
@@ -78,6 +81,7 @@ const Canvas = () => {
 
   // Boilerplate
   const { onDrop } = useBlockMetadataOnDrop({ startId });
+  const { onDrop: onResultsDrop } = useResultsOnDrop();
 
   const onDragOver = (event: React.DragEvent) => {
     event.preventDefault();
@@ -112,6 +116,7 @@ const Canvas = () => {
             // Drag Functions
             onDrop={(event: React.DragEvent<HTMLDivElement>) => {
               onDrop(event, reactFlowInstance, setElements);
+              onResultsDrop(event, reactFlowInstance, setElements);
             }}
             onDragOver={onDragOver}
             // Connection Functions

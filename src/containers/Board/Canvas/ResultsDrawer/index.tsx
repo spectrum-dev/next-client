@@ -34,9 +34,9 @@ const ResultsDrawer = (
             value: card.value,
             type: card.type,
           }}
+          onClose={onClose}
         />,
       );
-    }
     return response;
   };
 

@@ -34,6 +34,7 @@ const SideDrawer = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void 
     event.dataTransfer.setData('application/reactflow-id', blockId);
     event.dataTransfer.setData('application/reactflow-metadata-type', blockType);
     event.dataTransfer.setData('application/reactflow-metadata-url', blockMetadataEndpoint);
+    event.dataTransfer.setData('application/reactflow-flow-block-type', 'baseBlock');
   };
 
   const renderBlockList = () => {
