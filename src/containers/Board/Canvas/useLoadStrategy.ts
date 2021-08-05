@@ -12,6 +12,7 @@ interface State {
   isLoaded: boolean;
   hasError: boolean;
   inputs: Record<any, any> | {};
+  outputs: Record<any, any> | {};
 }
 
 export default function useLoadStrategy() {
@@ -21,6 +22,7 @@ export default function useLoadStrategy() {
     isLoaded: false,
     hasError: false,
     inputs: {},
+    outputs: {},
   });
   const toast = useToast();
 
@@ -44,6 +46,7 @@ export default function useLoadStrategy() {
             isLoaded: true,
             hasError: false,
             inputs: getStrategyResponse.data?.inputs,
+            outputs: getStrategyResponse.data?.outputs,
           };
         });
       } else {
@@ -57,6 +60,7 @@ export default function useLoadStrategy() {
           isLoaded: true,
           hasError: true,
           inputs: {},
+          outputs: {},
         };
       });
       toast({

@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-syntax */
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { useToast } from '@chakra-ui/react';
 import { isNode, isEdge } from 'react-flow-renderer';
 
@@ -14,16 +14,30 @@ interface State {
   hasError: boolean;
   invokeRun: Function | undefined;
   outputs: Record<any, any> | undefined;
+  showResults: boolean;
 }
 
 export default function useRunStrategy(
-  { inputs, elements }: { inputs: Record<any, any>, elements: Array<Record<any, any>> },
+  {
+    inputs,
+    elements,
+    loadedOutputs,
+    isStrategyLoaded,
+  }:
+  {
+    inputs: Record<any, any>,
+    loadedOutputs: any,
+    elements: Array<Record<any, any>>,
+    isStrategyLoaded: boolean
+  },
 ) {
+  const [initializer, setInitializer] = useState<Boolean>(false);
   const [state, setState] = useState<State>({
     isLoading: false,
     hasError: false,
     invokeRun: undefined,
     outputs: {},
+    showResults: false,
   });
   const toast = useToast();
 
@@ -67,7 +81,16 @@ export default function useRunStrategy(
           isClosable: true,
           position: 'top',
         });
-        setState((elems) => ({ ...elems, outputs: runResponse?.data?.response }));
+        // TODO: Having an issue with outputs being undefined
+        if (runResponse?.data?.response) {
+          setState((elems) => ({ ...elems, outputs: runResponse?.data?.response, showResults: Object.keys(runResponse?.data?.response).includes('results') }));
+        } else {
+          setState((elems) => ({
+            ...elems,
+            outputs: runResponse?.data?.response,
+            showResults: false,
+          }));
+        }
       } else {
         throw new Error(POST_RUN_STRATEGY_500);
       }
@@ -80,11 +103,34 @@ export default function useRunStrategy(
         position: 'top',
       });
       setState({
-        isLoading: false, hasError: true, invokeRun: undefined, outputs: undefined,
+        isLoading: false,
+        hasError: true,
+        invokeRun: undefined,
+        outputs: undefined,
+        showResults: false,
       });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [elements, inputs]);
+
+  useEffect(() => {
+    if (isStrategyLoaded) {
+      if (!initializer) {
+        setState((els: any) => {
+          setInitializer(true);
+          if (loadedOutputs) {
+            return {
+              ...els,
+              outputs: loadedOutputs,
+              showResults: Object.keys(loadedOutputs).includes('results'),
+            };
+          }
+          return {};
+        });
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loadedOutputs, isStrategyLoaded]);
 
   return {
     ...state,

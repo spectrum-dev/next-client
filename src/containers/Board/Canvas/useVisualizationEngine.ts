@@ -15,6 +15,7 @@ export default function useVisualizationEngine({
   });
 
   const runVisualization = async () => {
+    console.log('Outputs: ', outputs);
     for (const [key, value] of Object.entries(outputs)) {
       // Will not create graphs when results key comes up
       if (key === 'results') {

@@ -67,25 +67,23 @@ const SideDrawer = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void 
   };
 
   return (
-    <>
-      <Drawer
-        isOpen={isOpen}
-        placement="right"
-        onClose={onClose}
-        // @ts-ignore
-        finalFocusRef={btnRef}
-      >
-        <DrawerOverlay />
-        <DrawerContent backgroundColor="#212838" margin="30px 20px 30px 0px" borderRadius="40px">
-          <DrawerCloseButton textColor="white" />
-          <DrawerHeader textColor="white" textAlign="center">Drag a block</DrawerHeader>
+    <Drawer
+      isOpen={isOpen}
+      placement="right"
+      onClose={onClose}
+      // @ts-ignore
+      finalFocusRef={btnRef}
+    >
+      <DrawerOverlay />
+      <DrawerContent backgroundColor="#212838" margin="30px 20px 30px 0px" borderRadius="40px">
+        <DrawerCloseButton textColor="white" />
+        <DrawerHeader textColor="white" textAlign="center">Drag a block</DrawerHeader>
 
-          <DrawerBody overflow="scroll" textColor="white" justifyContent="center">
-            { renderBlockList() }
-          </DrawerBody>
-        </DrawerContent>
-      </Drawer>
-    </>
+        <DrawerBody overflow="scroll" textColor="white" justifyContent="center">
+          { renderBlockList() }
+        </DrawerBody>
+      </DrawerContent>
+    </Drawer>
   );
 };
 
