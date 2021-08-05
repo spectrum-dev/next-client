@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   memo,
+  useContext,
+  useState,
+  useEffect,
 } from 'react';
 
 import {
@@ -8,6 +11,9 @@ import {
   Text,
   Center,
 } from '@chakra-ui/react';
+
+// Contexts
+import InputContext from 'app/contexts/input';
 
 function format(value: number) {
   const formatter = new Intl.NumberFormat('en-US', {
@@ -20,10 +26,34 @@ function format(value: number) {
 const ResultBlock = memo((
   props: any,
 ) => {
-  const {
-    id, data,
-  } = props;
-  const { label, type, value } = data;
+  const { label } = props.data;
+  const [displayData, setDisplayData] = useState<{
+    label: string; type: string; value: number;
+  }>({ label, type: '', value: 0 });
+
+  // @ts-ignore
+  const { outputs } = useContext(InputContext);
+
+  const findResults = () => {
+    if (!outputs?.results?.cards) {
+      return;
+    }
+
+    for (const data of outputs?.results?.cards) {
+      if (data.label === label) {
+        setDisplayData({
+          label: data.label,
+          type: data.type,
+          value: data.value,
+        });
+      }
+    }
+  };
+
+  useEffect(() => {
+    findResults();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [outputs?.results?.cards]);
 
   return (
     <>
@@ -36,20 +66,23 @@ const ResultBlock = memo((
         shadow="base"
         color="gray.400"
         textAlign="center"
+        width="450px"
+        height="170px"
       >
-        <Text fontSize="xs" fontWeight="bold" textTransform="uppercase" letterSpacing="wide">
-          {label}
+        <Text fontSize="2xl" fontWeight="bold" textTransform="uppercase" letterSpacing="wide">
+          {displayData.label}
         </Text>
         <Center>
           <Text
             marginTop="10px"
             as="span"
             color="white"
-            fontSize="4xl"
+            fontSize="6xl"
             fontWeight="bold"
             lineHeight="1"
           >
-            { type === 'PERCENTAGE' ? `${format(value * 100)} %` : format(value) }
+            { displayData.type === 'PERCENTAGE'
+              ? `${format(displayData.value * 100)} %` : format(displayData.value) }
           </Text>
         </Center>
       </Box>

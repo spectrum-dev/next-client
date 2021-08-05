@@ -44,8 +44,6 @@ export default function useBlockMetadataOnDrop({ startId }: { startId: number })
         return;
       }
 
-      console.log('Continuing Here');
-
       const position = reactFlowInstance.project({ x: event.clientX, y: event.clientY - 40 });
 
       const metadataResponse = await fetcher(`/orchestration/${blockType}/${blockId}/metadata`, {

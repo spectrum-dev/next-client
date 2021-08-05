@@ -10,7 +10,10 @@ export default function useResultsOnDrop() {
 
   const onDrop = async (event: any, reactFlowInstance: any, setElements: any) => {
     // Extracts data from headers
-    const blockData = event.dataTransfer.getData('application/reactflow-data');
+    const label = event.dataTransfer.getData('application/reactflow-data-label');
+    // const value = event.dataTransfer.getData('application/reactflow-data-value');
+    // const type = event.dataTransfer.getData('application/reactflow-data-type');
+
     const flowBlockType = event.dataTransfer.getData('application/reactflow-flow-block-type');
 
     if (flowBlockType === 'baseBlock') {
@@ -22,7 +25,7 @@ export default function useResultsOnDrop() {
       id: `RESULTS-${generateID()}`,
       type: 'resultBlock',
       position,
-      data: blockData,
+      data: { label },
     };
 
     setElements((es: any) => es.concat(newNode));

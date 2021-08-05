@@ -107,7 +107,10 @@ const Canvas = () => {
   return (
     <Box minH="100vh" h="100vh" as="section">
       <ReactFlowProvider>
-        <InputContext.Provider value={{ inputs, setInputs, edgeValidation }}>
+        <InputContext.Provider value={{
+          inputs, setInputs, edgeValidation, outputs,
+        }}
+        >
           <ReactFlow
             elements={elements}
             // Element Types

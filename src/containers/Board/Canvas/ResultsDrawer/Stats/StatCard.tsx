@@ -28,10 +28,12 @@ const StatCard = (props: StatCardProps) => {
 
   const onDrag = (
     event: any,
-    blockData: string,
   ) => {
     event.dataTransfer.setData('application/reactflow-flow-block-type', 'resultsBlock');
-    event.dataTransfer.setData('application/reactflow-data', blockData);
+    event.dataTransfer.setData('application/reactflow-data-label', label);
+    event.dataTransfer.setData('application/reactflow-data-value', value);
+    event.dataTransfer.setData('application/reactflow-data-type', type);
+
     onClose();
   };
 
