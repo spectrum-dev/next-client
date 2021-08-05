@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-syntax */
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { useToast } from '@chakra-ui/react';
 import { isNode, isEdge } from 'react-flow-renderer';
 
@@ -18,8 +18,20 @@ interface State {
 }
 
 export default function useRunStrategy(
-  { inputs, elements }: { inputs: Record<any, any>, elements: Array<Record<any, any>> },
+  {
+    inputs,
+    elements,
+    loadedOutputs,
+    isStrategyLoaded,
+  }:
+  {
+    inputs: Record<any, any>,
+    loadedOutputs: any,
+    elements: Array<Record<any, any>>,
+    isStrategyLoaded: boolean
+  },
 ) {
+  const [initializer, setInitializer] = useState<Boolean>(false);
   const [state, setState] = useState<State>({
     isLoading: false,
     hasError: false,
@@ -100,6 +112,25 @@ export default function useRunStrategy(
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [elements, inputs]);
+
+  useEffect(() => {
+    if (isStrategyLoaded) {
+      if (!initializer) {
+        setState((els: any) => {
+          setInitializer(true);
+          if (loadedOutputs) {
+            return {
+              ...els,
+              outputs: loadedOutputs,
+              showResults: Object.keys(loadedOutputs).includes('results'),
+            };
+          }
+          return {};
+        });
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loadedOutputs, isStrategyLoaded]);
 
   return {
     ...state,

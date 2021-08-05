@@ -34,6 +34,7 @@ const Canvas = () => {
   const {
     elements, setElements,
     inputs: loadedInputs,
+    outputs: loadedOutputs,
     isLoaded: isStrategyLoaded,
   } = useLoadStrategy();
   const [reactFlowInstance, setReactFlowInstance] = useState();
@@ -51,7 +52,12 @@ const Canvas = () => {
   );
 
   const { isValid, edgeValidation } = useValidateStrategy({ inputs, elements });
-  const { outputs, invokeRun, showResults } = useRunStrategy({ inputs, elements });
+  const { outputs, invokeRun, showResults } = useRunStrategy(
+    {
+      inputs, elements, loadedOutputs, isStrategyLoaded,
+    },
+  );
+
   useVisualizationEngine({
     outputs, setElements, reactFlowInstance,
   });

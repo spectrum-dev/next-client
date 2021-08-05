@@ -36,7 +36,7 @@ const Controls = (
       }
       bg="#1a202c"
       color="white"
-      // isOpen={!isStrategyValid}
+      isOpen={!isStrategyValid}
       textAlign="center"
     >
       <IconButton aria-label="Run strategy" icon={<BsPlayFill color="white" size={20} />} background="#1a202c" disabled={!isStrategyValid} onClick={() => onRunStrategy()} />
