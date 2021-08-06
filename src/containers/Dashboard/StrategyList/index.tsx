@@ -18,29 +18,23 @@ import useDeleteStrategy from './useDeleteStrategy';
 import { Description } from './Description';
 
 const StrategyList = ({ onCreateStrategyOpen }: { onCreateStrategyOpen: Function }) => {
-  const [allStrategies, setAllStrategies] = useGetAllStrategies();
+  const { allStrategies, setAllStrategies } = useGetAllStrategies();
   const { onDelete } = useDeleteStrategy({ setAllStrategies });
 
-  const renderStrategies = () => {
-    if (allStrategies && Array.isArray(allStrategies)) {
-      return allStrategies.map((item) => {
-        const createdAtDate = new Date(item.created_at);
-
-        return (
-          <Description
-            key={item.strategy_id}
-            title={item.strategy_name}
-            creationDate={`${createdAtDate.toDateString()} at ${createdAtDate.toTimeString()}`}
-            strategyId={item.strategy_id}
-            onDelete={onDelete}
-          >
-            No Strategy Description ...
-          </Description>
-        );
-      });
-    }
-    return <></>;
-  };
+  const renderStrategies = () => allStrategies.map((item) => {
+    const createdAtDate = new Date(item.created_at);
+    return (
+      <Description
+        key={item.strategy_id}
+        title={item.strategy_name}
+        creationDate={`${createdAtDate.toDateString()} at ${createdAtDate.toTimeString()}`}
+        strategyId={item.strategy_id}
+        onDelete={onDelete}
+      >
+        No Strategy Description ...
+      </Description>
+    );
+  });
 
   return (
     <Box as="section" py="12" bg={mode('gray.100', 'gray.800')}>

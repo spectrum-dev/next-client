@@ -6,8 +6,20 @@ import fetcher from 'app/fetcher';
 
 const GET_ALL_STRATEGIES_RESPONSE_500 = 'There was an error retrieving your strategies. Please try again.';
 
+interface GetStrategyRecordResponse {
+  strategy_id: string;
+  strategy_name: string;
+  created_at: string;
+}
+
+export type GetStrategyArrayResponse = Array<GetStrategyRecordResponse> | [];
+
+interface GetStrategyResponse {
+  strategies: Array<GetStrategyRecordResponse>
+}
+
 export default function useGetAllStrategies() {
-  const [state, setState] = useState<Array<Record<string, string>>>([]);
+  const [allStrategies, setAllStrategies] = useState<GetStrategyArrayResponse>([]);
 
   const toast = useToast();
 
@@ -20,7 +32,8 @@ export default function useGetAllStrategies() {
       });
 
       if (getStrategiesResponse.status === 200) {
-        setState(getStrategiesResponse?.data?.strategies);
+        const response: GetStrategyResponse = getStrategiesResponse.data;
+        setAllStrategies(response.strategies);
       } else {
         throw new Error(GET_ALL_STRATEGIES_RESPONSE_500);
       }
@@ -32,7 +45,7 @@ export default function useGetAllStrategies() {
         isClosable: true,
       });
 
-      setState([]);
+      setAllStrategies([]);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -42,5 +55,5 @@ export default function useGetAllStrategies() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return [state, setState];
+  return { allStrategies, setAllStrategies };
 }
