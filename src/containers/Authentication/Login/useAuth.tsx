@@ -6,7 +6,9 @@ import {
 } from 'react';
 
 import { useToast } from '@chakra-ui/react';
-import { useGoogleLogin, useGoogleLogout } from 'react-google-login';
+import {
+  useGoogleLogin, useGoogleLogout, GoogleLoginResponse, GoogleLoginResponseOffline,
+} from 'react-google-login';
 
 import fetcher from 'app/fetcher';
 import history from 'app/history';
@@ -22,6 +24,15 @@ const ERROR_SCRIPT_LOADING_REACT_GOOGLE_LOGIN = 'There was an error loading the 
 const ERROR_SETTING_AUTHENTICATED_STATUS = 'There was an error setting the authenticated status of the user';
 const WHITELIST_RESPONSE_ERROR = 'This accounts has not been added to the whitelist. Please contact us if you feel this is an error.';
 const DJANGO_AUTHENTICATION_ERROR = 'There was an error sending the authentication token to the backend';
+
+// Types
+interface WhitelistRequestBody {
+  email: string;
+}
+
+interface AuthenticationRequestBody {
+  access_token: string;
+}
 
 export function AuthProvider({
   children,
@@ -70,13 +81,20 @@ export function AuthProvider({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onLoginSuccess = async (res: any): Promise<any> => {
+  const onLoginSuccess = async (
+    response: GoogleLoginResponse | GoogleLoginResponseOffline,
+  ): Promise<void> => {
     try {
       setLoading(true);
 
-      const whitelistRequestBody = {
-        email: res?.profileObj?.email,
+      if (!('profileObj' in response)) {
+        return;
+      }
+
+      const whitelistRequestBody: WhitelistRequestBody = {
+        email: response.profileObj.email,
       };
+
       const whitelistResponse = await fetcher.post('authentication/validate', whitelistRequestBody, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
@@ -84,22 +102,22 @@ export function AuthProvider({
       });
 
       if (whitelistResponse.status === 200) {
-        const authenticationRequestBody = {
-          access_token: res.accessToken,
+        const authenticationRequestBody: AuthenticationRequestBody = {
+          access_token: response.accessToken,
         };
-        const response = await fetcher.post('/rest-auth/google/', authenticationRequestBody, {
+        const authResponse = await fetcher.post('/rest-auth/google/', authenticationRequestBody, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
           },
         });
 
-        if (response.status === 200) {
-          const responsePayload = {
+        if (authResponse.status === 200) {
+          const responsePayload: User = {
             isAuthenticated: true,
-            firstName: res?.profileObj?.givenName,
-            lastName: res?.profileObj.familyName,
-            email: res?.profileObj?.email,
-            accessToken: res.accessToken,
+            firstName: response.profileObj.givenName,
+            lastName: response.profileObj.familyName,
+            email: response.profileObj.email,
+            accessToken: response.accessToken,
           };
           setAuthenticationStatus(responsePayload);
           setUser(responsePayload);
@@ -111,21 +129,21 @@ export function AuthProvider({
         throw Error(WHITELIST_RESPONSE_ERROR);
       }
     } catch (e) {
-      const errorResponse = {
-        isAuthenticated: false,
-        firstName: '',
-        lastName: '',
-        email: '',
-        accessToken: '',
-        error: e,
-      };
       toast({
         title: WHITELIST_RESPONSE_ERROR,
         status: 'error',
         duration: 3000,
         isClosable: true,
       });
-      setUser(errorResponse);
+
+      setUser({
+        isAuthenticated: false,
+        firstName: '',
+        lastName: '',
+        email: '',
+        accessToken: '',
+        error: e,
+      });
     } finally {
       setLoading(false);
     }
