@@ -5,15 +5,16 @@ import { useState, useEffect } from 'react';
 import { isNode, Elements } from 'react-flow-renderer';
 
 import { formatDate } from 'app/utils';
-
 import fetcher from 'app/fetcher';
+
+import { Inputs } from './index.types';
 
 export default function useInputManager(
   { elements, loadedInputs, isStrategyLoaded }:
-  { elements: Elements, loadedInputs: Record<any, any>, isStrategyLoaded: boolean },
+  { elements: Elements, loadedInputs: Inputs, isStrategyLoaded: boolean },
 ) {
   const [initializer, setInitializer] = useState<Boolean>(false);
-  const [inputs, setInputs] = useState({});
+  const [inputs, setInputs] = useState<Inputs>({});
   const [startId, setStartId] = useState<number>(0);
 
   const handleInputByType = async (
@@ -97,7 +98,7 @@ export default function useInputManager(
         && (element?.id.split('-').length === 1)
       ) {
         // @ts-ignore
-        if (!inputs?.[element.id]) {
+        if (!(inputs?.[element.id])) {
           // @ts-ignore
           mergedInputs[element.id] = {};
           // @ts-ignore

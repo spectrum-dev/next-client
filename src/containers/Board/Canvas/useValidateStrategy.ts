@@ -5,6 +5,8 @@ import { isNode, isEdge, Elements } from 'react-flow-renderer';
 
 import fetcher from 'app/fetcher';
 
+import { Inputs } from './index.types';
+
 const NON_NODE_OR_EDGE_VALUE = 'There was an error validating this strategy. Please try again.';
 const POST_RUN_STRATEGY_500 = 'There was an error validating this strategy. Please try again.';
 
@@ -17,7 +19,7 @@ interface State {
 }
 
 export default function useValidateStrategy(
-  { inputs, elements }: { inputs: Record<any, any>, elements: Elements },
+  { inputs, elements }: { inputs: Inputs, elements: Elements },
 ) {
   const [state, setState] = useState<State>({
     isLoading: false,
@@ -44,6 +46,7 @@ export default function useValidateStrategy(
       for (const element of elements) {
         if (isNode(element)) {
           if (element?.id.split('-').length === 1) {
+            // @ts-ignore
             if (!checkInputsValid(inputs[element?.id])) {
               // eslint-disable-next-line @typescript-eslint/no-throw-literal
               throw BreakException;
@@ -97,7 +100,6 @@ export default function useValidateStrategy(
   useEffect(() => {
     if (
       (elements && elements.length > 0)
-      // @ts-ignore
       && (inputs && Object.keys(inputs).length > 0)
     ) {
       fetchData();

@@ -6,7 +6,7 @@ import { Elements } from 'react-flow-renderer';
 
 import fetcher from 'app/fetcher';
 
-import { URLParams } from './index.types';
+import { URLParams, Inputs } from './index.types';
 
 const STRATEGY_SAVE_SUCCESS = 'Your strategy has been saved successfully';
 const GET_COMMIT_ID_ERROR = 'There was an error getting the commit ID. Please refresh the page.';
@@ -20,7 +20,7 @@ interface State {
 
 export default function useSaveStrategy(
   { inputs, outputs, elements }:
-  { inputs: Record<any, any>, outputs: any, elements: Elements },
+  { inputs: Inputs, outputs: any, elements: Elements },
 ) {
   const [state, setState] = useState<State>({
     isLoading: false,

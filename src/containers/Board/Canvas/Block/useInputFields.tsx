@@ -122,6 +122,7 @@ export default function useInputFields({ id }: { id: any }) {
       return <></>;
     }
 
+    // @ts-ignore
     if (!inputs?.[id]) {
       return <></>;
     }
@@ -130,6 +131,7 @@ export default function useInputFields({ id }: { id: any }) {
       case 'input':
         return (
           <NumberInput
+            // @ts-ignore
             value={inputs?.[id]?.[inputField.fieldVariableName]?.value}
             onChange={(value: String) => {
               setInputs((inp: any) => ({
@@ -157,7 +159,9 @@ export default function useInputFields({ id }: { id: any }) {
         const options = [];
         // Used as in transition, as sometimes the options
         // won't exist as the metric used doesn't have any options
+        // @ts-ignore
         if (inputs?.[id]?.[inputField?.fieldVariableName].options) {
+          // @ts-ignore
           for (const elem of inputs?.[id]?.[inputField?.fieldVariableName].options) {
             options.push(
               <option value={elem}>
