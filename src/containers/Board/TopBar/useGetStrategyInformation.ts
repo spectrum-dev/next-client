@@ -12,11 +12,10 @@ interface StrategyInformationResponse {
   strategy_name: string;
 }
 
+type StrategyInformation = StrategyInformationResponse | undefined;
+
 export default function useGetStrategyInformation() {
-  const [strategyInformation, setStrategyInformation] = useState<StrategyInformationResponse>({
-    strategy_id: '',
-    strategy_name: 'Strategy',
-  });
+  const [strategyInformation, setStrategyInformation] = useState<StrategyInformation>(undefined);
   const toast = useToast();
 
   const { strategyId } = useParams<any>();
@@ -44,10 +43,7 @@ export default function useGetStrategyInformation() {
         isClosable: true,
         position: 'top',
       });
-      setStrategyInformation({
-        strategy_id: '',
-        strategy_name: 'Error Loading Name',
-      });
+      setStrategyInformation(undefined);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [strategyId]);
