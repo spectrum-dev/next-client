@@ -2,7 +2,7 @@
 /* eslint-disable no-prototype-builtins */
 /* eslint-disable no-restricted-syntax */
 import { useState, useEffect } from 'react';
-import { isNode } from 'react-flow-renderer';
+import { isNode, Elements } from 'react-flow-renderer';
 
 import { formatDate } from 'app/utils';
 
@@ -10,7 +10,7 @@ import fetcher from 'app/fetcher';
 
 export default function useInputManager(
   { elements, loadedInputs, isStrategyLoaded }:
-  { elements: Array<Record<any, any>>, loadedInputs: Record<any, any>, isStrategyLoaded: boolean },
+  { elements: Elements, loadedInputs: Record<any, any>, isStrategyLoaded: boolean },
 ) {
   const [initializer, setInitializer] = useState<Boolean>(false);
   const [inputs, setInputs] = useState({});
@@ -93,7 +93,6 @@ export default function useInputManager(
     let mergedInputs = {};
     for (const element of elements) {
       if (
-        // @ts-ignore
         isNode(element)
         && (element?.id.split('-').length === 1)
       ) {
@@ -125,7 +124,6 @@ export default function useInputManager(
           }
         }
       } else if (
-        // @ts-ignore
         isNode(element)
         && (element?.id.split('-').length === 3)
       ) {

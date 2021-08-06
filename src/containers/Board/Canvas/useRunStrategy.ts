@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 import { useCallback, useState, useEffect } from 'react';
 import { useToast } from '@chakra-ui/react';
-import { isNode, isEdge } from 'react-flow-renderer';
+import { isNode, isEdge, Elements } from 'react-flow-renderer';
 
 import fetcher from 'app/fetcher';
 
@@ -27,7 +27,7 @@ export default function useRunStrategy(
   {
     inputs: Record<any, any>,
     loadedOutputs: any,
-    elements: Array<Record<any, any>>,
+    elements: Elements,
     isStrategyLoaded: boolean
   },
 ) {
@@ -46,13 +46,11 @@ export default function useRunStrategy(
       const nodeList = {};
       const edgeList = [];
       for (const element of elements) {
-        // @ts-ignore
         if (isNode(element)) {
           if (element?.id.split('-').length === 1) {
             // @ts-ignore
             nodeList[element?.id] = inputs[element?.id];
           }
-          // @ts-ignore
         } else if (isEdge(element)) {
           if (element?.target.split('-').length === 1) {
             edgeList.push(element);
