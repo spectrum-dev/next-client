@@ -3,30 +3,36 @@ import { useCallback, useEffect, useState } from 'react';
 import { useToast } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 
+import { Elements } from 'react-flow-renderer';
+
 import fetcher from 'app/fetcher';
+
+import { URLParams } from './index.types';
 
 const POST_LOAD_STRATEGY_500 = 'There was an error loading your strategy. Please refresh the page.';
 
+// Types
 interface State {
-  isLoading: boolean;
   isLoaded: boolean;
-  hasError: boolean;
+  inputs: Record<any, any> | {};
+  outputs: Record<any, any> | {};
+}
+
+interface GetStrategyResponse {
+  elements: Elements;
   inputs: Record<any, any> | {};
   outputs: Record<any, any> | {};
 }
 
 export default function useLoadStrategy() {
-  const [elements, setElements] = useState<Array<any>>([]);
+  const [elements, setElements] = useState<Elements>([]);
   const [state, setState] = useState<State>({
-    isLoading: false,
     isLoaded: false,
-    hasError: false,
     inputs: {},
     outputs: {},
   });
   const toast = useToast();
-
-  const { strategyId } = useParams<any>();
+  const { strategyId } = useParams<URLParams>();
 
   const fetchData = useCallback(async () => {
     try {
@@ -37,38 +43,36 @@ export default function useLoadStrategy() {
       });
 
       if (getStrategyResponse.status === 200) {
-        // @ts-ignore
+        const response: GetStrategyResponse = getStrategyResponse.data;
         setState(() => {
-          setElements(getStrategyResponse.data?.elements);
+          setElements(response.elements);
 
           return {
-            isLoading: false,
             isLoaded: true,
-            hasError: false,
-            inputs: getStrategyResponse.data?.inputs,
-            outputs: getStrategyResponse.data?.outputs,
+            inputs: response.inputs,
+            outputs: response.outputs,
           };
         });
       } else {
         throw new Error(POST_LOAD_STRATEGY_500);
       }
     } catch (e) {
-      setState(() => {
-        setElements([]);
-        return {
-          isLoading: false,
-          isLoaded: true,
-          hasError: true,
-          inputs: {},
-          outputs: {},
-        };
-      });
       toast({
         title: POST_LOAD_STRATEGY_500,
         status: 'error',
         duration: 3000,
         isClosable: true,
         position: 'top',
+      });
+
+      setState(() => {
+        setElements([]);
+
+        return {
+          isLoaded: true,
+          inputs: {},
+          outputs: {},
+        };
       });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
