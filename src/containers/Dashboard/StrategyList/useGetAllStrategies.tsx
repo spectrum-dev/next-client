@@ -17,7 +17,7 @@ interface GetStrategyResponse {
 }
 
 export default function useGetAllStrategies() {
-  const [state, setState] = useState<Array<GetStrategyRecordResponse> | []>([]);
+  const [allStrategies, setAllStrategies] = useState<Array<GetStrategyRecordResponse> | []>([]);
 
   const toast = useToast();
 
@@ -31,7 +31,7 @@ export default function useGetAllStrategies() {
 
       if (getStrategiesResponse.status === 200) {
         const response: GetStrategyResponse = getStrategiesResponse.data;
-        setState(response.strategies);
+        setAllStrategies(response.strategies);
       } else {
         throw new Error(GET_ALL_STRATEGIES_RESPONSE_500);
       }
@@ -43,7 +43,7 @@ export default function useGetAllStrategies() {
         isClosable: true,
       });
 
-      setState([]);
+      setAllStrategies([]);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -53,5 +53,5 @@ export default function useGetAllStrategies() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return [state, setState];
+  return { allStrategies, setAllStrategies };
 }
