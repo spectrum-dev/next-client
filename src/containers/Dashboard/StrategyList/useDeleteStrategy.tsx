@@ -1,26 +1,23 @@
-import { useState } from 'react';
-
 import { useToast } from '@chakra-ui/react';
 
 import fetcher from 'app/fetcher';
 
+import { GetStrategyArrayResponse } from './useGetAllStrategies';
+
 const SUCCESS_DELETING_STRATEGY = 'The strategy has been successfully deleted';
 const ERROR_UNHANDLED_DELETING_STRATEGY = 'There was an error deleting the strategy. Please try again';
 
-interface State {
-  isLoading: boolean;
-  hasError: boolean;
+interface OnDeleteResponse {
+  status: 'true' | 'false';
 }
 
-export default function useDeleteStrategy({ setAllStrategies }: { setAllStrategies: any }) {
-  const [state, setState] = useState<State>({
-    isLoading: false,
-    hasError: false,
-  });
-
+export default function useDeleteStrategy(
+  { setAllStrategies }:
+  { setAllStrategies: React.Dispatch<React.SetStateAction<GetStrategyArrayResponse>> },
+) {
   const toast = useToast();
 
-  const onDelete = async (strategyId: string) => {
+  const onDelete = async (strategyId: string): Promise<OnDeleteResponse | {}> => {
     try {
       const deleteStrategyResponse = await fetcher.post(`/strategy/deleteStrategy/${strategyId}`, {}, {
         headers: {
@@ -37,7 +34,7 @@ export default function useDeleteStrategy({ setAllStrategies }: { setAllStrategi
           position: 'top',
         });
 
-        setAllStrategies((allStrategies: Array<Record<string, string>>) => {
+        setAllStrategies((allStrategies: GetStrategyArrayResponse) => {
           const updatedStrategies = [];
 
           for (const strategy of allStrategies) {
@@ -60,16 +57,9 @@ export default function useDeleteStrategy({ setAllStrategies }: { setAllStrategi
         isClosable: true,
       });
 
-      setState({
-        isLoading: false,
-        hasError: true,
-      });
       return {};
     }
   };
 
-  return {
-    state,
-    onDelete,
-  };
+  return { onDelete };
 }

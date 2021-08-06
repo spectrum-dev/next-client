@@ -12,12 +12,14 @@ interface GetStrategyRecordResponse {
   created_at: string;
 }
 
+export type GetStrategyArrayResponse = Array<GetStrategyRecordResponse> | [];
+
 interface GetStrategyResponse {
   strategies: Array<GetStrategyRecordResponse>
 }
 
 export default function useGetAllStrategies() {
-  const [allStrategies, setAllStrategies] = useState<Array<GetStrategyRecordResponse> | []>([]);
+  const [allStrategies, setAllStrategies] = useState<GetStrategyArrayResponse>([]);
 
   const toast = useToast();
 
