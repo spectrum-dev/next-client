@@ -7,6 +7,17 @@ import fetcher from 'app/fetcher';
 
 const ERROR_UNHANDLED_CREATING_STRATEGY = 'There was an error creating the strategy. Please try again';
 
+// Types
+
+interface SaveStrategyPayload {
+  strategy_name: string;
+}
+
+interface SaveStrategyResponse {
+  strategy_id: string;
+  strategy_name: string;
+}
+
 interface State {
   isLoading: boolean;
   hasError: boolean;
@@ -14,7 +25,7 @@ interface State {
 
 export default function useCreateStrategy(
   { strategyName }:
-  { strategyName: String },
+  { strategyName: string },
 ) {
   const [state, setState] = useState<State>({
     isLoading: false,
@@ -26,17 +37,18 @@ export default function useCreateStrategy(
 
   const onCreate = async () => {
     try {
-      const saveStrategyResponse = await fetcher.post('/strategy/createStrategy', { strategy_name: strategyName }, {
+      const saveStrategyPayload: SaveStrategyPayload = { strategy_name: strategyName };
+      const saveStrategyResponse = await fetcher.post('/strategy/createStrategy', saveStrategyPayload, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
         },
       });
 
       if (saveStrategyResponse.status === 200) {
-        const response = saveStrategyResponse.data;
+        const response: SaveStrategyResponse = saveStrategyResponse.data;
         history.push(`/board/${response.strategy_id}`);
 
-        return saveStrategyResponse.data;
+        return response;
       }
 
       throw new Error(ERROR_UNHANDLED_CREATING_STRATEGY);
