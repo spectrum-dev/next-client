@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Box, Center, useDisclosure } from '@chakra-ui/react';
 
 import ReactFlow, {
-  ReactFlowProvider, Background, addEdge, Edge, Connection,
+  ReactFlowProvider, Background, addEdge, Edge, Connection, OnLoadParams,
 } from 'react-flow-renderer';
 
 // Contexts
@@ -37,7 +37,7 @@ const Canvas = () => {
     outputs: loadedOutputs,
     isLoaded: isStrategyLoaded,
   } = useLoadStrategy();
-  const [reactFlowInstance, setReactFlowInstance] = useState();
+  const [reactFlowInstance, setReactFlowInstance] = useState<OnLoadParams>();
   const [nodeTypes] = useState({
     block: Block,
     visualizationBlock: VisualizationBlock,
@@ -87,8 +87,8 @@ const Canvas = () => {
     setElements((els) => addEdge({ ...params, type: 'flowEdge' }, els));
   };
 
-  const onLoad = (_reactFlowInstance: any) => {
-    setReactFlowInstance(_reactFlowInstance);
+  const onLoad = (params: OnLoadParams) => {
+    setReactFlowInstance(params);
   };
 
   const onNodeDragStop = (event: any, node: any) => {
