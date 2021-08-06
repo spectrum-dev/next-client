@@ -27,7 +27,7 @@ const TopBar = () => {
 
       <Flex>
         <Heading fontSize="18">
-          { strategyInformation?.strategy_name ? strategyInformation.strategy_name : 'Strategy' }
+          {strategyInformation && strategyInformation.strategy_name}
         </Heading>
       </Flex>
 
