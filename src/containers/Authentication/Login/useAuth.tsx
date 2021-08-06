@@ -19,7 +19,7 @@ const CLIENT_ID = '127712187286-65rpilkupfcu9h7b87u944kcs5f6e3j6.apps.googleuser
 
 const ERROR_LOGGING_IN_REACT_GOOGLE_LOGIN = 'There was an error logging in. Please try again';
 const ERROR_LOGGING_OUT_REACT_GOOGLE_LOGIN = 'There was an error logging out. Please try again';
-const ERROR_SCRIPT_LOADING_REACT_GOOGLE_LOGIN = 'There was an error loading the login script. Please try again';
+const ERROR_SCRIPT_LOADING_REACT_GOOGLE_LOGIN = 'There was error setting up Google single sign on. Please unblock your browser cookies.';
 
 const ERROR_SETTING_AUTHENTICATED_STATUS = 'There was an error setting the authenticated status of the user';
 const WHITELIST_RESPONSE_ERROR = 'This accounts has not been added to the whitelist. Please contact us if you feel this is an error.';
@@ -179,7 +179,7 @@ export function AuthProvider({
       toast({
         title: ERROR_SCRIPT_LOADING_REACT_GOOGLE_LOGIN,
         status: 'error',
-        duration: 3000,
+        duration: 10000,
         isClosable: true,
       });
     },
