@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 import { useCallback, useEffect, useState } from 'react';
 import { useToast } from '@chakra-ui/react';
-import { isNode, isEdge } from 'react-flow-renderer';
+import { isNode, isEdge, Elements } from 'react-flow-renderer';
 
 import fetcher from 'app/fetcher';
 
@@ -17,7 +17,7 @@ interface State {
 }
 
 export default function useValidateStrategy(
-  { inputs, elements }: { inputs: Record<any, any>, elements: Array<any> },
+  { inputs, elements }: { inputs: Record<any, any>, elements: Elements },
 ) {
   const [state, setState] = useState<State>({
     isLoading: false,
@@ -51,7 +51,6 @@ export default function useValidateStrategy(
             // @ts-ignore
             nodeList[element?.id] = inputs[element?.id];
           }
-          // @ts-ignore
         } else if (isEdge(element)) {
           if (element?.target.split('-').length === 1) {
             edgeList.push(element);

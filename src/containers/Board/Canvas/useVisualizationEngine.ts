@@ -1,6 +1,8 @@
 /* eslint-disable no-restricted-syntax */
 import { useState, useEffect } from 'react';
 
+import { SetElements } from './index.types';
+
 interface State {
   isLoading: boolean;
   hasError: boolean;
@@ -8,7 +10,7 @@ interface State {
 
 export default function useVisualizationEngine({
   outputs, setElements, reactFlowInstance,
-}: { outputs: any, setElements: Function, reactFlowInstance: any, }) {
+}: { outputs: any, setElements: SetElements, reactFlowInstance: any, }) {
   const [state] = useState<State>({
     isLoading: false,
     hasError: false,
