@@ -4,6 +4,34 @@ export interface URLParams {
   strategyId: string;
 }
 
+interface InputsMetadata {
+  [key: string]: {
+    blockId: string;
+    blockType: string;
+  }
+}
+
+interface BlockInputsForm {
+  [key: string]: {
+    [form_value: string]: {
+      value: string;
+      rawValue?: string;
+      options?: Array<string> | { label: string; value: string };
+      onChange?: string;
+    }
+  }
+}
+
+interface VisualizationBlockInputForm {
+  [key: string]: {
+    xValue: string; // TODO: Check this
+    yValue: string;
+    graphType: string;
+  }
+}
+
+export type Inputs = InputsMetadata & BlockInputsForm & VisualizationBlockInputForm;
+
 interface OutputResults {
   results: {
     cards: Array<{
