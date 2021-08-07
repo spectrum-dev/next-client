@@ -23,7 +23,7 @@ import { formatDate } from 'app/utils';
 // Contexts
 import InputContext from 'app/contexts/input';
 
-export default function useInputFields({ id }: { id: any }) {
+export default function useInputFields({ id }: { id: string }) {
   const [additionalInputs, setAdditionalInputs] = useState([]);
 
   // @ts-ignore

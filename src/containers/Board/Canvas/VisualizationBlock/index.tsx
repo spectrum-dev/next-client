@@ -17,7 +17,7 @@ import styled from '@emotion/styled';
 
 import { BsGear } from 'react-icons/bs';
 
-import { Handle as RawHandle, Position } from 'react-flow-renderer';
+import { Handle as RawHandle, Position, NodeProps } from 'react-flow-renderer';
 
 // Utils
 import { formatBlockTypeHeader } from 'app/utils';
@@ -54,7 +54,7 @@ const Handle = styled(RawHandle)`
   }
 `;
 
-export default memo(({ id, data: rawData }: { id: string, data: any }) => {
+export default memo(({ id, data: rawData }: NodeProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [[graphHeight, graphWidth, graphRatio]] = useState<[number, number, number]>(
     [750, 1340, 1.0],

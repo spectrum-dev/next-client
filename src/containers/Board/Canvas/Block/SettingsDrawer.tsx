@@ -22,7 +22,7 @@ const SettingsDrawer = (
         isOpen={isOpen}
         placement="right"
         onClose={onClose}
-            // @ts-ignore
+        // @ts-ignore
         finalFocusRef={btnRef}
       >
         <DrawerOverlay />
