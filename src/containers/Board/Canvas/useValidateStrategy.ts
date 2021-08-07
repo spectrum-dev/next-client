@@ -9,19 +9,27 @@ const NON_NODE_OR_EDGE_VALUE = 'There was an error validating this strategy. Ple
 const POST_RUN_STRATEGY_500 = 'There was an error validating this strategy. Please try again.';
 
 const BreakException = {};
+
+type EdgeValidation = Record<string, {
+  status: boolean,
+  target_block: string,
+  allowed_connections: Array<string>,
+}>;
+
 interface State {
-  isLoading: boolean;
-  hasError: boolean;
   isValid: boolean;
-  edgeValidation: Record<string, Boolean>;
+  edgeValidation: EdgeValidation;
+}
+
+interface ValidateResponse {
+  valid: boolean;
+  edges: EdgeValidation;
 }
 
 export default function useValidateStrategy(
   { inputs, elements }: { inputs: Record<any, any>, elements: Elements },
 ) {
   const [state, setState] = useState<State>({
-    isLoading: false,
-    hasError: false,
     isValid: false,
     edgeValidation: {},
   });
@@ -29,7 +37,6 @@ export default function useValidateStrategy(
 
   const checkInputsValid = (blockInputs: any) => {
     for (const blockInput of Object.keys(blockInputs)) {
-      // @ts-ignore
       if (blockInput !== 'blockType' && blockInput !== 'blockId' && blockInputs?.[blockInput]?.value === '') {
         return false;
       }
@@ -39,20 +46,19 @@ export default function useValidateStrategy(
 
   const fetchData = useCallback(async () => {
     try {
-      const nodeList = {};
+      const nodeList: any = {};
       const edgeList = [];
       for (const element of elements) {
         if (isNode(element)) {
           if (element?.id.split('-').length === 1) {
-            if (!checkInputsValid(inputs[element?.id])) {
+            if (!checkInputsValid(inputs[element.id])) {
               // eslint-disable-next-line @typescript-eslint/no-throw-literal
               throw BreakException;
             }
-            // @ts-ignore
-            nodeList[element?.id] = inputs[element?.id];
+            nodeList[element.id] = inputs[element.id];
           }
         } else if (isEdge(element)) {
-          if (element?.target.split('-').length === 1) {
+          if (element.target.split('-').length === 1) {
             edgeList.push(element);
           }
         } else {
@@ -65,16 +71,15 @@ export default function useValidateStrategy(
         edgeList,
       };
 
-      const runResponse = await fetcher.post('/orchestration/validate', requestBody, {
+      const validateResponse = await fetcher.post('/orchestration/validate', requestBody, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
         },
       });
 
-      if (runResponse.status === 200) {
-        setState((elems) => ({
-          ...elems, isValid: runResponse.data?.valid, edgeValidation: runResponse.data?.edges,
-        }));
+      if (validateResponse.status === 200) {
+        const response: ValidateResponse = validateResponse.data;
+        setState({ isValid: response.valid, edgeValidation: response.edges });
       } else {
         throw new Error(POST_RUN_STRATEGY_500);
       }
@@ -87,8 +92,8 @@ export default function useValidateStrategy(
           isClosable: true,
         });
       }
-      setState((elems: any) => ({
-        ...elems, isLoading: false, hasError: true, isValid: false,
+      setState((elems) => ({
+        ...elems, isValid: false,
       }));
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -97,7 +102,6 @@ export default function useValidateStrategy(
   useEffect(() => {
     if (
       (elements && elements.length > 0)
-      // @ts-ignore
       && (inputs && Object.keys(inputs).length > 0)
     ) {
       fetchData();
