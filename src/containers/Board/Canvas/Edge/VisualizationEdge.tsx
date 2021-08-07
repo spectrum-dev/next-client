@@ -1,4 +1,4 @@
-import { getMarkerEnd, getSmoothStepPath } from 'react-flow-renderer';
+import { getMarkerEnd, getSmoothStepPath, WrapEdgeProps } from 'react-flow-renderer';
 
 const VisualizationEdge = (
   {
@@ -11,7 +11,7 @@ const VisualizationEdge = (
     targetPosition,
     arrowHeadType,
     markerEndId,
-  }: any,
+  }: WrapEdgeProps,
 ) => {
   const edgePath = getSmoothStepPath({
     sourceX, sourceY, sourcePosition, targetX, targetY, targetPosition,

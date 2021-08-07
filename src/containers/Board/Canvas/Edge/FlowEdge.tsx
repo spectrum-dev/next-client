@@ -5,7 +5,7 @@ import { Tooltip } from '@chakra-ui/react';
 // Contexts
 import InputContext from 'app/contexts/input';
 
-import { getMarkerEnd, getSmoothStepPath } from 'react-flow-renderer';
+import { getMarkerEnd, getSmoothStepPath, WrapEdgeProps } from 'react-flow-renderer';
 
 const FlowEdge = (
   {
@@ -18,7 +18,7 @@ const FlowEdge = (
     targetPosition,
     arrowHeadType,
     markerEndId,
-  }: any,
+  }: WrapEdgeProps,
 ) => {
   // @ts-ignore
   const { edgeValidation } = useContext(InputContext);
