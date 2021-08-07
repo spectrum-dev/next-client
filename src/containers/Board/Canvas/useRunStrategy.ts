@@ -45,11 +45,11 @@ export default function useRunStrategy(
       const edgeList = [];
       for (const element of elements) {
         if (isNode(element)) {
-          if (element?.id.split('-').length === 1) {
-            nodeList[element?.id] = inputs[element?.id];
+          if (element.id.split('-').length === 1) {
+            nodeList[element.id] = inputs[element.id];
           }
         } else if (isEdge(element)) {
-          if (element?.target.split('-').length === 1) {
+          if (element.target.split('-').length === 1) {
             edgeList.push(element);
           }
         } else {
