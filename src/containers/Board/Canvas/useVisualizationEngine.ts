@@ -1,24 +1,20 @@
-/* eslint-disable no-restricted-syntax */
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import {
+  Elements, OnLoadParams, Node, Edge, FlowElement,
+} from 'react-flow-renderer';
 
 import { SetElements, Outputs } from './index.types';
 
-interface State {
-  isLoading: boolean;
-  hasError: boolean;
-}
-
 export default function useVisualizationEngine({
   outputs, setElements, reactFlowInstance,
-}: { outputs: Outputs, setElements: SetElements, reactFlowInstance: any, }) {
-  const [state] = useState<State>({
-    isLoading: false,
-    hasError: false,
-  });
-
+}: { outputs: Outputs, setElements: SetElements, reactFlowInstance: OnLoadParams | undefined }) {
   const runVisualization = async () => {
+    if (!reactFlowInstance) {
+      return;
+    }
+
     for (const [key, value] of Object.entries(outputs)) {
-      // Will not create graphs when results key comes up
+      // A graph for the results key (in the outputs response) will not be created
       if (key === 'results') {
         return;
       }
@@ -28,14 +24,14 @@ export default function useVisualizationEngine({
 
       const position = reactFlowInstance.project({ x: 100, y: 100 });
 
-      const newNode: any = {
+      const newNode: Node = {
         id: key,
         type: 'visualizationBlock',
         position,
         data: value,
       };
 
-      const edge: any = {
+      const edge: Edge = {
         source: BLOCK_ID_IN_FLOW,
         sourceHandle: `output_${BLOCK_ID_IN_FLOW}`,
         target: key,
@@ -44,7 +40,7 @@ export default function useVisualizationEngine({
         id: `reactflow__edge-${key}output_id${BLOCK_ID_IN_FLOW}-2input_id${key}`,
       };
 
-      setElements((es: any) => {
+      setElements((es: Elements) => {
         let idExists = false;
         for (const tempElem of es) {
           if (tempElem.id === key) {
@@ -53,7 +49,7 @@ export default function useVisualizationEngine({
         }
 
         if (idExists) {
-          return es.map((el: any) => {
+          return es.map((el: FlowElement) => {
             if (el?.id === key) {
               // eslint-disable-next-line no-param-reassign
               el.data = value;
@@ -72,5 +68,5 @@ export default function useVisualizationEngine({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [outputs]);
 
-  return state;
+  return {};
 }
