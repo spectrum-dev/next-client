@@ -5,18 +5,20 @@ import fetcher from 'app/fetcher';
 
 const GET_ALL_METADATA_RESPONSE_500 = 'Error retrieving block metadata';
 
-interface State {
-  isLoading: boolean;
-  hasError: boolean;
-  blockMetadata: Record<any, any> | undefined;
+interface BlockMetadata {
+  [blockKey: string]: {
+    [id: string]: {
+      blockName: string;
+      blockMetadata: string;
+    }
+  }
+}
+interface MetadataResponse {
+  response: BlockMetadata;
 }
 
 export default function useBlockMetadataRetriever() {
-  const [state, setState] = useState<State>({
-    isLoading: true,
-    hasError: false,
-    blockMetadata: undefined,
-  });
+  const [blockMetadata, setBlockMetadata] = useState<BlockMetadata | undefined>(undefined);
   const toast = useToast();
 
   const fetchData = useCallback(async () => {
@@ -28,10 +30,8 @@ export default function useBlockMetadataRetriever() {
       });
 
       if (metadataResponse.status === 200) {
-        setState((element) => ({
-          ...element,
-          blockMetadata: metadataResponse?.data?.response,
-        }));
+        const response: MetadataResponse = metadataResponse.data;
+        setBlockMetadata(response.response);
       } else {
         throw new Error(GET_ALL_METADATA_RESPONSE_500);
       }
@@ -50,5 +50,5 @@ export default function useBlockMetadataRetriever() {
     fetchData();
   }, [fetchData]);
 
-  return state;
+  return { blockMetadata };
 }
