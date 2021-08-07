@@ -1,13 +1,12 @@
-import { useContext } from 'react';
-
+import { useContext, memo } from 'react';
 import { Tooltip } from '@chakra-ui/react';
+import {
+  getMarkerEnd, getSmoothStepPath, WrapEdgeProps,
+} from 'react-flow-renderer';
 
-// Contexts
 import InputContext from 'app/contexts/input';
 
-import { getMarkerEnd, getSmoothStepPath, WrapEdgeProps } from 'react-flow-renderer';
-
-const FlowEdge = (
+const FlowEdge = memo((
   {
     id,
     sourceX,
@@ -29,7 +28,7 @@ const FlowEdge = (
 
   const markerEnd = getMarkerEnd(arrowHeadType, markerEndId);
 
-  const renderEdgeColor = () => {
+  const renderEdgeColor = (): string => {
     if (edgeValidation) {
       if (Object.keys(edgeValidation).length === 0) {
         return '#ed8936';
@@ -48,17 +47,17 @@ const FlowEdge = (
     return '#ed8936';
   };
 
-  const renderTooltip = () => {
-    if (edgeValidation && edgeValidation?.[id] && !edgeValidation?.[id].status) {
-      return (
-        <Tooltip
-          hasArrow
-          label={`The ${edgeValidation?.[id]?.target_block} block only can connect from the ${edgeValidation?.[id]?.allowed_connections.join(', ')} ${edgeValidation?.[id]?.allowed_connections.length === 1 ? 'block' : 'blocks'}`}
-          bg="#1a202c"
-          color="white"
-          textAlign="center"
-        >
-          <g>
+  return (
+    edgeValidation && edgeValidation?.[id] && !edgeValidation?.[id].status
+      ? (
+        <g>
+          <Tooltip
+            hasArrow
+            label={`The ${edgeValidation?.[id]?.target_block} block only can connect from the ${edgeValidation?.[id]?.allowed_connections.join(', ')} ${edgeValidation?.[id]?.allowed_connections.length === 1 ? 'block' : 'blocks'}`}
+            bg="#1a202c"
+            color="white"
+            textAlign="center"
+          >
             <path
               id={id}
               className="react-flow_flow-edge-path"
@@ -68,27 +67,22 @@ const FlowEdge = (
               d={edgePath}
               markerEnd={markerEnd}
             />
-          </g>
-        </Tooltip>
-      );
-    }
-
-    return (
-      <g>
-        <path
-          id={id}
-          className="react-flow_flow-edge-path"
-          fill="none"
-          stroke={renderEdgeColor()}
-          strokeWidth={5.5}
-          d={edgePath}
-          markerEnd={markerEnd}
-        />
-      </g>
-    );
-  };
-
-  return renderTooltip();
-};
+          </Tooltip>
+        </g>
+      ) : (
+        <g>
+          <path
+            id={id}
+            className="react-flow_flow-edge-path"
+            fill="none"
+            stroke={renderEdgeColor()}
+            strokeWidth={5.5}
+            d={edgePath}
+            markerEnd={markerEnd}
+          />
+        </g>
+      )
+  );
+});
 
 export default FlowEdge;

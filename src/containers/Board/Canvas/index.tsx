@@ -115,6 +115,7 @@ const Canvas = () => {
             }}
             onDragOver={onDragOver}
             // Connection Functions
+            // @ts-ignore
             connectionLineComponent={FlowEdge}
             onConnect={onConnect}
             // Loading and Node Updating Functions

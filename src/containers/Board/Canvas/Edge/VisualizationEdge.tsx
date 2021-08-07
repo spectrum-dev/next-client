@@ -1,6 +1,9 @@
-import { getMarkerEnd, getSmoothStepPath, WrapEdgeProps } from 'react-flow-renderer';
+import { memo } from 'react';
+import {
+  getMarkerEnd, getSmoothStepPath, WrapEdgeProps,
+} from 'react-flow-renderer';
 
-const VisualizationEdge = (
+const VisualizationEdge = memo((
   {
     id,
     sourceX,
@@ -30,6 +33,6 @@ const VisualizationEdge = (
       />
     </g>
   );
-};
+});
 
 export default VisualizationEdge;
