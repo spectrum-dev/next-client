@@ -37,6 +37,7 @@ const ResultsDrawer = (
           onClose={onClose}
         />,
       );
+    }
     return response;
   };
 
