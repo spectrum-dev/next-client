@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Box, Center, useDisclosure } from '@chakra-ui/react';
 
 import ReactFlow, {
-  ReactFlowProvider, Background, addEdge, Edge, Connection, OnLoadParams,
+  ReactFlowProvider, Background, addEdge, Edge, Connection, OnLoadParams, Node,
 } from 'react-flow-renderer';
 
 // Contexts
@@ -79,7 +79,7 @@ const Canvas = () => {
   // Boilerplate
   const { onDrop } = useBlockMetadataOnDrop({ startId });
 
-  const onDragOver = (event: any) => {
+  const onDragOver = (event: React.DragEvent) => {
     event.preventDefault();
   };
 
@@ -91,7 +91,7 @@ const Canvas = () => {
     setReactFlowInstance(params);
   };
 
-  const onNodeDragStop = (event: any, node: any) => {
+  const onNodeDragStop = (event: React.MouseEvent<Element, MouseEvent>, node: Node) => {
     setElements((els) => els.map((el) => {
       if (el.id === node.id) {
         return node;
