@@ -9,7 +9,9 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 
-import { Handle as RawHandle, Position, useUpdateNodeInternals } from 'react-flow-renderer';
+import {
+  Handle as RawHandle, Position, useUpdateNodeInternals, NodeProps,
+} from 'react-flow-renderer';
 
 import styled from '@emotion/styled';
 
@@ -32,12 +34,8 @@ const Handle = styled(RawHandle)`
 `;
 
 const Block = memo((
-  props: any,
+  { id, data }: NodeProps,
 ) => {
-  const {
-    id, data,
-  } = props;
-
   const updateNodeInternals = useUpdateNodeInternals();
   const { onOpen, onClose, isOpen } = useDisclosure();
 
