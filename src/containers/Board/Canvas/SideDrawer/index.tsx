@@ -25,7 +25,7 @@ const SideDrawer = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void 
   const { blockMetadata: blockMetadataFromRetriever } = useBlockMetadataRetriever();
 
   const onDrag = (
-    event: any,
+    event: React.DragEvent<HTMLDivElement>,
     blockType: string,
     blockId: string,
     blockMetadataEndpoint: string,
@@ -52,8 +52,15 @@ const SideDrawer = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void 
       for (const [blockId, blockData] of Object.entries(blockMetadata)) {
         blockList.push(
           <Center key={`${blockType}-${blockId}`}>
-            {/* @ts-ignore */}
-            <GenericBlock key={`${blockType}-${blockId}`} blockName={blockData.blockName} blockType={formatBlockTypeHeader(blockType)} onDrag={async (event) => { await onClose(); await onDrag(event, blockType, blockId, blockData.blockMetadataEndpoint); }} />
+            <GenericBlock
+              key={`${blockType}-${blockId}`}
+              blockName={blockData.blockName}
+              blockType={formatBlockTypeHeader(blockType)}
+              onDrag={async (event) => {
+                await onClose();
+                await onDrag(event, blockType, blockId, blockData.blockMetadata);
+              }}
+            />
           </Center>,
         );
       }
@@ -75,7 +82,7 @@ const SideDrawer = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void 
       finalFocusRef={btnRef}
     >
       <DrawerOverlay />
-      <DrawerContent backgroundColor="#212838" margin="75px 20px 30px 0px" borderRadius="40px">
+      <DrawerContent backgroundColor="#212838" margin="70px 20px 30px 0px" borderRadius="20px">
         <DrawerCloseButton textColor="white" />
         <DrawerHeader textColor="white" textAlign="center">Drag a block</DrawerHeader>
 
