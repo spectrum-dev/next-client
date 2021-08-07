@@ -31,6 +31,7 @@ interface VisualizationBlockInputForm {
 }
 
 export type Inputs = InputsMetadata & BlockInputsForm & VisualizationBlockInputForm;
+export type SetInputs = React.Dispatch<React.SetStateAction<Inputs>>;
 
 interface OutputResults {
   results: {
