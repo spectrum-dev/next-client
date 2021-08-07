@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { useToast } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 
@@ -12,21 +12,22 @@ const STRATEGY_SAVE_SUCCESS = 'Your strategy has been saved successfully';
 const GET_COMMIT_ID_ERROR = 'There was an error getting the commit ID. Please refresh the page.';
 const POST_SAVE_STRATEGY_ERROR = 'There was an error saving the strategy. Please try again.';
 
-interface State {
-  isLoading: boolean;
-  hasError: boolean;
-  hasSaved: boolean | undefined;
+// Types
+interface CommitIDResponse {
+  strategyId: string;
+  commitId: string;
+}
+
+interface SaveStrategyRequestBody {
+  metadata: Elements;
+  outputs: Outputs;
+  inputs: Record<any, any>;
 }
 
 export default function useSaveStrategy(
   { inputs, outputs, elements }:
   { inputs: Record<any, any>, outputs: Outputs, elements: Elements },
 ) {
-  const [state, setState] = useState<State>({
-    isLoading: false,
-    hasError: false,
-    hasSaved: undefined,
-  });
   const toast = useToast();
 
   const { strategyId } = useParams<URLParams>();
@@ -40,17 +41,20 @@ export default function useSaveStrategy(
       });
 
       if (commitIdResponse.status === 200) {
-        const saveStrategyRequestBody = {
+        const response: CommitIDResponse = commitIdResponse.data;
+
+        const saveStrategyRequestBody: SaveStrategyRequestBody = {
           metadata: elements,
           inputs,
           outputs,
         };
 
-        const saveStrategyResponse = await fetcher.post(`/strategy/${strategyId}/${commitIdResponse?.data?.commitId}`, saveStrategyRequestBody, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-          },
-        });
+        const saveStrategyResponse = await fetcher.post(`/strategy/${response.strategyId}/${response.commitId}`,
+          saveStrategyRequestBody, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            },
+          });
 
         if (saveStrategyResponse.status === 200) {
           toast({
@@ -59,11 +63,6 @@ export default function useSaveStrategy(
             duration: 3000,
             isClosable: true,
             position: 'top',
-          });
-          setState({
-            isLoading: false,
-            hasError: false,
-            hasSaved: true,
           });
         } else {
           throw new Error(POST_SAVE_STRATEGY_ERROR);
@@ -79,13 +78,9 @@ export default function useSaveStrategy(
         isClosable: true,
         position: 'top',
       });
-      setState({ isLoading: false, hasError: true, hasSaved: false });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [elements, inputs, outputs, strategyId]);
 
-  return {
-    ...state,
-    saveStrategy,
-  };
+  return { saveStrategy };
 }
