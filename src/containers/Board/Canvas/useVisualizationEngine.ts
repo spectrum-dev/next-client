@@ -1,24 +1,19 @@
 /* eslint-disable no-restricted-syntax */
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import { OnLoadParams } from 'react-flow-renderer';
 
 import { SetElements, Outputs } from './index.types';
 
-interface State {
-  isLoading: boolean;
-  hasError: boolean;
-}
-
 export default function useVisualizationEngine({
   outputs, setElements, reactFlowInstance,
-}: { outputs: Outputs, setElements: SetElements, reactFlowInstance: any, }) {
-  const [state] = useState<State>({
-    isLoading: false,
-    hasError: false,
-  });
-
+}: { outputs: Outputs, setElements: SetElements, reactFlowInstance: OnLoadParams | undefined }) {
   const runVisualization = async () => {
+    if (!reactFlowInstance) {
+      return;
+    }
+
     for (const [key, value] of Object.entries(outputs)) {
-      // Will not create graphs when results key comes up
+      // Graphs will not be created when results key is in output
       if (key === 'results') {
         return;
       }
@@ -72,5 +67,5 @@ export default function useVisualizationEngine({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [outputs]);
 
-  return state;
+  return {};
 }
