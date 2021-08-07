@@ -12,12 +12,11 @@ const POST_RUN_STRATEGY_500 = 'There was an error running this strategy. Please 
 const STRATEGY_RUN_SUCCESS = 'The strategy was run successfully.';
 
 interface State {
-  isLoading: boolean;
-  hasError: boolean;
-  invokeRun: Function | undefined;
   outputs: Outputs;
   showResults: boolean;
 }
+
+type RunResponse = { response: Outputs };
 
 export default function useRunStrategy(
   {
@@ -33,11 +32,8 @@ export default function useRunStrategy(
     isStrategyLoaded: boolean
   },
 ) {
-  const [initializer, setInitializer] = useState<Boolean>(false);
+  const [initializer, setInitializer] = useState<boolean>(false);
   const [state, setState] = useState<State>({
-    isLoading: false,
-    hasError: false,
-    invokeRun: undefined,
     outputs: {},
     showResults: false,
   });
@@ -45,16 +41,15 @@ export default function useRunStrategy(
 
   const fetchData = useCallback(async () => {
     try {
-      const nodeList = {};
+      const nodeList: any = {};
       const edgeList = [];
       for (const element of elements) {
         if (isNode(element)) {
-          if (element?.id.split('-').length === 1) {
-            // @ts-ignore
-            nodeList[element?.id] = inputs[element?.id];
+          if (element.id.split('-').length === 1) {
+            nodeList[element.id] = inputs[element.id];
           }
         } else if (isEdge(element)) {
-          if (element?.target.split('-').length === 1) {
+          if (element.target.split('-').length === 1) {
             edgeList.push(element);
           }
         } else {
@@ -74,6 +69,8 @@ export default function useRunStrategy(
       });
 
       if (runResponse.status === 200) {
+        const response: RunResponse = runResponse.data;
+
         toast({
           title: STRATEGY_RUN_SUCCESS,
           status: 'success',
@@ -81,16 +78,8 @@ export default function useRunStrategy(
           isClosable: true,
           position: 'top',
         });
-        // TODO: Having an issue with outputs being undefined
-        if (runResponse?.data?.response) {
-          setState((elems) => ({ ...elems, outputs: runResponse?.data?.response, showResults: Object.keys(runResponse?.data?.response).includes('results') }));
-        } else {
-          setState((elems) => ({
-            ...elems,
-            outputs: runResponse?.data?.response,
-            showResults: false,
-          }));
-        }
+
+        setState({ outputs: response.response, showResults: 'results' in response.response });
       } else {
         throw new Error(POST_RUN_STRATEGY_500);
       }
@@ -102,10 +91,8 @@ export default function useRunStrategy(
         isClosable: true,
         position: 'top',
       });
+
       setState({
-        isLoading: false,
-        hasError: true,
-        invokeRun: undefined,
         outputs: {},
         showResults: false,
       });
@@ -116,16 +103,18 @@ export default function useRunStrategy(
   useEffect(() => {
     if (isStrategyLoaded) {
       if (!initializer) {
-        setState((els: any) => {
+        setState(() => {
           setInitializer(true);
           if (loadedOutputs) {
             return {
-              ...els,
               outputs: loadedOutputs,
-              showResults: Object.keys(loadedOutputs).includes('results'),
+              showResults: 'results' in loadedOutputs,
             };
           }
-          return {};
+          return {
+            outputs: {},
+            showResults: false,
+          };
         });
       }
     }
