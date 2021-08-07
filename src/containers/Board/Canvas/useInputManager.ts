@@ -8,11 +8,16 @@ import { formatDate } from 'app/utils';
 
 import fetcher from 'app/fetcher';
 
+// Types
+interface FieldDataResponse {
+  response: Array<string>;
+}
+
 export default function useInputManager(
   { elements, loadedInputs, isStrategyLoaded }:
   { elements: Elements, loadedInputs: Record<any, any>, isStrategyLoaded: boolean },
 ) {
-  const [initializer, setInitializer] = useState<Boolean>(false);
+  const [initializer, setInitializer] = useState<boolean>(false);
   const [inputs, setInputs] = useState({});
   const [startId, setStartId] = useState<number>(0);
 
@@ -28,31 +33,31 @@ export default function useInputManager(
           },
         };
       case 'dropdown':
-        const fieldData = await fetcher(`/orchestration/${blockType}/${blockId}${input?.fieldData?.base}`, {
+        const fieldDataResponse = await fetcher(`/orchestration/${blockType}/${blockId}${input?.fieldData?.base}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
           },
         });
 
-        if (fieldData.status === 200) {
+        if (fieldDataResponse.status === 200) {
+          const response: FieldDataResponse = fieldDataResponse.data;
+
           if (input?.fieldData?.hasOwnProperty('onChange')) {
             return {
               [input?.fieldVariableName]: {
-                options: fieldData.data.response,
+                options: response.response,
                 value: '',
                 onChange: input?.fieldData?.onChange,
               },
             };
           }
           return {
-            // @ts-ignore
             [input?.fieldVariableName]: {
-              options: fieldData.data.response,
+              options: response.response,
               value: '',
             },
           };
         }
-        console.error('Error making remote request for dropdown data');
         break;
       case 'input':
         return {
@@ -73,7 +78,6 @@ export default function useInputManager(
           },
         };
       default:
-        console.error('Unhandled Input Type');
         break;
     }
     return {};
@@ -112,7 +116,6 @@ export default function useInputManager(
               element?.data?.metadata?.blockType,
               element?.data?.metadata?.blockId,
             );
-            // @ts-ignore
             mergedInputs = {
               ...mergedInputs,
               [element.id]: {
