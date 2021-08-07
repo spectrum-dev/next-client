@@ -42,7 +42,7 @@ export default function useInputManager(
         if (fieldDataResponse.status === 200) {
           const response: FieldDataResponse = fieldDataResponse.data;
 
-          if (input?.fieldData?.hasOwnProperty('onChange')) {
+          if ('onChange' in input?.fieldData) {
             return {
               [input?.fieldVariableName]: {
                 options: response.response,
@@ -98,23 +98,23 @@ export default function useInputManager(
     for (const element of elements) {
       if (
         isNode(element)
-        && (element?.id.split('-').length === 1)
+        && (element.id.split('-').length === 1)
       ) {
         // @ts-ignore
         if (!inputs?.[element.id]) {
           // @ts-ignore
           mergedInputs[element.id] = {};
           // @ts-ignore
-          mergedInputs[element.id].blockType = element?.data?.metadata?.blockType;
+          mergedInputs[element.id].blockType = element.data.metadata.blockType;
           // @ts-ignore
-          mergedInputs[element.id].blockId = element?.data?.metadata?.blockId;
-          for (const input of element?.data?.metadata?.inputs) {
+          mergedInputs[element.id].blockId = element.data.metadata.blockId;
+          for (const input of element.data.metadata.inputs) {
             // eslint-disable-next-line no-await-in-loop
             const inputValue = await handleInputByType(
               input.fieldType,
               input,
-              element?.data?.metadata?.blockType,
-              element?.data?.metadata?.blockId,
+              element.data.metadata.blockType,
+              element.data.metadata.blockId,
             );
             mergedInputs = {
               ...mergedInputs,
@@ -128,7 +128,7 @@ export default function useInputManager(
         }
       } else if (
         isNode(element)
-        && (element?.id.split('-').length === 3)
+        && (element.id.split('-').length === 3)
       ) {
         // @ts-ignore
         mergedInputs[element.id] = {
