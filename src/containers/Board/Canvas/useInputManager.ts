@@ -83,7 +83,7 @@ export default function useInputManager(
     return {};
   };
 
-  const startIdCalculator = (responseObject: any): number => Math.max(
+  const startIdCalculator = (responseObject: Inputs): number => Math.max(
     ...Object.keys(responseObject).map((i) => {
       if (i.split('-').length === 1) {
         return Number(i);
