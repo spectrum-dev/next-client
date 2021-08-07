@@ -110,7 +110,9 @@ const Canvas = () => {
             nodeTypes={nodeTypes}
             edgeTypes={edgeTypes}
             // Drag Functions
-            onDrop={(event) => { onDrop(event, reactFlowInstance, setElements); }}
+            onDrop={(event: React.DragEvent<HTMLDivElement>) => {
+              onDrop(event, reactFlowInstance, setElements);
+            }}
             onDragOver={onDragOver}
             // Connection Functions
             connectionLineComponent={FlowEdge}
