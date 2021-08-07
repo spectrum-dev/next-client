@@ -9,29 +9,33 @@ import {
   SimpleGrid,
 } from '@chakra-ui/react';
 
+import { Outputs } from 'containers/Board/Canvas/index.types';
+
 import StatCard from './Stats/StatCard';
 
 const ResultsDrawer = (
   { isOpen, onClose, outputs }:
-  { isOpen: boolean, onClose: () => void, outputs: any },
+  { isOpen: boolean, onClose: () => void, outputs: Outputs },
 ) => {
   const btnRef = useRef();
 
   const renderStatCards = () => {
     const response = [];
-    if (outputs?.results?.cards) {
-      for (const card of outputs?.results?.cards) {
-        response.push(
-          <StatCard
-            key={0}
-            data={{
-              label: card.label,
-              value: card.value,
-              type: card.type,
-            }}
-          />,
-        );
-      }
+    if (!('results' in outputs)) {
+      return <></>;
+    }
+
+    for (const card of outputs.results.cards) {
+      response.push(
+        <StatCard
+          key={0}
+          data={{
+            label: card.label,
+            value: card.value,
+            type: card.type,
+          }}
+        />,
+      );
     }
     return response;
   };

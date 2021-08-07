@@ -5,6 +5,8 @@ import { isNode, isEdge, Elements } from 'react-flow-renderer';
 
 import fetcher from 'app/fetcher';
 
+import { Outputs } from './index.types';
+
 const NON_NODE_OR_EDGE_VALUE = 'There was an error running this strategy. Please try again.';
 const POST_RUN_STRATEGY_500 = 'There was an error running this strategy. Please try again.';
 const STRATEGY_RUN_SUCCESS = 'The strategy was run successfully.';
@@ -13,7 +15,7 @@ interface State {
   isLoading: boolean;
   hasError: boolean;
   invokeRun: Function | undefined;
-  outputs: Record<any, any> | undefined;
+  outputs: Outputs;
   showResults: boolean;
 }
 
@@ -26,7 +28,7 @@ export default function useRunStrategy(
   }:
   {
     inputs: Record<any, any>,
-    loadedOutputs: any,
+    loadedOutputs: Outputs,
     elements: Elements,
     isStrategyLoaded: boolean
   },
@@ -104,7 +106,7 @@ export default function useRunStrategy(
         isLoading: false,
         hasError: true,
         invokeRun: undefined,
-        outputs: undefined,
+        outputs: {},
         showResults: false,
       });
     }

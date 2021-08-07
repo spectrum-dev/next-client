@@ -7,7 +7,7 @@ import { Elements } from 'react-flow-renderer';
 
 import fetcher from 'app/fetcher';
 
-import { URLParams } from './index.types';
+import { URLParams, Outputs } from './index.types';
 
 const POST_LOAD_STRATEGY_500 = 'There was an error loading your strategy. Please refresh the page.';
 
@@ -15,13 +15,13 @@ const POST_LOAD_STRATEGY_500 = 'There was an error loading your strategy. Please
 interface State {
   isLoaded: boolean;
   inputs: Record<any, any> | {};
-  outputs: Record<any, any> | {};
+  outputs: Outputs;
 }
 
 interface GetStrategyResponse {
   elements: Elements;
   inputs: Record<any, any> | {};
-  outputs: Record<any, any> | {};
+  outputs: Outputs;
 }
 
 export default function useLoadStrategy() {
