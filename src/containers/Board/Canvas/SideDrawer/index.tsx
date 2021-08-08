@@ -81,7 +81,6 @@ const SideDrawer = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void 
       onClose={onClose}
       // @ts-ignore
       finalFocusRef={btnRef}
-      key={0}
     >
       <DrawerOverlay />
       <DrawerContent backgroundColor="#212838" margin="70px 20px 30px 0px" borderRadius="20px">
