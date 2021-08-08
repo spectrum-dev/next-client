@@ -14,9 +14,9 @@ import SideDrawer from './SideDrawer';
 import ResultsDrawer from './ResultsDrawer';
 
 // Blocks
-import Block from './Block';
-import VisualizationBlock from './VisualizationBlock';
-import ResultBlock from './ResultBlock';
+import Block from './blocks/Block';
+import VisualizationBlock from './blocks/VisualizationBlock';
+import ResultBlock from './blocks/ResultBlock';
 
 // Edges
 import FlowEdge from './Edge/FlowEdge';
