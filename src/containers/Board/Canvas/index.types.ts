@@ -19,3 +19,5 @@ interface OutputResults {
 export type Outputs = Record<string, Array<Record<string, string | number>>> & OutputResults | {};
 
 export type SetElements = React.Dispatch<React.SetStateAction<Elements<any>>>;
+
+export type BlockType = 'DATA_BLOCK' | 'SIGNAL_BLOCK' | 'STRATEGY_BLOCK' | 'COMPUTATIONAL_BLOCK';
