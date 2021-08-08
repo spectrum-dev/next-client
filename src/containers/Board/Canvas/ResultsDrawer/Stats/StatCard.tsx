@@ -20,21 +20,14 @@ function format(value: number) {
   return formatter.format(value);
 }
 
-const StatCard = (props: StatCardProps) => {
-  const { onClose } = props;
-  const {
-    label, value, type,
-  } = props.data;
-
+const StatCard = (
+  { data: { label, value, type }, onClose }: StatCardProps,
+) => {
   const onDrag = (
-    event: any,
+    event: React.DragEvent<HTMLDivElement>,
   ) => {
     event.dataTransfer.setData('application/reactflow-flow-block-type', 'resultsBlock');
     event.dataTransfer.setData('application/reactflow-data-label', label);
-    event.dataTransfer.setData('application/reactflow-data-value', value);
-    event.dataTransfer.setData('application/reactflow-data-type', type);
-
-    onClose();
   };
 
   return (
@@ -48,8 +41,10 @@ const StatCard = (props: StatCardProps) => {
       color="gray.400"
       textAlign="center"
       draggable
-      // @ts-ignore
-      onDragStart={onDrag}
+      onDragStart={(event) => {
+        onDrag(event);
+        onClose();
+      }}
     >
       <Box>
         <Text fontSize="xs" fontWeight="bold" textTransform="uppercase" letterSpacing="wide">

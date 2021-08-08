@@ -23,7 +23,7 @@ import { Handle as RawHandle, Position, NodeProps } from 'react-flow-renderer';
 import { formatBlockTypeHeader } from 'app/utils';
 
 // Contexts
-import InputContext from 'app/contexts/input';
+import BoardContext from 'app/contexts/board';
 
 // Hooks
 import useVisualizationData from './visualizations/useVisualizationData';
@@ -66,7 +66,7 @@ export default memo(({ id, data: rawData }: NodeProps) => {
   }, [rawData]);
 
   // @ts-ignore
-  const { inputs, setInputs } = useContext(InputContext);
+  const { inputs, setInputs } = useContext(BoardContext);
 
   const [graphType, setGraphType] = useState<VisualizationType>(
     inputs?.[id]?.graphType ? inputs?.[id]?.graphType : VisualizationType.Line,

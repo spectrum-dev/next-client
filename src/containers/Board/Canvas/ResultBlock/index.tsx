@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 
 // Contexts
-import InputContext from 'app/contexts/input';
+import BoardContext from 'app/contexts/board';
 
 // Types
 import { Outputs } from 'containers/Board/Canvas/index.types';
@@ -20,7 +20,7 @@ import { Outputs } from 'containers/Board/Canvas/index.types';
 /**
  *
  * @param value Numerical Value to be displayed
- * @returns Formatted value
+ * @returns Formatted number up to 3 Decimal Places
  */
 function format(value: number) {
   const formatter = new Intl.NumberFormat('en-US', {
@@ -39,20 +39,20 @@ interface ResultsBlockProps {
 }
 
 const ResultBlock = memo((
-  { data }: ResultsBlockProps,
+  { data: { label } }: ResultsBlockProps,
 ) => {
   const [displayData, setDisplayData] = useState<{
     label: string;
     type: string;
     value: number;
   }>({
-    label: data.label,
+    label,
     type: '',
     value: 0,
   });
 
   // @ts-ignore
-  const { outputs } = useContext<{ outputs: Outputs }>(InputContext);
+  const { outputs } = useContext<{ outputs: Outputs }>(BoardContext);
 
   const findResults = () => {
     if (!('results' in outputs)) {
@@ -60,7 +60,7 @@ const ResultBlock = memo((
     }
 
     for (const cardData of outputs.results.cards) {
-      if (cardData.label === data.label) {
+      if (cardData.label === label) {
         setDisplayData({
           label: cardData.label,
           type: cardData.type,

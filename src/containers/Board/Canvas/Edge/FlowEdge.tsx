@@ -4,7 +4,7 @@ import {
   getMarkerEnd, getSmoothStepPath, WrapEdgeProps,
 } from 'react-flow-renderer';
 
-import InputContext from 'app/contexts/input';
+import BoardContext from 'app/contexts/board';
 
 const FlowEdge = memo((
   {
@@ -20,7 +20,7 @@ const FlowEdge = memo((
   }: WrapEdgeProps,
 ) => {
   // @ts-ignore
-  const { edgeValidation } = useContext(InputContext);
+  const { edgeValidation } = useContext(BoardContext);
 
   const edgePath = getSmoothStepPath({
     sourceX, sourceY, sourcePosition, targetX, targetY, targetPosition,

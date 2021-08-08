@@ -6,7 +6,7 @@ import ReactFlow, {
 } from 'react-flow-renderer';
 
 // Contexts
-import InputContext from 'app/contexts/input';
+import BoardContext from 'app/contexts/board';
 
 // Canvas Components
 import Controls from './Controls';
@@ -80,7 +80,7 @@ const Canvas = () => {
   } = useDisclosure();
 
   // Boilerplate
-  const { onDrop } = useBlockMetadataOnDrop({ startId });
+  const { onDrop: onBlockDrop } = useBlockMetadataOnDrop({ startId });
   const { onDrop: onResultsDrop } = useResultsOnDrop();
 
   const onDragOver = (event: React.DragEvent) => {
@@ -107,7 +107,7 @@ const Canvas = () => {
   return (
     <Box minH="100vh" h="100vh" as="section">
       <ReactFlowProvider>
-        <InputContext.Provider value={{
+        <BoardContext.Provider value={{
           inputs, setInputs, edgeValidation, outputs,
         }}
         >
@@ -118,7 +118,7 @@ const Canvas = () => {
             edgeTypes={edgeTypes}
             // Drag Functions
             onDrop={(event: React.DragEvent<HTMLDivElement>) => {
-              onDrop(event, reactFlowInstance, setElements);
+              onBlockDrop(event, reactFlowInstance, setElements);
               onResultsDrop(event, reactFlowInstance, setElements);
             }}
             onDragOver={onDragOver}
@@ -164,7 +164,7 @@ const Canvas = () => {
             onClose={onResultsDrawerClose}
             outputs={outputs}
           />
-        </InputContext.Provider>
+        </BoardContext.Provider>
       </ReactFlowProvider>
     </Box>
   );

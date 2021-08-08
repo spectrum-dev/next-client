@@ -1,7 +1,6 @@
 export default function useResultsOnDrop() {
   const onDrop = async (event: any, reactFlowInstance: any, setElements: any) => {
     const label = event.dataTransfer.getData('application/reactflow-data-label');
-
     const flowBlockType = event.dataTransfer.getData('application/reactflow-flow-block-type');
 
     if (flowBlockType === 'baseBlock') {
