@@ -12,6 +12,7 @@ import {
 import { Outputs } from 'containers/Board/Canvas/index.types';
 
 import StatCard from './Stats/StatCard';
+import Graph from './Graph';
 
 const ResultsDrawer = (
   { isOpen, onClose, outputs }:
@@ -41,6 +42,23 @@ const ResultsDrawer = (
     return response;
   };
 
+  const renderGraphCards = () => {
+    const response = [];
+
+    if (!('results' in outputs)) {
+      return <></>;
+    }
+
+    for (const graph of outputs.results.graphs) {
+      response.push(
+        <Graph
+          data={graph}
+        />,
+      );
+    }
+    return response;
+  };
+
   return (
     <Drawer
       isOpen={isOpen}
@@ -62,6 +80,13 @@ const ResultsDrawer = (
             spacing="6"
           >
             { renderStatCards() }
+          </SimpleGrid>
+          <SimpleGrid
+            columns={{ base: 1, md: 1, lg: 1 }}
+            spacing="6"
+            marginTop="50px"
+          >
+            { renderGraphCards() }
           </SimpleGrid>
         </DrawerBody>
       </DrawerContent>

@@ -11,7 +11,13 @@ interface OutputResults {
       value: number;
       type: string;
     }>;
-    graphs: Array<Record<string, any>>;
+    graphs: Array<{
+      title: string;
+      data: Array<{
+        timestamp: string;
+        value: number;
+      }>
+    }>;
     tables: Array<Record<string, any>>;
   }
 }
