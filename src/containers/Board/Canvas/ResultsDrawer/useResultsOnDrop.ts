@@ -1,9 +1,19 @@
 import {
-  Node, Elements, FlowElement, isNode,
+  Node, Elements, FlowElement, isNode, OnLoadParams,
 } from 'react-flow-renderer';
 
+import { SetElements } from 'containers/Board/Canvas/index.types';
+
 export default function useResultsOnDrop() {
-  const onDrop = async (event: any, reactFlowInstance: any, setElements: any) => {
+  const onDrop = async (
+    event: React.DragEvent<HTMLDivElement>,
+    reactFlowInstance: OnLoadParams | undefined,
+    setElements: SetElements,
+  ) => {
+    if (!reactFlowInstance) {
+      return;
+    }
+
     const label = event.dataTransfer.getData('application/reactflow-data-label');
     const flowBlockType = event.dataTransfer.getData('application/reactflow-flow-block-type');
 

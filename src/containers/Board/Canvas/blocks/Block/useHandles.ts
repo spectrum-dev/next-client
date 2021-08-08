@@ -1,11 +1,30 @@
 import { useState, useEffect, useCallback } from 'react';
 
+import { BlockType } from 'containers/Board/Canvas/index.types';
+
 interface State {
   inputHandle: boolean;
   outputHandle: boolean;
 }
 
-export default function useHandles({ validationData }: { validationData: any }) {
+interface ValidationData {
+  input: {
+    required: Array<{
+      blockType: BlockType;
+      number: number;
+    }>;
+    allowed_blocks: Array<{
+      blockId: string;
+      blockType: BlockType;
+    }>
+  };
+  output: Array<{
+    blockType: BlockType;
+    number: number;
+  }>
+}
+
+export default function useHandles({ validationData }: { validationData: ValidationData }) {
   const [state, setState] = useState<State>({
     inputHandle: false,
     outputHandle: false,

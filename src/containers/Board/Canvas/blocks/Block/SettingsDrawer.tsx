@@ -12,7 +12,7 @@ import {
 
 const SettingsDrawer = (
   { isOpen, onClose, renderedInputFields }:
-  { isOpen: boolean, onClose: () => void, renderedInputFields: any },
+  { isOpen: boolean, onClose: () => void, renderedInputFields: Array<React.ReactNode> },
 ) => {
   const btnRef = useRef();
 

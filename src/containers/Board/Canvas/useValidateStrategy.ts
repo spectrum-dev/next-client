@@ -1,7 +1,9 @@
 /* eslint-disable no-restricted-syntax */
 import { useCallback, useEffect, useState } from 'react';
 import { useToast } from '@chakra-ui/react';
-import { isNode, isEdge, Elements } from 'react-flow-renderer';
+import {
+  isNode, isEdge, Elements, Edge,
+} from 'react-flow-renderer';
 
 import fetcher from 'app/fetcher';
 
@@ -47,7 +49,7 @@ export default function useValidateStrategy(
   const fetchData = useCallback(async () => {
     try {
       const nodeList: any = {};
-      const edgeList = [];
+      const edgeList: Array<Edge> = [];
       for (const element of elements) {
         if (isNode(element)) {
           if (element?.id.split('-').length === 1) {

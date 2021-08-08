@@ -87,7 +87,7 @@ const SideDrawer = (
                     ]
                   }
                 value={graphType}
-                onChange={(selectedItem: any) => {
+                onChange={(selectedItem) => {
                   setGraphType(selectedItem.value);
                 }}
               />
@@ -102,7 +102,7 @@ const SideDrawer = (
                     <Dropdown
                       options={inputs?.[id]?.dataKeys}
                       value={inputs?.[id]?.dataKey}
-                      onChange={(selectedItem: any) => {
+                      onChange={(selectedItem) => {
                         setDataKey(selectedItem.value);
                         setTransformedData(rawData[selectedItem.value]);
                       }}
@@ -131,7 +131,7 @@ const SideDrawer = (
                     <Dropdown
                       options={yValues}
                       value={inputs?.[id]?.yValue}
-                      onChange={(selectedItem: any) => setYValue(selectedItem.value)}
+                      onChange={(selectedItem) => setYValue(selectedItem.value)}
                     />
                   </Box>
                 </>
