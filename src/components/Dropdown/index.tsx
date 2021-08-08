@@ -1,4 +1,4 @@
-import Dropdown from 'react-dropdown';
+import Dropdown, { ReactDropdownProps } from 'react-dropdown';
 import 'react-dropdown/style.css';
 
 import styled from '@emotion/styled';
@@ -32,11 +32,7 @@ const StyledDropdown = (
     options,
     value,
     onChange,
-  }: {
-    options: any;
-    value: any;
-    onChange: any
-  },
+  }: ReactDropdownProps,
 ) => (
   <StyledDropdownComponent
     options={options}

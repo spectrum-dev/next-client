@@ -54,11 +54,11 @@ export function AuthProvider({
     accessToken: localStorage.getItem('accessToken') || '',
   });
 
-  const setAuthenticationStatus = (response: any) => {
-    localStorage.setItem('isAuthenticated', 'true');
-    localStorage.setItem('firstName', response?.profileObj?.givenName);
-    localStorage.setItem('lastName', response?.profileObj?.familyName);
-    localStorage.setItem('email', response?.profileObj?.email);
+  const setAuthenticationStatus = (response: User) => {
+    localStorage.setItem('isAuthenticated', response.isAuthenticated ? 'true' : 'false');
+    localStorage.setItem('firstName', response.firstName);
+    localStorage.setItem('lastName', response.lastName);
+    localStorage.setItem('email', response.email);
     localStorage.setItem('accessToken', response.accessToken);
   };
 

@@ -1,8 +1,8 @@
 export interface User {
   isAuthenticated: boolean;
-  firstName: String;
-  lastName: String;
-  email: String;
-  accessToken: String;
+  firstName: string;
+  lastName: string;
+  email: string;
+  accessToken: string;
   error?: any;
 }
