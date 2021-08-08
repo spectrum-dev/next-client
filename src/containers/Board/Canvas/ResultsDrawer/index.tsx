@@ -17,7 +17,7 @@ const ResultsDrawer = (
   { isOpen, onClose, outputs }:
   { isOpen: boolean, onClose: () => void, outputs: Outputs },
 ) => {
-  const btnRef = useRef();
+  const btnRef: React.RefObject<any> = useRef();
 
   const renderStatCards = () => {
     const response = [];
@@ -28,12 +28,13 @@ const ResultsDrawer = (
     for (const card of outputs.results.cards) {
       response.push(
         <StatCard
-          key={0}
+          key={`key-${card.label}`}
           data={{
             label: card.label,
             value: card.value,
             type: card.type,
           }}
+          onClose={onClose}
         />,
       );
     }
@@ -46,7 +47,6 @@ const ResultsDrawer = (
       placement="bottom"
       onClose={onClose}
       size="full"
-      // @ts-ignore
       finalFocusRef={btnRef}
     >
       <DrawerOverlay />

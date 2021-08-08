@@ -34,6 +34,7 @@ const SideDrawer = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void 
     event.dataTransfer.setData('application/reactflow-id', blockId);
     event.dataTransfer.setData('application/reactflow-metadata-type', blockType);
     event.dataTransfer.setData('application/reactflow-metadata-url', blockMetadataEndpoint);
+    event.dataTransfer.setData('application/reactflow-flow-block-type', 'baseBlock');
   };
 
   const renderBlockList = () => {
@@ -56,9 +57,9 @@ const SideDrawer = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void 
               key={`${blockType}-${blockId}`}
               blockName={blockData.blockName}
               blockType={formatBlockTypeHeader(blockType)}
-              onDrag={async (event) => {
-                await onClose();
-                await onDrag(event, blockType, blockId, blockData.blockMetadata);
+              onDrag={(event) => {
+                onClose();
+                onDrag(event, blockType, blockId, blockData.blockMetadata);
               }}
             />
           </Center>,

@@ -21,13 +21,13 @@ import fetcher from 'app/fetcher';
 import { formatDate } from 'app/utils';
 
 // Contexts
-import InputContext from 'app/contexts/input';
+import BoardContext from 'app/contexts/board';
 
 export default function useInputFields({ id }: { id: string }) {
   const [additionalInputs, setAdditionalInputs] = useState([]);
 
   // @ts-ignore
-  const { inputs, setInputs } = useContext(InputContext);
+  const { inputs, setInputs } = useContext(BoardContext);
 
   const handleOnSearchEvent = async (
     // eslint-disable-next-line @typescript-eslint/no-shadow

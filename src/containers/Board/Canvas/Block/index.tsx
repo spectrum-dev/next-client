@@ -16,7 +16,7 @@ import {
 import styled from '@emotion/styled';
 
 // Contexts
-import InputContext from 'app/contexts/input';
+import BoardContext from 'app/contexts/board';
 
 // Hooks
 import useHandles from './useHandles';
@@ -40,7 +40,7 @@ const Block = memo((
   const { onOpen, onClose, isOpen } = useDisclosure();
 
   // @ts-ignore
-  const { inputs: managedInputs } = useContext(InputContext);
+  const { inputs: managedInputs } = useContext(BoardContext);
 
   const [renderedInputFields, setRenderedInputFields] = useState([]);
 

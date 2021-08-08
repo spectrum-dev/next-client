@@ -6,7 +6,7 @@ import ReactFlow, {
 } from 'react-flow-renderer';
 
 // Contexts
-import InputContext from 'app/contexts/input';
+import BoardContext from 'app/contexts/board';
 
 // Canvas Components
 import Controls from './Controls';
@@ -16,6 +16,7 @@ import ResultsDrawer from './ResultsDrawer';
 // Blocks
 import Block from './Block';
 import VisualizationBlock from './VisualizationBlock';
+import ResultBlock from './ResultBlock';
 
 // Edges
 import FlowEdge from './Edge/FlowEdge';
@@ -23,6 +24,7 @@ import VisualizationEdge from './Edge/VisualizationEdge';
 
 // Hooks
 import useBlockMetadataOnDrop from './SideDrawer/useBlockMetadataOnDrop';
+import useResultsOnDrop from './ResultsDrawer/useResultsOnDrop';
 import useLoadStrategy from './useLoadStrategy';
 import useInputManager from './useInputManager';
 import useSaveStrategy from './useSaveStrategy';
@@ -41,6 +43,7 @@ const Canvas = () => {
   const [nodeTypes] = useState({
     block: Block,
     visualizationBlock: VisualizationBlock,
+    resultBlock: ResultBlock,
   });
   const [edgeTypes] = useState({
     flowEdge: FlowEdge,
@@ -77,7 +80,8 @@ const Canvas = () => {
   } = useDisclosure();
 
   // Boilerplate
-  const { onDrop } = useBlockMetadataOnDrop({ startId });
+  const { onDrop: onBlockDrop } = useBlockMetadataOnDrop({ startId });
+  const { onDrop: onResultsDrop } = useResultsOnDrop();
 
   const onDragOver = (event: React.DragEvent) => {
     event.preventDefault();
@@ -103,7 +107,10 @@ const Canvas = () => {
   return (
     <Box minH="100vh" h="100vh" as="section">
       <ReactFlowProvider>
-        <InputContext.Provider value={{ inputs, setInputs, edgeValidation }}>
+        <BoardContext.Provider value={{
+          inputs, setInputs, edgeValidation, outputs,
+        }}
+        >
           <ReactFlow
             elements={elements}
             // Element Types
@@ -111,7 +118,8 @@ const Canvas = () => {
             edgeTypes={edgeTypes}
             // Drag Functions
             onDrop={(event: React.DragEvent<HTMLDivElement>) => {
-              onDrop(event, reactFlowInstance, setElements);
+              onBlockDrop(event, reactFlowInstance, setElements);
+              onResultsDrop(event, reactFlowInstance, setElements);
             }}
             onDragOver={onDragOver}
             // Connection Functions
@@ -156,7 +164,7 @@ const Canvas = () => {
             onClose={onResultsDrawerClose}
             outputs={outputs}
           />
-        </InputContext.Provider>
+        </BoardContext.Provider>
       </ReactFlowProvider>
     </Box>
   );

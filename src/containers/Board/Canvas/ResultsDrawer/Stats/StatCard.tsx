@@ -8,7 +8,8 @@ export interface StatCardProps {
     label: string
     value: number
     type: string
-  }
+  },
+  onClose: () => void
 }
 
 function format(value: number) {
@@ -19,10 +20,15 @@ function format(value: number) {
   return formatter.format(value);
 }
 
-const StatCard = (props: StatCardProps) => {
-  const {
-    label, value, type,
-  } = props.data;
+const StatCard = (
+  { data: { label, value, type }, onClose }: StatCardProps,
+) => {
+  const onDrag = (
+    event: React.DragEvent<HTMLDivElement>,
+  ) => {
+    event.dataTransfer.setData('application/reactflow-flow-block-type', 'resultsBlock');
+    event.dataTransfer.setData('application/reactflow-data-label', label);
+  };
 
   return (
     <Flex
@@ -34,6 +40,11 @@ const StatCard = (props: StatCardProps) => {
       shadow="base"
       color="gray.400"
       textAlign="center"
+      draggable
+      onDragStart={(event) => {
+        onDrag(event);
+        onClose();
+      }}
     >
       <Box>
         <Text fontSize="xs" fontWeight="bold" textTransform="uppercase" letterSpacing="wide">

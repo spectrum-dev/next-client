@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react';
 
 // Contexts
-import InputContext from 'app/contexts/input';
+import BoardContext from 'app/contexts/board';
 
 // Custom UI
 import Dropdown from 'components/Dropdown';
@@ -52,7 +52,7 @@ const SideDrawer = (
 ) => {
   const btnRef = useRef();
   // @ts-ignore
-  const { inputs } = useContext(InputContext);
+  const { inputs } = useContext(BoardContext);
 
   return (
     <Drawer
