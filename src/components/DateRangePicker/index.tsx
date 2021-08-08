@@ -26,8 +26,8 @@ const DateRangePicker = (
   }: {
     startDate: string;
     endDate: string;
-    onStartChange: () => void;
-    onEndChange: () => void;
+    onStartChange: any;
+    onEndChange: any;
   },
 ) => (
   <>
