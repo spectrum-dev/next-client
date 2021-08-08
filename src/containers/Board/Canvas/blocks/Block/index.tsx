@@ -42,7 +42,7 @@ const Block = memo((
   // @ts-ignore
   const { inputs: managedInputs } = useContext(BoardContext);
 
-  const [renderedInputFields, setRenderedInputFields] = useState([]);
+  const [renderedInputFields, setRenderedInputFields] = useState<Array<React.ReactNode> | []>([]);
 
   const {
     blockName, blockType, inputs, validation,
