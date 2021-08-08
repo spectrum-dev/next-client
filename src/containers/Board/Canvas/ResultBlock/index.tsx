@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   memo,
   useContext,
@@ -15,6 +14,14 @@ import {
 // Contexts
 import InputContext from 'app/contexts/input';
 
+// Types
+import { Outputs } from 'containers/Board/Canvas/index.types';
+
+/**
+ *
+ * @param value Numerical Value to be displayed
+ * @returns Formatted value
+ */
 function format(value: number) {
   const formatter = new Intl.NumberFormat('en-US', {
     minimumFractionDigits: 3,
@@ -23,28 +30,41 @@ function format(value: number) {
   return formatter.format(value);
 }
 
+interface ResultsBlockProps {
+  data: {
+    label: string;
+    type: string;
+    value: number;
+  }
+}
+
 const ResultBlock = memo((
-  props: any,
+  { data }: ResultsBlockProps,
 ) => {
-  const { label } = props.data;
   const [displayData, setDisplayData] = useState<{
-    label: string; type: string; value: number;
-  }>({ label, type: '', value: 0 });
+    label: string;
+    type: string;
+    value: number;
+  }>({
+    label: data.label,
+    type: '',
+    value: 0,
+  });
 
   // @ts-ignore
-  const { outputs } = useContext(InputContext);
+  const { outputs } = useContext<{ outputs: Outputs }>(InputContext);
 
   const findResults = () => {
-    if (!outputs?.results?.cards) {
+    if (!('results' in outputs)) {
       return;
     }
 
-    for (const data of outputs?.results?.cards) {
-      if (data.label === label) {
+    for (const cardData of outputs.results.cards) {
+      if (cardData.label === data.label) {
         setDisplayData({
-          label: data.label,
-          type: data.type,
-          value: data.value,
+          label: cardData.label,
+          type: cardData.type,
+          value: cardData.value,
         });
       }
     }
@@ -53,7 +73,7 @@ const ResultBlock = memo((
   useEffect(() => {
     findResults();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [outputs?.results?.cards]);
+  }, [outputs]);
 
   return (
     <>
