@@ -20,4 +20,4 @@ export type Outputs = Record<string, Array<Record<string, string | number>>> & O
 
 export type SetElements = React.Dispatch<React.SetStateAction<Elements<any>>>;
 
-export type BlockType = 'DATA_BLOCK' | 'SIGNAL_BLOCK' | 'STRATEGY_BLOCK' | 'COMPUTATIONAL_BLOCK';
+export type BlockType = 'DATA_BLOCK' | 'COMPUTATIONAL_BLOCK' | 'SIGNAL_BLOCK' | 'STRATEGY_BLOCK';
