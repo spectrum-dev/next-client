@@ -16,6 +16,13 @@ export interface ResultsGraphDataRecord {
 
 export type ResultsGraphData = Array<ResultsGraphDataRecord>;
 
+export interface ResultsTableDataRecord {
+  title: string;
+  data: Array<Record<string, string | number>>
+}
+
+export type ResultsTableData = Array<ResultsTableDataRecord>;
+
 interface OutputResults {
   results: {
     cards: Array<{
@@ -24,7 +31,7 @@ interface OutputResults {
       type: string;
     }>;
     graphs: ResultsGraphData;
-    tables: Array<Record<string, any>>;
+    tables: ResultsTableData;
   }
 }
 
