@@ -1,21 +1,13 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Box, Flex, Text,
 } from '@chakra-ui/react';
 
+// Types
+import { ResultsGraphDataRecord } from 'containers/Board/Canvas/index.types';
+
 import LineGraph from './LineGraph';
 
-// Types
-
-interface ResultsGraphData {
-  title: string;
-  data: Array<{
-    timestamp: string;
-    value: number;
-  }>
-}
-
-const Graph = ({ data }: { data: ResultsGraphData }) => (
+const Graph = ({ data }: { data: ResultsGraphDataRecord }) => (
   <Flex
     direction="column"
     align="center"
@@ -34,8 +26,10 @@ const Graph = ({ data }: { data: ResultsGraphData }) => (
       </Text>
       <Box>
         <LineGraph
-            // @ts-ignore
+          // @ts-ignore
           data={data.data}
+          xLabel={data.xLabel}
+          yLabel={data.yLabel}
         />
       </Box>
     </Box>

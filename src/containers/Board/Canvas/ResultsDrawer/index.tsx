@@ -74,7 +74,7 @@ const ResultsDrawer = (
           Strategy Results
         </DrawerHeader>
 
-        <DrawerBody overflow="scroll" textColor="white" justifyContent="center">
+        <DrawerBody overflow="scroll" textColor="white" justifyContent="center" minWidth={900}>
           <SimpleGrid
             columns={{ base: 1, md: 2, lg: 4 }}
             spacing="6"

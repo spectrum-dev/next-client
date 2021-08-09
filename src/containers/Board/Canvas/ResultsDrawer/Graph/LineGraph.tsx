@@ -35,7 +35,6 @@ const LineGraph = (
   const yExtents = () => {
     let min = 1000000;
     let max = -1;
-    // eslint-disable-next-line no-restricted-syntax
     for (const element of data) {
       if (yAccessor(element) !== null) {
         min = Math.min(min, yAccessor(element));
@@ -58,7 +57,7 @@ const LineGraph = (
       data={graphData}
       seriesName=""
       margin={{
-        left: 0, right: 50, top: 10, bottom: 40,
+        left: 0, right: 60, top: 10, bottom: 40,
       }}
     >
       <Chart id={1} yExtents={yExtents}>
