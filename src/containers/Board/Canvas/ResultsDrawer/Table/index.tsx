@@ -50,7 +50,6 @@ const Table = ({ data }: { data: ResultsTableDataRecord }) => {
       p="6"
       bg="gray.700"
       rounded="8px"
-      height="400px"
       shadow="base"
       color="gray.400"
       textAlign="center"
