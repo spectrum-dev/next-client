@@ -33,8 +33,6 @@ function format(value: number) {
 interface ResultsBlockProps {
   data: {
     label: string;
-    type: string;
-    value: number;
   }
 }
 
