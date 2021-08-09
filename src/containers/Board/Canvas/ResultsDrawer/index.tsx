@@ -43,12 +43,11 @@ const ResultsDrawer = (
   };
 
   const renderGraphCards = () => {
-    const response = [];
-
     if (!('results' in outputs)) {
       return <></>;
     }
 
+    const response = [];
     for (const graph of outputs.results.graphs) {
       response.push(
         <Graph

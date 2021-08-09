@@ -15,6 +15,7 @@ export interface ResultsGraphDataRecord {
 }
 
 export type ResultsGraphData = Array<ResultsGraphDataRecord>;
+
 interface OutputResults {
   results: {
     cards: Array<{
