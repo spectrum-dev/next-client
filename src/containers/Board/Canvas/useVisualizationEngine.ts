@@ -22,6 +22,11 @@ export default function useVisualizationEngine({
       const splitKey = key.split('-');
       const BLOCK_ID_IN_FLOW = splitKey[2];
 
+      // Backtest data is kept in the results drawer, so we shouldn't generate graphs here
+      if (splitKey[0] === 'STRATEGY_BLOCK') {
+        return;
+      }
+
       const position = reactFlowInstance.project({ x: 100, y: 100 });
 
       const newNode: Node = {

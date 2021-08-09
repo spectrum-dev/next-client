@@ -23,8 +23,8 @@ export default function useResultsOnDrop() {
 
     const position = reactFlowInstance.project({ x: event.clientX, y: event.clientY - 40 });
     const newNode: Node = {
-      id: `RESULTS-${label}`,
-      type: 'resultBlock',
+      id: `RESULTS-${flowBlockType}-${label}`,
+      type: flowBlockType,
       position,
       data: { label },
     };

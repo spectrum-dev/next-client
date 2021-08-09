@@ -26,7 +26,7 @@ const StatCard = (
   const onDrag = (
     event: React.DragEvent<HTMLDivElement>,
   ) => {
-    event.dataTransfer.setData('application/reactflow-flow-block-type', 'resultsBlock');
+    event.dataTransfer.setData('application/reactflow-flow-block-type', 'resultBlock');
     event.dataTransfer.setData('application/reactflow-data-label', label);
   };
 

@@ -53,6 +53,7 @@ const ResultsDrawer = (
       response.push(
         <Graph
           data={graph}
+          onClose={onClose}
         />,
       );
     }
