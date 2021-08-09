@@ -11,7 +11,7 @@ const Graph = ({ data, onClose }: { data: ResultsGraphDataRecord, onClose: () =>
   const onDrag = (
     event: React.DragEvent<HTMLDivElement>,
   ) => {
-    event.dataTransfer.setData('application/reactflow-flow-block-type', 'resultsGraphBlock');
+    event.dataTransfer.setData('application/reactflow-flow-block-type', 'resultGraphBlock');
     event.dataTransfer.setData('application/reactflow-data-label', data.title);
   };
 

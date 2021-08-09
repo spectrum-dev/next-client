@@ -45,7 +45,7 @@ const Canvas = () => {
     block: Block,
     visualizationBlock: VisualizationBlock,
     resultBlock: ResultBlock,
-    resultsGraphBlock: ResultsGraphBlock,
+    resultGraphBlock: ResultsGraphBlock,
   });
   const [edgeTypes] = useState({
     flowEdge: FlowEdge,
