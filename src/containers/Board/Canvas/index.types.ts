@@ -4,6 +4,18 @@ export interface URLParams {
   strategyId: string;
 }
 
+export interface ResultsGraphDataRecord {
+  title: string;
+  data: Array<{
+    timestamp: string;
+    value: number;
+  }>
+  xLabel: string;
+  yLabel: string;
+}
+
+export type ResultsGraphData = Array<ResultsGraphDataRecord>;
+
 interface OutputResults {
   results: {
     cards: Array<{
@@ -11,7 +23,7 @@ interface OutputResults {
       value: number;
       type: string;
     }>;
-    graphs: Array<Record<string, any>>;
+    graphs: ResultsGraphData;
     tables: Array<Record<string, any>>;
   }
 }
