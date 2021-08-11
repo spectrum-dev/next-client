@@ -87,7 +87,7 @@ const ResultGraphBlock = memo((
             data={displayData}
             fontSize={20}
             margin={{
-              left: 0, right: 90, top: 10, bottom: 40,
+              left: 0, right: 90, top: 10, bottom: 25,
             }}
             disableInteraction
           />
