@@ -1,12 +1,15 @@
 import { format } from 'd3-format';
+import { timeFormat } from 'd3-time-format';
 
 import {
   discontinuousTimeScaleProviderBuilder,
   withSize,
   withDeviceRatio,
+  MouseCoordinateX,
   MouseCoordinateY,
   ZoomButtons,
   CrossHairCursor,
+  CurrentCoordinate,
 } from 'react-financial-charts';
 import { XAxis, YAxis } from '@react-financial-charts/axes';
 import { Chart, ChartCanvas } from '@react-financial-charts/core';
@@ -59,6 +62,8 @@ const LineGraph = (
     xAccessor(graphData[0]), xAccessor(graphData[graphData.length - 1]),
   ];
 
+  const timeDisplayFormat = timeFormat('%b %d');
+
   return (
     <ChartCanvas
       clamp={!disableInteraction}
@@ -82,11 +87,13 @@ const LineGraph = (
         <YAxis strokeStyle="white" tickLabelFill="white" tickStrokeStyle="white" tickStrokeWidth={2} zoomEnabled={false} fontSize={fontSize || 10} tickFormat={pricesDisplayFormat} />
         {!disableInteraction && (
           <>
+            <MouseCoordinateX displayFormat={timeDisplayFormat} />
             <MouseCoordinateY
               displayFormat={pricesDisplayFormat}
               fontSize={fontSize || 10}
             />
             <ZoomButtons />
+            <CurrentCoordinate yAccessor={yAccessor} fillStyle="green" r={5} />
           </>
         )}
       </Chart>
