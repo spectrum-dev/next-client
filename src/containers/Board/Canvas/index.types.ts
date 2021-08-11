@@ -21,6 +21,10 @@ export interface ResultsTableDataRecord {
   data: Array<Record<string, string | number>>
 }
 
+type FlowTableData = Array<Record<string, string | number>>;
+
+export type TableData = ResultsTableDataRecord | FlowTableData;
+
 export type ResultsTableData = Array<ResultsTableDataRecord>;
 
 interface OutputResults {

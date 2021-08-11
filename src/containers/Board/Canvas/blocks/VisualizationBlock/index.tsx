@@ -27,7 +27,7 @@ import BoardContext from 'app/contexts/board';
 // Visualizations
 import LineGraph from 'components/Graphs/LineGraph';
 import CandlestickGraph from 'components/Graphs/CandlestickGraph';
-import DataTable from './visualizations/DataTable';
+import Table from 'components/Tables/Table';
 
 // Hooks
 import useVisualizationData from './visualizations/useVisualizationData';
@@ -181,7 +181,9 @@ export default memo(({ id, data: rawData }: NodeProps) => {
         );
       case VisualizationType.DataTable:
         return (
-          <DataTable data={rawData} />
+          <Table
+            data={rawData}
+          />
         );
       default:
         return (
