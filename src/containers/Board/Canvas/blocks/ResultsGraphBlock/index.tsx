@@ -11,7 +11,7 @@ import {
   IconButton,
 } from '@chakra-ui/react';
 
-import { BsGear } from 'react-icons/bs';
+import { GiExpand } from 'react-icons/gi';
 
 // Contexts
 import BoardContext from 'app/contexts/board';
@@ -60,22 +60,25 @@ const ResultGraphBlock = memo((
     <>
       <Flex
         direction="column"
-        align="center"
         p="6"
         bg="gray.700"
         rounded="8px"
         shadow="base"
         color="gray.400"
-        textAlign="center"
         width="1300px"
         height="800px"
       >
         <Flex margin="10px 0px 0px 0px">
-          <IconButton aria-label="Edit" icon={<BsGear />} rounded="full" size="lg" fontSize="40px" textColor="white" background="#1a202c" onClick={onOpen} style={{ textAlign: 'left' }} />
+          <Box w="10px" marginTop="-10px">
+            <IconButton aria-label="Edit" align="flex-end" icon={<GiExpand />} rounded="full" size="md" fontSize="30px" textColor="white" background="gray.700" onClick={onOpen} />
+          </Box>
           <Spacer />
-          <Text fontSize="2xl" fontWeight="bold" textTransform="uppercase" letterSpacing="wide">
-            { data.label }
-          </Text>
+
+          <Box marginLeft="-10px">
+            <Text fontSize="2xl" fontWeight="bold" textTransform="uppercase" letterSpacing="wide">
+              { data.label }
+            </Text>
+          </Box>
           <Spacer />
         </Flex>
         <Box flex="1" width="100%" height="100%">
