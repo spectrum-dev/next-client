@@ -1,6 +1,16 @@
 import { format } from 'd3-format';
+import { timeFormat } from 'd3-time-format';
 
-import { discontinuousTimeScaleProviderBuilder, withSize, withDeviceRatio } from 'react-financial-charts';
+import {
+  discontinuousTimeScaleProviderBuilder,
+  withSize,
+  withDeviceRatio,
+  MouseCoordinateX,
+  MouseCoordinateY,
+  ZoomButtons,
+  CrossHairCursor,
+  CurrentCoordinate,
+} from 'react-financial-charts';
 import { XAxis, YAxis } from '@react-financial-charts/axes';
 import { Chart, ChartCanvas } from '@react-financial-charts/core';
 import { LineSeries } from '@react-financial-charts/series';
@@ -17,11 +27,12 @@ interface LineGraphProps {
   readonly ratio: number;
   readonly fontSize?: number;
   readonly margin?: { bottom: number; left: number; right: number; top: number; } | undefined;
+  readonly disableInteraction: boolean;
 }
 
 const LineGraph = (
   {
-    data, height, width, ratio, fontSize, margin,
+    data, height, width, ratio, fontSize, margin, disableInteraction,
   }: LineGraphProps,
 ) => {
   const pricesDisplayFormat = format('.4f');
@@ -51,9 +62,12 @@ const LineGraph = (
     xAccessor(graphData[0]), xAccessor(graphData[graphData.length - 1]),
   ];
 
+  const timeDisplayFormat = timeFormat('%b %d');
+
   return (
     <ChartCanvas
-      disableInteraction
+      clamp={!disableInteraction}
+      disableInteraction={disableInteraction}
       height={height}
       width={width}
       ratio={ratio}
@@ -71,7 +85,19 @@ const LineGraph = (
         <LineSeries yAccessor={yAccessor} />
         <XAxis strokeStyle="white" tickLabelFill="white" tickStrokeStyle="white" tickStrokeWidth={2} zoomEnabled={false} fontSize={fontSize || 10} />
         <YAxis strokeStyle="white" tickLabelFill="white" tickStrokeStyle="white" tickStrokeWidth={2} zoomEnabled={false} fontSize={fontSize || 10} tickFormat={pricesDisplayFormat} />
+        {!disableInteraction && (
+          <>
+            <MouseCoordinateX displayFormat={timeDisplayFormat} />
+            <MouseCoordinateY
+              displayFormat={pricesDisplayFormat}
+              fontSize={fontSize || 10}
+            />
+            <ZoomButtons />
+            <CurrentCoordinate yAccessor={yAccessor} fillStyle="green" r={5} />
+          </>
+        )}
       </Chart>
+      <CrossHairCursor />
     </ChartCanvas>
   );
 };

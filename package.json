@@ -25,6 +25,7 @@
     "@types/react-select": "^4.0.17",
     "axios": "^0.21.1",
     "d3-format": "^2.0.0",
+    "d3-time-format": "^3.0.0",
     "eslint": "^7.30.0",
     "framer-motion": "^4.0.0",
     "history": "^4.10.1",
