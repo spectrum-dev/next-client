@@ -27,7 +27,6 @@ import { formatBlockTypeHeader } from 'app/utils';
 import BoardContext from 'app/contexts/board';
 
 // Visualizations
-// import LineGraph from './visualizations/LineGraph';
 import LineGraph from 'components/Graphs/LineGraph';
 import CandlestickGraph from './visualizations/CandlestickGraph';
 import DataTable from './visualizations/DataTable';
