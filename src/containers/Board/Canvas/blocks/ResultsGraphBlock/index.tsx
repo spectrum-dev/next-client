@@ -68,13 +68,13 @@ const ResultGraphBlock = memo((
         width="1300px"
         height="800px"
       >
-        <Flex margin="10px 0px 0px 0px">
-          <Box w="10px" marginTop="-10px">
+        <Flex>
+          <Box w="10px" marginTop="-10px" marginLeft="-10px">
             <IconButton aria-label="Edit" align="flex-end" icon={<GiExpand />} rounded="full" size="md" fontSize="30px" textColor="white" background="gray.700" onClick={onOpen} />
           </Box>
           <Spacer />
 
-          <Box marginLeft="-10px">
+          <Box marginLeft="10px">
             <Text fontSize="2xl" fontWeight="bold" textTransform="uppercase" letterSpacing="wide">
               { data.label }
             </Text>
