@@ -1,11 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   memo, useState, useContext, useEffect, ReactNode,
 } from 'react';
 
 import {
   Box,
-  Heading,
   Flex,
   Text,
   Spacer,
@@ -28,7 +26,7 @@ import BoardContext from 'app/contexts/board';
 
 // Visualizations
 import LineGraph from 'components/Graphs/LineGraph';
-import CandlestickGraph from './visualizations/CandlestickGraph';
+import CandlestickGraph from 'components/Graphs/CandlestickGraph';
 import DataTable from './visualizations/DataTable';
 
 // Hooks
@@ -69,9 +67,6 @@ export default memo(({ id, data: rawData }: NodeProps) => {
     onClose: onVisualizationClose,
   } = useDisclosure();
 
-  const [[graphHeight, graphWidth, graphRatio]] = useState<[number, number, number]>(
-    [750, 1340, 1.0],
-  );
   const [transformedData, setTransformedData] = useState(rawData);
 
   useEffect(() => {
@@ -144,17 +139,9 @@ export default memo(({ id, data: rawData }: NodeProps) => {
   const {
     hasError: hasVisualizationDataError,
     data,
-    xScale,
-    xAccessor,
-    xExtents,
-    displayXAccessor,
-    yAccessor,
-    yExtents,
   } = useVisualizationData({
     rawData: transformedData,
-    graphType,
     xValue,
-    yValue: inputs?.[id]?.yValue,
   });
 
   // TODO: Determine whether there is a better way to set the yValue
@@ -182,15 +169,14 @@ export default memo(({ id, data: rawData }: NodeProps) => {
       case VisualizationType.Candlestick:
         return (
           <CandlestickGraph
-            height={graphHeight}
-            width={graphWidth}
-            ratio={graphRatio}
-            xScale={xScale}
-            xAccessor={xAccessor}
-            xExtents={xExtents}
-            displayXAccessor={displayXAccessor}
-            yExtents={yExtents}
+            // @ts-ignore
             data={data}
+            disableInteraction
+            xValue={xValue}
+            fontSize={20}
+            margin={{
+              left: 0, right: 90, top: 10, bottom: 25,
+            }}
           />
         );
       case VisualizationType.DataTable:
@@ -272,6 +258,7 @@ export default memo(({ id, data: rawData }: NodeProps) => {
         data={data}
         xValue={xValue}
         yValue={inputs?.[id]?.yValue}
+        graphType={graphType}
       />
     </Flex>
   );
