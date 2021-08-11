@@ -3,6 +3,7 @@ import {
 } from 'react';
 
 import {
+  Flex,
   Box,
   Text,
 } from '@chakra-ui/react';
@@ -14,7 +15,7 @@ import BoardContext from 'app/contexts/board';
 import { Outputs } from 'containers/Board/Canvas/index.types';
 
 // Graphs
-import LineGraph from './LineGraph';
+import LineGraph from 'components/Graphs/LineGraph';
 
 interface ResultsGraphBlockProps {
   data: {
@@ -47,30 +48,32 @@ const ResultGraphBlock = memo((
   }, [outputs]);
 
   return (
-    <>
-      <Box
-        direction="column"
-        align="center"
-        p="6"
-        bg="gray.700"
-        rounded="8px"
-        shadow="base"
-        color="gray.400"
-        textAlign="center"
-        width="1300px"
-        height="800px"
-      >
-        <Text fontSize="2xl" fontWeight="bold" textTransform="uppercase" letterSpacing="wide">
-          { data.label }
-        </Text>
+    <Flex
+      direction="column"
+      align="center"
+      p="6"
+      bg="gray.700"
+      rounded="8px"
+      shadow="base"
+      color="gray.400"
+      textAlign="center"
+      width="1300px"
+      height="800px"
+    >
+      <Text fontSize="2xl" fontWeight="bold" textTransform="uppercase" letterSpacing="wide">
+        { data.label }
+      </Text>
+      <Box flex="1" width="100%" height="100%">
         <LineGraph
+          // @ts-ignore
           data={displayData}
-          height={730}
-          width={1250}
-          ratio={1.0}
+          fontSize={20}
+          margin={{
+            left: 0, right: 90, top: 10, bottom: 40,
+          }}
         />
       </Box>
-    </>
+    </Flex>
   );
 });
 
