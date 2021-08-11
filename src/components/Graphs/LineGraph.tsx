@@ -1,6 +1,13 @@
 import { format } from 'd3-format';
 
-import { discontinuousTimeScaleProviderBuilder, withSize, withDeviceRatio } from 'react-financial-charts';
+import {
+  discontinuousTimeScaleProviderBuilder,
+  withSize,
+  withDeviceRatio,
+  MouseCoordinateY,
+  ZoomButtons,
+  CrossHairCursor,
+} from 'react-financial-charts';
 import { XAxis, YAxis } from '@react-financial-charts/axes';
 import { Chart, ChartCanvas } from '@react-financial-charts/core';
 import { LineSeries } from '@react-financial-charts/series';
@@ -17,11 +24,12 @@ interface LineGraphProps {
   readonly ratio: number;
   readonly fontSize?: number;
   readonly margin?: { bottom: number; left: number; right: number; top: number; } | undefined;
+  readonly disableInteraction: boolean;
 }
 
 const LineGraph = (
   {
-    data, height, width, ratio, fontSize, margin,
+    data, height, width, ratio, fontSize, margin, disableInteraction,
   }: LineGraphProps,
 ) => {
   const pricesDisplayFormat = format('.4f');
@@ -53,7 +61,8 @@ const LineGraph = (
 
   return (
     <ChartCanvas
-      disableInteraction
+      clamp={!disableInteraction}
+      disableInteraction={disableInteraction}
       height={height}
       width={width}
       ratio={ratio}
@@ -71,7 +80,17 @@ const LineGraph = (
         <LineSeries yAccessor={yAccessor} />
         <XAxis strokeStyle="white" tickLabelFill="white" tickStrokeStyle="white" tickStrokeWidth={2} zoomEnabled={false} fontSize={fontSize || 10} />
         <YAxis strokeStyle="white" tickLabelFill="white" tickStrokeStyle="white" tickStrokeWidth={2} zoomEnabled={false} fontSize={fontSize || 10} tickFormat={pricesDisplayFormat} />
+        {!disableInteraction && (
+          <>
+            <MouseCoordinateY
+              displayFormat={pricesDisplayFormat}
+              fontSize={fontSize || 10}
+            />
+            <ZoomButtons />
+          </>
+        )}
       </Chart>
+      <CrossHairCursor />
     </ChartCanvas>
   );
 };

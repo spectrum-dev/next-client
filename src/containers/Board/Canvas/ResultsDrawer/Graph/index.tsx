@@ -40,6 +40,7 @@ const Graph = ({ data, onClose }: { data: ResultsGraphDataRecord, onClose: () =>
         <LineGraph
           // @ts-ignore
           data={data.data}
+          disableInteraction
         />
       </Box>
     </Flex>
