@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import { timeFormat } from 'd3-time-format';
 
@@ -18,7 +18,7 @@ const Table = ({ data }: { data: TableData }) => {
   const [totalRows, setTotalRows] = useState<number>(0);
   const [tableData, setTableData] = useState<Array<Record<string, string | number>> | []>([]);
 
-  const renderColumns = () => {
+  const renderColumns = useCallback(() => {
     const updatedColumns = [];
     if (tableData.length > 0) {
       for (const elem of Object.keys(tableData[0])) {
@@ -34,39 +34,39 @@ const Table = ({ data }: { data: TableData }) => {
             name: elem,
             selector: elem,
             sortable: true,
+            right: true,
           });
         }
       }
     }
 
-    console.log('Columns: ', columns);
     setColumns(updatedColumns);
-  };
+  }, [tableData]);
 
-  const timeDisplayFormat = timeFormat('%b %d');
+  const timeDisplayFormat = timeFormat('%b %d, %Y %H:%M:%S');
 
-  const cleanupTableData = (rawTableData: any) => rawTableData.map((item: any) => {
+  const cleanupTableData = useCallback((rawTableData: any) => rawTableData.map((item: any) => {
     if ('timestamp' in item) {
       return {
-        timestamp: timeDisplayFormat(item.timestamp),
         ...item,
+        timestamp: timeDisplayFormat(new Date(item.timestamp)),
       };
     }
 
     if ('date' in item) {
       return {
-        date: timeDisplayFormat(item.date),
         ...item,
+        date: timeDisplayFormat(new Date(item.date)),
       };
     }
 
     return item;
-  });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }), []);
 
-  const getTotalRows = () => setTotalRows(tableData.length);
+  const getTotalRows = useCallback(() => setTotalRows(tableData.length), [tableData.length]);
 
   useEffect(() => {
-    console.log('Rendering Data: ', data);
     if ('data' in data) {
       setTableData(cleanupTableData(data.data));
     } else {
@@ -76,7 +76,8 @@ const Table = ({ data }: { data: TableData }) => {
     renderColumns();
     getTotalRows();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+  }, [data, getTotalRows]);
+  //  cleanupTableData, renderColumns, getTotalRows
 
   const customStyles = {
     header: {
@@ -113,7 +114,7 @@ const Table = ({ data }: { data: TableData }) => {
         },
         backgroundColor: '#1a202c',
         color: 'white',
-        fontSize: '20px',
+        fontSize: '22px',
       },
     },
     pagination: {
