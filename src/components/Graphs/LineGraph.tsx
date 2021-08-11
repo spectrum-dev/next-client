@@ -57,7 +57,7 @@ const LineGraph = (
       data={graphData}
       seriesName=""
       margin={{
-        left: 0, right: 60, top: 10, bottom: 40,
+        left: 0, right: 50, top: 10, bottom: 40,
       }}
     >
       <Chart id={1} yExtents={yExtents}>
@@ -69,9 +69,5 @@ const LineGraph = (
   );
 };
 
-export default withSize({
-  style: {
-    minHeight: 355, minWidth: 800,
-  },
 // @ts-ignore
-})(withDeviceRatio()(LineGraph));
+export default withSize()(withDeviceRatio()(LineGraph));

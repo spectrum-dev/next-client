@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Box, Flex, Text,
 } from '@chakra-ui/react';
@@ -5,7 +6,7 @@ import {
 // Types
 import { ResultsGraphDataRecord } from 'containers/Board/Canvas/index.types';
 
-import LineGraph from './LineGraph';
+import LineGraph from 'components/Graphs/LineGraph';
 
 const Graph = ({ data, onClose }: { data: ResultsGraphDataRecord, onClose: () => void }) => {
   const onDrag = (
@@ -32,18 +33,14 @@ const Graph = ({ data, onClose }: { data: ResultsGraphDataRecord, onClose: () =>
         onClose();
       }}
     >
-      <Box>
-        <Text fontSize="xs" fontWeight="bold" textTransform="uppercase" letterSpacing="wide">
-          {data.title}
-        </Text>
-        <Box>
-          <LineGraph
-            // @ts-ignore
-            data={data.data}
-            xLabel={data.xLabel}
-            yLabel={data.yLabel}
-          />
-        </Box>
+      <Text fontSize="xs" fontWeight="bold" textTransform="uppercase" letterSpacing="wide">
+        {data.title}
+      </Text>
+      <Box flex="1" width="100%" height="100%">
+        <LineGraph
+          // @ts-ignore
+          data={data.data}
+        />
       </Box>
     </Flex>
   );
