@@ -15,13 +15,10 @@ import { XAxis, YAxis } from '@react-financial-charts/axes';
 import { Chart, ChartCanvas } from '@react-financial-charts/core';
 import { LineSeries } from '@react-financial-charts/series';
 
-// interface RecordData {
-//   readonly timestamp: string;
-//   readonly value: number;
-// }
+type RecordData = Record<string, number>;
 
 interface LineGraphProps {
-  readonly data: Array<Record<string, number>>;
+  readonly data: Array<RecordData>;
   readonly height: number;
   readonly width: number;
   readonly ratio: number;
@@ -39,7 +36,7 @@ const LineGraph = (
 ) => {
   const pricesDisplayFormat = format('.4f');
   const xScaleProvider = discontinuousTimeScaleProviderBuilder().inputDateAccessor(
-    (d: Record<string, number>) => (
+    (d: RecordData) => (
       xValue ? new Date(d[xValue]) : new Date(d.timestamp)
     ),
   );
@@ -47,7 +44,7 @@ const LineGraph = (
     data: graphData, xScale, xAccessor, displayXAccessor,
   } = xScaleProvider(data);
 
-  const yAccessor = (inputData: Record<string, number>) => (
+  const yAccessor = (inputData: RecordData) => (
     yValue ? inputData[yValue] : inputData.value
   );
 
