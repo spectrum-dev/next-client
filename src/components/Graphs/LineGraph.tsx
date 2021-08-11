@@ -15,11 +15,13 @@ interface LineGraphProps {
   readonly height: number;
   readonly width: number;
   readonly ratio: number;
+  readonly fontSize?: number;
+  readonly margin?: { bottom: number; left: number; right: number; top: number; } | undefined;
 }
 
 const LineGraph = (
   {
-    data, height, width, ratio,
+    data, height, width, ratio, fontSize, margin,
   }: LineGraphProps,
 ) => {
   const pricesDisplayFormat = format('.4f');
@@ -45,6 +47,10 @@ const LineGraph = (
     return [min, max];
   };
 
+  const xExtents = [
+    xAccessor(graphData[0]), xAccessor(graphData[graphData.length - 1]),
+  ];
+
   return (
     <ChartCanvas
       disableInteraction
@@ -53,17 +59,18 @@ const LineGraph = (
       ratio={ratio}
       xScale={xScale}
       xAccessor={xAccessor}
+      xExtents={xExtents}
       displayXAccessor={displayXAccessor}
       data={graphData}
       seriesName=""
-      margin={{
+      margin={margin || {
         left: 0, right: 50, top: 10, bottom: 40,
       }}
     >
       <Chart id={1} yExtents={yExtents}>
         <LineSeries yAccessor={yAccessor} />
-        <XAxis strokeStyle="white" tickLabelFill="white" tickStrokeStyle="white" tickStrokeWidth={2} zoomEnabled={false} fontSize={10} />
-        <YAxis strokeStyle="white" tickLabelFill="white" tickStrokeStyle="white" tickStrokeWidth={2} zoomEnabled={false} fontSize={10} tickFormat={pricesDisplayFormat} />
+        <XAxis strokeStyle="white" tickLabelFill="white" tickStrokeStyle="white" tickStrokeWidth={2} zoomEnabled={false} fontSize={fontSize || 10} />
+        <YAxis strokeStyle="white" tickLabelFill="white" tickStrokeStyle="white" tickStrokeWidth={2} zoomEnabled={false} fontSize={fontSize || 10} tickFormat={pricesDisplayFormat} />
       </Chart>
     </ChartCanvas>
   );
