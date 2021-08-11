@@ -16,6 +16,7 @@ import {
 import styled from '@emotion/styled';
 
 import { BsGear } from 'react-icons/bs';
+import { GiExpand } from 'react-icons/gi';
 
 import { Handle as RawHandle, Position, NodeProps } from 'react-flow-renderer';
 
@@ -25,17 +26,18 @@ import { formatBlockTypeHeader } from 'app/utils';
 // Contexts
 import BoardContext from 'app/contexts/board';
 
+// Visualizations
+// import LineGraph from './visualizations/LineGraph';
+import LineGraph from 'components/Graphs/LineGraph';
+import CandlestickGraph from './visualizations/CandlestickGraph';
+import DataTable from './visualizations/DataTable';
+
 // Hooks
 import useVisualizationData from './visualizations/useVisualizationData';
 import useGraphTypeValidation, { VisualizationType } from './visualizations/useGraphTypeValidation';
 
 // Drawer
 import SettingsDrawer from './SettingsDrawer';
-
-// Visualizations
-import LineGraph from './visualizations/LineGraph';
-import CandlestickGraph from './visualizations/CandlestickGraph';
-import DataTable from './visualizations/DataTable';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Handle = styled(RawHandle)`
@@ -155,16 +157,15 @@ export default memo(({ id, data: rawData }: NodeProps) => {
       case VisualizationType.Line:
         return (
           <LineGraph
-            height={graphHeight}
-            width={graphWidth}
-            ratio={graphRatio}
-            xScale={xScale}
-            xAccessor={xAccessor}
-            xExtents={xExtents}
-            displayXAccessor={displayXAccessor}
-            yExtents={yExtents}
-            yAccessor={yAccessor}
+            // @ts-ignore
             data={data}
+            disableInteraction
+            xValue={xValue}
+            yValue={inputs?.[id]?.yValue}
+            fontSize={20}
+            margin={{
+              left: 0, right: 90, top: 10, bottom: 25,
+            }}
           />
         );
       case VisualizationType.Candlestick:
@@ -187,50 +188,55 @@ export default memo(({ id, data: rawData }: NodeProps) => {
         );
       default:
         return (
-          <LineGraph
-            height={graphHeight}
-            width={graphWidth}
-            ratio={graphRatio}
-            xScale={xScale}
-            xAccessor={xAccessor}
-            xExtents={xExtents}
-            displayXAccessor={displayXAccessor}
-            yExtents={yExtents}
-            yAccessor={yAccessor}
-            data={data}
-          />
+          <></>
         );
     }
   };
 
   return (
-    <>
-      <Box width="1300px" height="800px" borderRadius="25px" border="1px solid #1a202c" background="#1a202c" textAlign="center" insetBlockEnd="TEST">
-        <Flex margin="10px 0px 0px 0px">
-          <Spacer />
-          <Heading textColor="white" size="xl" textAlign="center">
-            { formatBlockTypeHeader(id) }
-          </Heading>
-          <Spacer />
-          <IconButton aria-label="Edit" icon={<BsGear />} rounded="full" size="lg" fontSize="40px" textColor="white" background="#1a202c" onClick={onOpen} />
-        </Flex>
-        <Handle
-          type="target"
-          position={Position.Left}
-          id={`input_${id}`}
-          onConnect={() => null}
-          isValidConnection={() => true}
-        />
-        <Box>
-          {
-            hasGraphTypeValidationError || hasVisualizationDataError
-              ? (
-                <Text>
-                  There was an error rendering the graph
-                </Text>
-              ) : renderGraph()
-          }
+    <Flex
+      direction="column"
+      p="6"
+      width="1300px"
+      height="800px"
+      rounded="8px"
+      shadow="base"
+      bg="#1a202c"
+      textAlign="center"
+    >
+      <Flex>
+        <Box w="10px" marginTop="-10px" marginLeft="-10px">
+          <IconButton aria-label="Edit" align="flex-end" icon={<GiExpand />} rounded="full" size="md" fontSize="30px" textColor="white" background="#1a202c" onClick={() => console.log('Opened Expanded Drawer')} />
         </Box>
+        <Spacer />
+
+        <Box marginLeft="10px">
+          <Text color="white" fontSize="2xl" fontWeight="bold" textTransform="uppercase" letterSpacing="wide">
+            { formatBlockTypeHeader(id) }
+          </Text>
+        </Box>
+        <Spacer />
+        <Box w="30px" marginTop="-15px">
+          <IconButton aria-label="Edit" icon={<BsGear />} rounded="full" size="lg" fontSize="30px" textColor="white" background="#1a202c" onClick={onOpen} />
+        </Box>
+      </Flex>
+
+      <Handle
+        type="target"
+        position={Position.Left}
+        id={`input_${id}`}
+        onConnect={() => null}
+        isValidConnection={() => true}
+      />
+      <Box flex="1" width="100%" height="100%">
+        {
+          hasGraphTypeValidationError || hasVisualizationDataError
+            ? (
+              <Text>
+                There was an error rendering the graph
+              </Text>
+            ) : renderGraph()
+        }
       </Box>
       <SettingsDrawer
         id={id}
@@ -246,6 +252,6 @@ export default memo(({ id, data: rawData }: NodeProps) => {
         setTransformedData={setTransformedData}
         rawData={rawData}
       />
-    </>
+    </Flex>
   );
 });

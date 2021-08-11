@@ -15,35 +15,41 @@ import { XAxis, YAxis } from '@react-financial-charts/axes';
 import { Chart, ChartCanvas } from '@react-financial-charts/core';
 import { LineSeries } from '@react-financial-charts/series';
 
-interface RecordData {
-  readonly timestamp: string;
-  readonly value: number;
-}
+// interface RecordData {
+//   readonly timestamp: string;
+//   readonly value: number;
+// }
 
 interface LineGraphProps {
-  readonly data: Array<RecordData>;
+  readonly data: Array<Record<string, number>>;
   readonly height: number;
   readonly width: number;
   readonly ratio: number;
   readonly fontSize?: number;
   readonly margin?: { bottom: number; left: number; right: number; top: number; } | undefined;
   readonly disableInteraction: boolean;
+  readonly xValue?: string;
+  readonly yValue?: string;
 }
 
 const LineGraph = (
   {
-    data, height, width, ratio, fontSize, margin, disableInteraction,
+    data, height, width, ratio, fontSize, margin, disableInteraction, xValue, yValue,
   }: LineGraphProps,
 ) => {
   const pricesDisplayFormat = format('.4f');
   const xScaleProvider = discontinuousTimeScaleProviderBuilder().inputDateAccessor(
-    (d: RecordData) => new Date(d.timestamp),
+    (d: Record<string, number>) => (
+      xValue ? new Date(d[xValue]) : new Date(d.timestamp)
+    ),
   );
   const {
     data: graphData, xScale, xAccessor, displayXAccessor,
   } = xScaleProvider(data);
 
-  const yAccessor = (inputData: RecordData) => inputData.value;
+  const yAccessor = (inputData: Record<string, number>) => (
+    yValue ? inputData[yValue] : inputData.value
+  );
 
   const yExtents = () => {
     let min = 1000000;
