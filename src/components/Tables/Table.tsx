@@ -77,7 +77,6 @@ const Table = ({ data }: { data: TableData }) => {
     getTotalRows();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, getTotalRows]);
-  //  cleanupTableData, renderColumns, getTotalRows
 
   const customStyles = {
     header: {
