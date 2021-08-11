@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useRef, ReactNode } from 'react';
 
 import {
@@ -43,7 +42,6 @@ const VisualizationDrawer = (
             data={data}
             xValue={xValue}
             yValue={yValue}
-            fontSize={10}
             margin={{
               left: 0, right: 90, top: 10, bottom: 25,
             }}
@@ -55,7 +53,6 @@ const VisualizationDrawer = (
             // @ts-ignore
             data={data}
             xValue={xValue}
-            fontSize={10}
             margin={{
               left: 0, right: 50, top: 0, bottom: 25,
             }}

@@ -1,11 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   memo, useState, useContext, useEffect, ReactNode,
 } from 'react';
 
 import {
   Box,
-  Heading,
   Flex,
   Text,
   Spacer,
@@ -69,9 +67,6 @@ export default memo(({ id, data: rawData }: NodeProps) => {
     onClose: onVisualizationClose,
   } = useDisclosure();
 
-  const [[graphHeight, graphWidth, graphRatio]] = useState<[number, number, number]>(
-    [750, 1340, 1.0],
-  );
   const [transformedData, setTransformedData] = useState(rawData);
 
   useEffect(() => {
@@ -146,9 +141,7 @@ export default memo(({ id, data: rawData }: NodeProps) => {
     data,
   } = useVisualizationData({
     rawData: transformedData,
-    graphType,
     xValue,
-    yValue: inputs?.[id]?.yValue,
   });
 
   // TODO: Determine whether there is a better way to set the yValue

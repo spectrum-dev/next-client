@@ -2,17 +2,15 @@ import { useState } from 'react';
 
 import { discontinuousTimeScaleProviderBuilder } from '@react-financial-charts/scales';
 
-import { VisualizationType } from './useGraphTypeValidation';
-
 interface State {
   isLoading: boolean;
   hasError: boolean;
 }
 
 export default function useVisualizationData({
-  rawData, graphType, xValue, yValue,
+  rawData, xValue,
 }:
-{ rawData: any, graphType: VisualizationType, xValue: string, yValue: string }) {
+{ rawData: any, xValue: string, }) {
   const [state] = useState<State>({
     isLoading: false,
     hasError: false,
@@ -59,51 +57,12 @@ export default function useVisualizationData({
   );
 
   const {
-    data, xScale, xAccessor, displayXAccessor,
+    data,
   } = xScaleProvider(cleanedData);
-
-  const xExtents = [
-    xAccessor(data[data.length - 1]), xAccessor(data[0]),
-  ];
-
-  // Y Axis Calculations
-  const yAccessor = (yAccessorData: any) => yAccessorData?.[yValue];
-
-  const calculateYExtents = () => {
-    let min = 1000000;
-    let max = -1;
-    // eslint-disable-next-line no-restricted-syntax
-    for (const element of data) {
-      switch (graphType) {
-        case VisualizationType.Line:
-          if (yAccessor(element) !== null) {
-            min = Math.min(min, yAccessor(element));
-          }
-          max = Math.max(max, yAccessor(element));
-          break;
-        case VisualizationType.Candlestick:
-          min = Math.min(min, element.low);
-          max = Math.max(max, element.high);
-          break;
-        default:
-          break;
-      }
-    }
-
-    return [min, max];
-  };
-
-  const yExtents = calculateYExtents();
 
   return {
     ...state,
     data,
-    xScale,
-    xAccessor,
-    xExtents,
-    displayXAccessor,
-    yAccessor,
-    yExtents,
     hasError: false,
   };
 }
