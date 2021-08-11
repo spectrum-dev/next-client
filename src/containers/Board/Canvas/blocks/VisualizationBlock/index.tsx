@@ -38,6 +38,7 @@ import useGraphTypeValidation, { VisualizationType } from './visualizations/useG
 
 // Drawer
 import SettingsDrawer from './SettingsDrawer';
+import VisualizationDrawer from './VisualizationDrawer';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Handle = styled(RawHandle)`
@@ -57,7 +58,18 @@ const Handle = styled(RawHandle)`
 `;
 
 export default memo(({ id, data: rawData }: NodeProps) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isSettingsOpen,
+    onOpen: onSettingsOpen,
+    onClose: onSettingsClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: isVisualizationOpen,
+    onOpen: onVisualizationOpen,
+    onClose: onVisualizationClose,
+  } = useDisclosure();
+
   const [[graphHeight, graphWidth, graphRatio]] = useState<[number, number, number]>(
     [750, 1340, 1.0],
   );
@@ -193,6 +205,8 @@ export default memo(({ id, data: rawData }: NodeProps) => {
     }
   };
 
+  const title = formatBlockTypeHeader(id);
+
   return (
     <Flex
       direction="column"
@@ -206,18 +220,18 @@ export default memo(({ id, data: rawData }: NodeProps) => {
     >
       <Flex>
         <Box w="10px" marginTop="-10px" marginLeft="-10px">
-          <IconButton aria-label="Edit" align="flex-end" icon={<GiExpand />} rounded="full" size="md" fontSize="30px" textColor="white" background="#1a202c" onClick={() => console.log('Opened Expanded Drawer')} />
+          <IconButton aria-label="Edit" align="flex-end" icon={<GiExpand />} rounded="full" size="md" fontSize="30px" textColor="white" background="#1a202c" onClick={onVisualizationOpen} />
         </Box>
         <Spacer />
 
         <Box marginLeft="10px">
           <Text color="white" fontSize="2xl" fontWeight="bold" textTransform="uppercase" letterSpacing="wide">
-            { formatBlockTypeHeader(id) }
+            { title }
           </Text>
         </Box>
         <Spacer />
         <Box w="30px" marginTop="-15px">
-          <IconButton aria-label="Edit" icon={<BsGear />} rounded="full" size="lg" fontSize="30px" textColor="white" background="#1a202c" onClick={onOpen} />
+          <IconButton aria-label="Edit" icon={<BsGear />} rounded="full" size="lg" fontSize="30px" textColor="white" background="#1a202c" onClick={onSettingsOpen} />
         </Box>
       </Flex>
 
@@ -240,8 +254,8 @@ export default memo(({ id, data: rawData }: NodeProps) => {
       </Box>
       <SettingsDrawer
         id={id}
-        isOpen={isOpen}
-        onClose={onClose}
+        isOpen={isSettingsOpen}
+        onClose={onSettingsClose}
         graphType={graphType}
         setGraphType={setGraphType}
         candlestickSupported={candlestickSupported}
@@ -251,6 +265,14 @@ export default memo(({ id, data: rawData }: NodeProps) => {
         setDataKey={setDataKey}
         setTransformedData={setTransformedData}
         rawData={rawData}
+      />
+      <VisualizationDrawer
+        isOpen={isVisualizationOpen}
+        onClose={onVisualizationClose}
+        title={title}
+        data={data}
+        xValue={xValue}
+        yValue={inputs?.[id]?.yValue}
       />
     </Flex>
   );
