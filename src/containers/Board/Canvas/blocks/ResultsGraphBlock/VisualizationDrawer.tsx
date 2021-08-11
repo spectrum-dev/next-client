@@ -15,7 +15,6 @@ import LineGraph from 'components/Graphs/LineGraph';
 
 const VisualizationDrawer = (
   {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     isOpen, onClose, title, data,
   }:
   { isOpen: boolean, onClose: () => void, title: string, data: any },
