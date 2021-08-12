@@ -40,7 +40,7 @@ export default function useBlockMetadataOnDrop({ startId }: { startId: number })
       const blockId = event.dataTransfer.getData('application/reactflow-id');
       const flowBlockType = event.dataTransfer.getData('application/reactflow-flow-block-type');
 
-      if (flowBlockType === 'resultBlock' || flowBlockType === 'resultGraphBlock') {
+      if (flowBlockType === 'resultBlock' || flowBlockType === 'resultGraphBlock' || flowBlockType === 'resultTableBlock') {
         return;
       }
 

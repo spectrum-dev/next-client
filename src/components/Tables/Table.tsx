@@ -18,11 +18,13 @@ const Table = ({
   headSize = 25,
   cellSize = 22,
   paginationSize = 20,
+  backgroundColor = '#1a202c',
 }: {
   data: TableData,
   headSize?: number,
   cellSize?: number,
   paginationSize?: number,
+  backgroundColor?: string,
 }) => {
   const [columns, setColumns] = useState<Array<TableColumns>>([]);
   const [totalRows, setTotalRows] = useState<number>(0);
@@ -99,7 +101,7 @@ const Table = ({
         borderTopStyle: 'solid',
         borderTopWidth: '1px',
         borderTopColor: defaultThemes.default.divider.default,
-        backgroundColor: '#1a202c',
+        backgroundColor,
       },
     },
     headCells: {
@@ -121,14 +123,14 @@ const Table = ({
           borderRightWidth: '1px',
           borderRightColor: defaultThemes.default.divider.default,
         },
-        backgroundColor: '#1a202c',
+        backgroundColor,
         color: 'white',
         fontSize: `${cellSize}px`,
       },
     },
     pagination: {
       style: {
-        backgroundColor: '#1a202c',
+        backgroundColor,
         color: 'white',
         fontSize: `${paginationSize}px`,
       },
