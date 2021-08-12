@@ -18,6 +18,7 @@ import Block from './blocks/Block';
 import VisualizationBlock from './blocks/VisualizationBlock';
 import ResultBlock from './blocks/ResultBlock';
 import ResultsGraphBlock from './blocks/ResultsGraphBlock';
+import ResultTableBlock from './blocks/ResultsTableBlock';
 
 // Edges
 import FlowEdge from './Edge/FlowEdge';
@@ -46,6 +47,7 @@ const Canvas = () => {
     visualizationBlock: VisualizationBlock,
     resultBlock: ResultBlock,
     resultGraphBlock: ResultsGraphBlock,
+    resultTableBlock: ResultTableBlock,
   });
   const [edgeTypes] = useState({
     flowEdge: FlowEdge,

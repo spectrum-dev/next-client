@@ -70,6 +70,7 @@ const ResultsDrawer = (
       response.push(
         <Table
           data={table}
+          onClose={onClose}
         />,
       );
     }
