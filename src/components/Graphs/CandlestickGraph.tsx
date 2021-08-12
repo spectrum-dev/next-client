@@ -9,10 +9,11 @@ import {
   MouseCoordinateY,
   ZoomButtons,
   CrossHairCursor,
+  OHLCTooltip,
 } from 'react-financial-charts';
 import { XAxis, YAxis } from '@react-financial-charts/axes';
 import { Chart, ChartCanvas } from '@react-financial-charts/core';
-import { CandlestickSeries } from '@react-financial-charts/series';
+import { CandlestickSeries, BarSeries } from '@react-financial-charts/series';
 
 type RecordData = Record<string, number>;
 
@@ -25,11 +26,20 @@ interface CandlestickGraphProps {
   readonly margin?: { bottom: number; left: number; right: number; top: number; } | undefined;
   readonly disableInteraction: boolean;
   readonly xValue?: string;
+  readonly volumeChartHeight?: number;
 }
 
 const CandlestickGraph = (
   {
-    data, height, width, ratio, fontSize, margin, disableInteraction, xValue,
+    data,
+    height,
+    width,
+    ratio,
+    fontSize,
+    margin,
+    disableInteraction,
+    xValue,
+    volumeChartHeight = 120,
   }: CandlestickGraphProps,
 ) => {
   const pricesDisplayFormat = format('.4f');
@@ -50,7 +60,8 @@ const CandlestickGraph = (
       max = Math.max(max, element.high);
     }
 
-    return [min, max];
+    // TODO: Added extra 5% toleterance for lower and 3% for upper
+    return [min - (min * 0.05), max + (max * 0.03)];
   };
 
   const xExtents = [
@@ -58,6 +69,14 @@ const CandlestickGraph = (
   ];
 
   const timeDisplayFormat = timeFormat('%b %d');
+
+  // Volume Bar Chart
+  const barChartOrigin = (_: number, h: number) => [0, h - volumeChartHeight];
+  const barChartExtents = (volumeChartData: RecordData) => volumeChartData.volume;
+  const volumeSeries = (volumeChartData: RecordData) => volumeChartData.volume;
+  const volumeColor = (volumeChartData: RecordData) => (
+    volumeChartData.close > volumeChartData.open ? 'rgba(38, 166, 154, 0.3)' : 'rgba(239, 83, 80, 0.3)'
+  );
 
   return (
     <ChartCanvas
@@ -76,6 +95,9 @@ const CandlestickGraph = (
         left: 0, right: 50, top: 10, bottom: 40,
       }}
     >
+      <Chart id={2} height={volumeChartHeight} origin={barChartOrigin} yExtents={barChartExtents}>
+        <BarSeries fillStyle={volumeColor} yAccessor={volumeSeries} />
+      </Chart>
       <Chart id={1} yExtents={yExtents}>
         <CandlestickSeries />
         <XAxis strokeStyle="white" tickLabelFill="white" tickStrokeStyle="white" tickStrokeWidth={2} zoomEnabled={false} fontSize={fontSize || 10} />
@@ -88,6 +110,7 @@ const CandlestickGraph = (
               fontSize={fontSize || 10}
             />
             <ZoomButtons />
+            <OHLCTooltip origin={[8, 16]} textFill="white" labelFill="gray" fontSize={18} />
           </>
         )}
       </Chart>
