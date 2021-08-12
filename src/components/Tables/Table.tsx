@@ -134,6 +134,9 @@ const Table = ({
       },
       pageButtonsStyle: {
         backgroundColor: 'white',
+        height: paginationSize !== 20 ? '20px' : '40px',
+        width: paginationSize !== 20 ? '20px' : '40px',
+        padding: paginationSize !== 20 ? '0px' : '8px',
       },
     },
   };
