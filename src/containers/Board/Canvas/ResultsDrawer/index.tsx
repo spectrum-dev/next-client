@@ -107,7 +107,7 @@ const ResultsDrawer = (
           </SimpleGrid>
 
           <SimpleGrid
-            columns={{ base: 1, md: 1, lg: 1 }}
+            columns={{ base: 1, md: 1, lg: 2 }}
             spacing="6"
             marginTop="50px"
           >
