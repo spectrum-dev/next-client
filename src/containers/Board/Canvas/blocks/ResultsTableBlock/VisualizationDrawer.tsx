@@ -42,6 +42,7 @@ const VisualizationDrawer = (
               <Table
                 data={data}
                 backgroundColor="#2D3748"
+                headSize={15}
               />
             </Box>
           </DrawerBody>
