@@ -44,9 +44,9 @@ const ResultTableBlock = memo((
       return;
     }
 
-    for (const graphData of outputs.results.graphs) {
-      if (graphData.title === data.label) {
-        setDisplayData(graphData.data);
+    for (const tableData of outputs.results.tables) {
+      if (tableData.title === data.label) {
+        setDisplayData(tableData.data);
       }
     }
   };
@@ -84,6 +84,7 @@ const ResultTableBlock = memo((
         <Box flex="1" width="100%" height="100%">
           <Table
             data={displayData}
+            backgroundColor="#2D3748"
           />
         </Box>
       </Flex>

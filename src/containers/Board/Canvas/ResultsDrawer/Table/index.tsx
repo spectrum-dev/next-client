@@ -40,6 +40,7 @@ const Table = ({ data, onClose }: { data: ResultsTableDataRecord, onClose: () =>
           headSize={12}
           cellSize={15}
           paginationSize={10}
+          backgroundColor="#2D3748"
         />
       </Box>
     </Flex>
