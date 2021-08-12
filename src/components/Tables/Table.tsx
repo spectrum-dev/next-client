@@ -13,7 +13,17 @@ interface TableColumns {
   sortable: boolean;
 }
 
-const Table = ({ data }: { data: TableData }) => {
+const Table = ({
+  data,
+  headSize = 25,
+  cellSize = 22,
+  paginationSize = 20,
+}: {
+  data: TableData,
+  headSize?: number,
+  cellSize?: number,
+  paginationSize?: number,
+}) => {
   const [columns, setColumns] = useState<Array<TableColumns>>([]);
   const [totalRows, setTotalRows] = useState<number>(0);
   const [tableData, setTableData] = useState<Array<Record<string, string | number>> | []>([]);
@@ -100,7 +110,7 @@ const Table = ({ data }: { data: TableData }) => {
           borderRightColor: defaultThemes.default.divider.default,
         },
         color: 'white',
-        fontSize: '25px',
+        fontSize: `${headSize}px`,
         textTransform: 'uppercase',
       },
     },
@@ -113,17 +123,20 @@ const Table = ({ data }: { data: TableData }) => {
         },
         backgroundColor: '#1a202c',
         color: 'white',
-        fontSize: '22px',
+        fontSize: `${cellSize}px`,
       },
     },
     pagination: {
       style: {
         backgroundColor: '#1a202c',
         color: 'white',
-        fontSize: '20px',
+        fontSize: `${paginationSize}px`,
       },
       pageButtonsStyle: {
         backgroundColor: 'white',
+        height: paginationSize !== 20 ? '20px' : '40px',
+        width: paginationSize !== 20 ? '20px' : '40px',
+        padding: paginationSize !== 20 ? '0px' : '8px',
       },
     },
   };
