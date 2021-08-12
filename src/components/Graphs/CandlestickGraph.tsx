@@ -9,6 +9,7 @@ import {
   MouseCoordinateY,
   ZoomButtons,
   CrossHairCursor,
+  OHLCTooltip,
 } from 'react-financial-charts';
 import { XAxis, YAxis } from '@react-financial-charts/axes';
 import { Chart, ChartCanvas } from '@react-financial-charts/core';
@@ -109,6 +110,7 @@ const CandlestickGraph = (
               fontSize={fontSize || 10}
             />
             <ZoomButtons />
+            <OHLCTooltip origin={[8, 16]} textFill="white" labelFill="gray" fontSize={18} />
           </>
         )}
       </Chart>
