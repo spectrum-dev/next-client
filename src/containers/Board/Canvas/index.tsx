@@ -8,6 +8,9 @@ import ReactFlow, {
 // Contexts
 import BoardContext from 'app/contexts/board';
 
+// Utils
+import { checkBlockType } from 'containers/Board/utils';
+
 // Canvas Components
 import Controls from './Controls';
 import SideDrawer from './SideDrawer';
@@ -92,7 +95,29 @@ const Canvas = () => {
   };
 
   const onConnect = (params: Edge<any> | Connection) => {
-    setElements((els) => addEdge({ ...params, type: 'flowEdge' }, els));
+    console.log('Params: ', params);
+    setElements((els) => {
+      const blockType = checkBlockType(params.target);
+      switch (blockType) {
+        case 'FLOW_BLOCK':
+          return addEdge({ ...params, type: 'flowEdge' }, els);
+        case 'VISUALIZATION_BLOCK':
+          // TODO: Determine how to push multiple lines here
+          setInputs((inp: any) => {
+            const { source, target } = params;
+            return {
+              ...inp,
+              [String(target)]: {
+                ...inp?.[String(target)],
+                ref: [source],
+              },
+            };
+          });
+          return addEdge({ ...params, type: 'visualizationEdge' }, els);
+        default:
+          return els;
+      }
+    });
   };
 
   const onLoad = (params: OnLoadParams) => {
