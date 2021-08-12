@@ -59,7 +59,8 @@ const CandlestickGraph = (
       max = Math.max(max, element.high);
     }
 
-    return [min, max];
+    // TODO: Added extra 5% toleterance for lower and 3% for upper
+    return [min - (min * 0.05), max + (max * 0.03)];
   };
 
   const xExtents = [
