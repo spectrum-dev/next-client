@@ -10,8 +10,8 @@ import {
   DrawerCloseButton,
 } from '@chakra-ui/react';
 
-// Line Graph
-import LineGraph from 'components/Graphs/LineGraph';
+// Table
+import Table from 'components/Tables/Table';
 
 const VisualizationDrawer = (
   {
@@ -39,9 +39,9 @@ const VisualizationDrawer = (
 
           <DrawerBody>
             <Box flex="1" width="100%" height="100%">
-              <LineGraph
-                // @ts-ignore
+              <Table
                 data={data}
+                backgroundColor="#2D3748"
               />
             </Box>
           </DrawerBody>
