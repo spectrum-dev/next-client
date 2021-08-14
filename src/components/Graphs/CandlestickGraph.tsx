@@ -41,7 +41,6 @@ const CandlestickGraph = (
     disableInteraction,
     xValue,
     volumeChartHeight = 120,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     overlays,
   }: CandlestickGraphProps,
 ) => {
