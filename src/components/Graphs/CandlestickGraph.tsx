@@ -13,7 +13,7 @@ import {
 } from 'react-financial-charts';
 import { XAxis, YAxis } from '@react-financial-charts/axes';
 import { Chart, ChartCanvas } from '@react-financial-charts/core';
-import { CandlestickSeries, BarSeries } from '@react-financial-charts/series';
+import { CandlestickSeries, BarSeries, LineSeries } from '@react-financial-charts/series';
 
 type RecordData = Record<string, number>;
 
@@ -27,6 +27,7 @@ interface CandlestickGraphProps {
   readonly disableInteraction: boolean;
   readonly xValue?: string;
   readonly volumeChartHeight?: number;
+  readonly overlays?: Array<string>;
 }
 
 const CandlestickGraph = (
@@ -40,6 +41,8 @@ const CandlestickGraph = (
     disableInteraction,
     xValue,
     volumeChartHeight = 120,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    overlays,
   }: CandlestickGraphProps,
 ) => {
   const pricesDisplayFormat = format('.4f');
@@ -78,6 +81,23 @@ const CandlestickGraph = (
     volumeChartData.close > volumeChartData.open ? 'rgba(38, 166, 154, 0.3)' : 'rgba(239, 83, 80, 0.3)'
   );
 
+  const renderOverlays = () => {
+    const elems = [];
+    if (!overlays) {
+      return <></>;
+    }
+
+    for (const overlay of overlays) {
+      elems.push(
+        <LineSeries
+          yAccessor={(item: any) => item[overlay]}
+          strokeWidth={2}
+        />,
+      );
+    }
+    return elems;
+  };
+
   return (
     <ChartCanvas
       clamp={!disableInteraction}
@@ -102,6 +122,7 @@ const CandlestickGraph = (
         <CandlestickSeries />
         <XAxis strokeStyle="white" tickLabelFill="white" tickStrokeStyle="white" tickStrokeWidth={2} zoomEnabled={false} fontSize={fontSize || 10} />
         <YAxis strokeStyle="white" tickLabelFill="white" tickStrokeStyle="white" tickStrokeWidth={2} zoomEnabled={false} fontSize={fontSize || 10} tickFormat={pricesDisplayFormat} />
+        { renderOverlays() }
         {!disableInteraction && (
           <>
             <MouseCoordinateX displayFormat={timeDisplayFormat} />

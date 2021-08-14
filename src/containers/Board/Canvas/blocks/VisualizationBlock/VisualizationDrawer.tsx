@@ -19,7 +19,7 @@ import { VisualizationType } from './visualizations/useGraphTypeValidation';
 
 const VisualizationDrawer = (
   {
-    isOpen, onClose, title, data, xValue, yValue, graphType,
+    isOpen, onClose, title, data, xValue, yValue, graphType, overlays,
   }:
   {
     isOpen: boolean,
@@ -29,6 +29,7 @@ const VisualizationDrawer = (
     xValue: string,
     yValue: string,
     graphType: VisualizationType,
+    overlays: Array<string>,
   },
 ) => {
   const btnRef: React.RefObject<any> = useRef();
@@ -56,6 +57,7 @@ const VisualizationDrawer = (
             margin={{
               left: 0, right: 50, top: 0, bottom: 25,
             }}
+            overlays={overlays}
           />
         );
       default:
