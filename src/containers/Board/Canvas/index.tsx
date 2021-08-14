@@ -95,7 +95,6 @@ const Canvas = () => {
   };
 
   const onConnect = (params: Edge<any> | Connection) => {
-    console.log('Params: ', params);
     setElements((els) => {
       const blockType = checkBlockType(params.target);
       switch (blockType) {
@@ -105,11 +104,19 @@ const Canvas = () => {
           // TODO: Determine how to push multiple lines here
           setInputs((inp: any) => {
             const { source, target } = params;
+            let ref = inp?.[String(target)]?.ref;
+            if (Array.isArray(ref)) {
+              if (source && !(ref.indexOf(source) !== -1)) {
+                ref.push(source);
+              }
+            } else {
+              ref = [source];
+            }
             return {
               ...inp,
               [String(target)]: {
                 ...inp?.[String(target)],
-                ref: [source],
+                ref,
               },
             };
           });
