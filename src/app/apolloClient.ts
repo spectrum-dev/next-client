@@ -11,7 +11,7 @@ const GRAPHQL_API_URL = process.env.GRAPHQL_API_URL || 'http://localhost:8080/gr
 const httpLink = new HttpLink({ uri: GRAPHQL_API_URL });
 
 const authMiddleware = new ApolloLink((operation, forward) => {
-  // add the authorization to the headers
+  // Adds authorization to header
   operation.setContext(({ headers = {} }) => ({
     headers: {
       ...headers,
