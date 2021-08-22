@@ -9,8 +9,13 @@ import {
   ChakraProvider,
   theme,
 } from '@chakra-ui/react';
+import {
+  ApolloProvider,
+} from '@apollo/client';
 
 import useAuth, { AuthProvider } from 'containers/Authentication/Login/useAuth';
+
+import { client } from 'app/apolloClient';
 
 // Screens
 import Login from 'containers/Authentication/Login';
@@ -26,14 +31,16 @@ function AuthenticatedRoute(props: RouteProps) {
 export const App = () => (
   <ChakraProvider theme={theme}>
     <AuthProvider>
-      <HashRouter>
-        <Switch>
-          <Route path="/login" component={Login} />
-          <AuthenticatedRoute path="/dashboard" component={Dashboard} />
-          <AuthenticatedRoute path="/board/:strategyId" component={Board} />
-          <Redirect from="/" to="/login" />
-        </Switch>
-      </HashRouter>
+      <ApolloProvider client={client}>
+        <HashRouter>
+          <Switch>
+            <Route path="/login" component={Login} />
+            <AuthenticatedRoute path="/dashboard" component={Dashboard} />
+            <AuthenticatedRoute path="/board/:strategyId" component={Board} />
+            <Redirect from="/" to="/login" />
+          </Switch>
+        </HashRouter>
+      </ApolloProvider>
     </AuthProvider>
   </ChakraProvider>
 );
