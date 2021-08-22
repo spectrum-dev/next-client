@@ -61,7 +61,7 @@ export default function useRunStrategy(
     }
   `;
 
-  const [dispatchRunStrategy, { data }] = useMutation(DISPATCH_RUN_STRATEGY);
+  const [dispatchRunStrategy, { error }] = useMutation(DISPATCH_RUN_STRATEGY);
 
   const fetchData = useCallback(async () => {
     try {
@@ -97,8 +97,6 @@ export default function useRunStrategy(
         },
       });
 
-      console.log(data);
-
       const runResponse = await fetcher.post('/orchestration/run', requestBody, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
@@ -118,6 +116,7 @@ export default function useRunStrategy(
 
         setState({ outputs: response.response, showResults: 'results' in response.response });
       } else {
+        console.error(error);
         throw new Error(POST_RUN_STRATEGY_500);
       }
     } catch (e) {
