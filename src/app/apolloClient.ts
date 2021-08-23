@@ -5,9 +5,9 @@ import {
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 
-const GRAPHQL_API_URL = process.env.GRAPHQL_API_URL || 'http://localhost:8080/graphql/';
+const REACT_APP_GRAPHQL_API_URL = process.env.REACT_APP_GRAPHQL_API_URL || 'http://localhost:8080/graphql/';
 
-const httpLink = createHttpLink({ uri: GRAPHQL_API_URL });
+const httpLink = createHttpLink({ uri: REACT_APP_GRAPHQL_API_URL });
 
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
