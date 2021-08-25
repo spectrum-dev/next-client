@@ -2,6 +2,7 @@ import { useCallback, useState, useEffect } from 'react';
 import {
   useMutation, useQuery,
 } from '@apollo/client';
+import { useToast } from '@chakra-ui/react';
 
 import {
   isNode, isEdge, Elements, Edge,
@@ -16,6 +17,8 @@ import {
 } from './gql';
 
 const NON_NODE_OR_EDGE_VALUE = 'There was an error running this strategy. Please try again.';
+const POST_RUN_STRATEGY_500 = 'There was an error running this strategy. Please try again.';
+const STRATEGY_RUN_SUCCESS = 'The strategy was run successfully.';
 
 interface State {
   outputs: Outputs;
@@ -36,6 +39,8 @@ export default function useRunStrategy(
     isStrategyLoaded: boolean
   },
 ) {
+  const toast = useToast();
+
   const [startPolling, setStartPolling] = useState<boolean>(false);
   const [initializer, setInitializer] = useState<boolean>(false);
   const [state, setState] = useState<State>({
@@ -115,9 +120,23 @@ export default function useRunStrategy(
       case 'SUCCESS':
         setState({ outputs: data.taskResult.output, showResults: 'result' in data.taskResult.output });
         setStartPolling(false);
+        toast({
+          title: STRATEGY_RUN_SUCCESS,
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+          position: 'top',
+        });
         break;
       case 'FAILURE':
         setStartPolling(false);
+        toast({
+          title: POST_RUN_STRATEGY_500,
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+          position: 'top',
+        });
         break;
       case 'PENDING':
         // Ensures logging for pending state (which is valid) is not misleading
