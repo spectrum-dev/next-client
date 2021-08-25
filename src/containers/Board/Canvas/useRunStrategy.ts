@@ -1,26 +1,26 @@
 import { useCallback, useState, useEffect } from 'react';
-import { useToast } from '@chakra-ui/react';
-import { gql, useMutation } from '@apollo/client';
-import { useParams } from 'react-router-dom';
+import {
+  useMutation, useQuery,
+} from '@apollo/client';
 
 import {
   isNode, isEdge, Elements, Edge,
 } from 'react-flow-renderer';
 
-import fetcher from 'app/fetcher';
+import { Outputs } from './index.types';
 
-import { URLParams, Outputs } from './index.types';
+// Queries & Mutations
+import {
+  DISPATCH_RUN_STRATEGY,
+  QUERY_TASK_RESULT,
+} from './gql';
 
 const NON_NODE_OR_EDGE_VALUE = 'There was an error running this strategy. Please try again.';
-const POST_RUN_STRATEGY_500 = 'There was an error running this strategy. Please try again.';
-const STRATEGY_RUN_SUCCESS = 'The strategy was run successfully.';
 
 interface State {
   outputs: Outputs;
   showResults: boolean;
 }
-
-type RunResponse = { response: Outputs };
 
 export default function useRunStrategy(
   {
@@ -36,106 +36,14 @@ export default function useRunStrategy(
     isStrategyLoaded: boolean
   },
 ) {
+  const [startPolling, setStartPolling] = useState<boolean>(false);
   const [initializer, setInitializer] = useState<boolean>(false);
   const [state, setState] = useState<State>({
     outputs: {},
     showResults: false,
   });
-  const toast = useToast();
 
-  const { strategyId } = useParams<URLParams>();
-
-  const DISPATCH_RUN_STRATEGY = gql`
-    mutation DISPATCH_RUN_STRATEGY($strategyId: ID!, $commitId: ID!, $metadata: JSON!, $inputs: JSON!, $nodeList: JSON!, $edgeList: [JSON!]) {
-      dispatchRunStrategy(
-        strategyId: $strategyId,
-        commitId: $commitId,
-        metadata: $metadata,
-        inputs: $inputs,
-        nodeList: $nodeList,
-        edgeList: $edgeList
-      ) {
-        status
-        taskId
-      }
-    }
-  `;
-
-  const [dispatchRunStrategy, { error }] = useMutation(DISPATCH_RUN_STRATEGY);
-
-  const fetchData = useCallback(async () => {
-    try {
-      const nodeList: any = {};
-      const edgeList: Array<Edge> = [];
-      for (const element of elements) {
-        if (isNode(element)) {
-          if (element.id.split('-').length === 1) {
-            nodeList[element.id] = inputs[element.id];
-          }
-        } else if (isEdge(element)) {
-          if (element.target.split('-').length === 1) {
-            edgeList.push(element);
-          }
-        } else {
-          throw new Error(NON_NODE_OR_EDGE_VALUE);
-        }
-      }
-
-      const requestBody = {
-        nodeList,
-        edgeList,
-      };
-
-      dispatchRunStrategy({
-        variables: {
-          strategyId,
-          commitId: '95a61cc4-a8f8-41e2-85e0-15f994f98f2a',
-          metadata: elements,
-          inputs,
-          nodeList,
-          edgeList,
-        },
-      });
-
-      const runResponse = await fetcher.post('/orchestration/run', requestBody, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-        },
-      });
-
-      if (runResponse.status === 200) {
-        const response: RunResponse = runResponse.data;
-
-        toast({
-          title: STRATEGY_RUN_SUCCESS,
-          status: 'success',
-          duration: 3000,
-          isClosable: true,
-          position: 'top',
-        });
-
-        setState({ outputs: response.response, showResults: 'results' in response.response });
-      } else {
-        console.error(error);
-        throw new Error(POST_RUN_STRATEGY_500);
-      }
-    } catch (e) {
-      toast({
-        title: POST_RUN_STRATEGY_500,
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-        position: 'top',
-      });
-
-      setState({
-        outputs: {},
-        showResults: false,
-      });
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [elements, inputs]);
-
+  // Triggered when loading data into the board
   useEffect(() => {
     if (isStrategyLoaded) {
       if (!initializer) {
@@ -154,8 +62,87 @@ export default function useRunStrategy(
         });
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loadedOutputs, isStrategyLoaded]);
+
+  // Dispatches async request to run strategy
+  const [dispatchRunStrategy, { data: taskData }] = useMutation(DISPATCH_RUN_STRATEGY);
+
+  /**
+   * Function invoked to request data from API
+   */
+  const fetchData = useCallback(async () => {
+    // Pre-processing to assemble a list of nodes and edges
+    const nodeList: any = {};
+    const edgeList: Array<Edge> = [];
+    for (const element of elements) {
+      if (isNode(element)) {
+        if (element.id.split('-').length === 1) {
+          nodeList[element.id] = inputs[element.id];
+        }
+      } else if (isEdge(element)) {
+        if (element.target.split('-').length === 1) {
+          edgeList.push(element);
+        }
+      } else {
+        throw new Error(NON_NODE_OR_EDGE_VALUE);
+      }
+    }
+
+    await dispatchRunStrategy({
+      variables: {
+        nodeList,
+        edgeList,
+      },
+    });
+
+    /**
+     * When the dispatch function is hit, we want to start
+     * polling the backend for the status of a running task
+     */
+    setStartPolling(true);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [elements, inputs]);
+
+  /**
+   * The implementation for the onCompleted handler that checks, when the
+   * response is SUCCESS, the output is put in state
+   *
+   * @param data Response data from query
+   */
+  const onCompleted = (data: any) => {
+    switch (data.taskResult.status) {
+      case 'SUCCESS':
+        setState({ outputs: data.taskResult.output, showResults: 'result' in data.taskResult.output });
+        setStartPolling(false);
+        break;
+      case 'FAILURE':
+        setStartPolling(false);
+        break;
+      case 'PENDING':
+        // Ensures logging for pending state (which is valid) is not misleading
+        break;
+      default:
+        console.log('Unhandled State: ', data);
+        break;
+    }
+  };
+
+  /**
+   * After the button has been clicked, the state of startPolling is set to true.
+   * Now, the below hook will start polling at an interval of 2 seconds for the
+   * task to complete, and when completed will return the response
+   */
+  useQuery(QUERY_TASK_RESULT, {
+    variables: {
+      taskId: taskData?.dispatchRunStrategy?.taskId || '',
+    },
+    notifyOnNetworkStatusChange: true,
+    skip: !startPolling,
+    pollInterval: !startPolling ? 0 : 2000,
+    onCompleted,
+    onError: () => setStartPolling(false),
+  });
 
   return {
     ...state,
