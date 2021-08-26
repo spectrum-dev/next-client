@@ -38,11 +38,13 @@ const CustomSelect = (
     options,
     onInputChange,
     onChange,
+    value,
   }: {
     placeholder: string;
     options: Array<any>,
     onInputChange: any,
     onChange: any,
+    value: any,
   },
 ) => {
   const transformOptions = () => {
@@ -69,6 +71,9 @@ const CustomSelect = (
       options={transformOptions()}
       onInputChange={onInputChange}
       onChange={onChange}
+      value={
+        transformOptions().filter((option) => option.value === value)
+      }
     />
   );
 };
