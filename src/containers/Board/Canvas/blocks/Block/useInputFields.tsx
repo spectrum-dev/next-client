@@ -261,10 +261,11 @@ export default function useInputFields({ id }: { id: string }) {
           />
         );
       case 'inputs_from_connection':
-        if (!inputDependencyGraph) {
+        console.log('Input Dependency Graph: ', inputDependencyGraph);
+        if (!inputDependencyGraph || !inputDependencyGraph?.[id]) {
           return (
             <div>
-              Connections Loading
+              Connect a block to populate this field
             </div>
           );
         }
