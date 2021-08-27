@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Box, Center, useDisclosure } from '@chakra-ui/react';
-
+import { useLazyQuery } from '@apollo/client';
 import ReactFlow, {
   ReactFlowProvider, Background, addEdge, Edge, Connection, OnLoadParams, Node,
 } from 'react-flow-renderer';
@@ -33,6 +33,10 @@ import useSaveStrategy from './useSaveStrategy';
 import useValidateStrategy from './useValidateStrategy';
 import useRunStrategy from './useRunStrategy';
 import useVisualizationEngine from './useVisualizationEngine';
+
+// GraphQL
+import { QUERY_INPUT_DEPENDENCY_GRAPH } from './gql';
+import { getNodeAndEdgeList } from './utils';
 
 const Canvas = () => {
   const {
@@ -83,6 +87,12 @@ const Canvas = () => {
     onClose: onResultsDrawerClose,
   } = useDisclosure();
 
+  // Queries
+  const [
+    getInputDependencyGraph,
+    { data: inputDependencyGraphData },
+  ] = useLazyQuery(QUERY_INPUT_DEPENDENCY_GRAPH);
+
   // Boilerplate
   const { onDrop: onBlockDrop } = useBlockMetadataOnDrop({ startId });
   const { onDrop: onResultsDrop } = useResultsOnDrop();
@@ -92,7 +102,14 @@ const Canvas = () => {
   };
 
   const onConnect = (params: Edge<any> | Connection) => {
-    setElements((els) => addEdge({ ...params, type: 'flowEdge' }, els));
+    setElements((els) => {
+      const updatedEls = addEdge({ ...params, type: 'flowEdge' }, els);
+
+      const { nodeList, edgeList } = getNodeAndEdgeList(updatedEls, inputs);
+      getInputDependencyGraph({ variables: { nodeList, edgeList } });
+
+      return updatedEls;
+    });
   };
 
   const onLoad = (params: OnLoadParams) => {
@@ -112,7 +129,11 @@ const Canvas = () => {
     <Box minH="100vh" h="100vh" as="section">
       <ReactFlowProvider>
         <BoardContext.Provider value={{
-          inputs, setInputs, edgeValidation, outputs,
+          inputs,
+          setInputs,
+          edgeValidation,
+          outputs,
+          inputDependencyGraph: inputDependencyGraphData?.inputDependencyGraph,
         }}
         >
           <ReactFlow

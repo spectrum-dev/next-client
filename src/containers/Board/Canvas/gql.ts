@@ -20,3 +20,9 @@ export const QUERY_TASK_RESULT = gql`
         }
     }
 `;
+
+export const QUERY_INPUT_DEPENDENCY_GRAPH = gql`
+    query INPUT_DEPENDENCY_GRAPH($nodeList: JSON!, $edgeList: [JSON!]) {
+        inputDependencyGraph(nodeList: $nodeList, edgeList: $edgeList)
+    }
+`;
