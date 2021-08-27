@@ -1,6 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Box, Center, useDisclosure } from '@chakra-ui/react';
-import { useLazyQuery } from '@apollo/client';
 import ReactFlow, {
   ReactFlowProvider, Background, addEdge, Edge, Connection, OnLoadParams, Node,
 } from 'react-flow-renderer';
@@ -33,12 +32,10 @@ import useSaveStrategy from './useSaveStrategy';
 import useValidateStrategy from './useValidateStrategy';
 import useRunStrategy from './useRunStrategy';
 import useVisualizationEngine from './useVisualizationEngine';
-
-// GraphQL
-import { QUERY_INPUT_DEPENDENCY_GRAPH } from './gql';
-import { getNodeAndEdgeList } from './utils';
+import useGenerateInputDependencyGraph from './useGenerateInputDependencyGraph';
 
 const Canvas = () => {
+  const [initializer, setInitializer] = useState(false);
   const {
     elements, setElements,
     inputs: loadedInputs,
@@ -61,6 +58,19 @@ const Canvas = () => {
   const { inputs, setInputs, startId } = useInputManager(
     { elements, loadedInputs, isStrategyLoaded },
   );
+
+  const {
+    generateInputDependencyGraph,
+    inputDependencyGraph,
+  } = useGenerateInputDependencyGraph();
+
+  // TODO: Maybe we want to migrate more loading-related logic here?
+  // NOTE: This cannot be moved inside hook as the function requires
+  //       elements and inputs to be passed in
+  if (!initializer && isStrategyLoaded && inputs && Object.keys(inputs).length > 0) {
+    generateInputDependencyGraph({ elements, inputs });
+    setInitializer(true);
+  }
 
   const { isValid, edgeValidation } = useValidateStrategy({ inputs, elements });
   const { outputs, invokeRun, showResults } = useRunStrategy(
@@ -87,12 +97,6 @@ const Canvas = () => {
     onClose: onResultsDrawerClose,
   } = useDisclosure();
 
-  // Queries
-  const [
-    getInputDependencyGraph,
-    { data: inputDependencyGraphData },
-  ] = useLazyQuery(QUERY_INPUT_DEPENDENCY_GRAPH);
-
   // Boilerplate
   const { onDrop: onBlockDrop } = useBlockMetadataOnDrop({ startId });
   const { onDrop: onResultsDrop } = useResultsOnDrop();
@@ -104,10 +108,7 @@ const Canvas = () => {
   const onConnect = (params: Edge<any> | Connection) => {
     setElements((els) => {
       const updatedEls = addEdge({ ...params, type: 'flowEdge' }, els);
-
-      const { nodeList, edgeList } = getNodeAndEdgeList(updatedEls, inputs);
-      getInputDependencyGraph({ variables: { nodeList, edgeList } });
-
+      generateInputDependencyGraph({ elements: updatedEls, inputs });
       return updatedEls;
     });
   };
@@ -125,6 +126,11 @@ const Canvas = () => {
     }));
   };
 
+  useEffect(() => {
+    console.log('Reloaded');
+    console.log(inputDependencyGraph);
+  }, [inputDependencyGraph]);
+
   return (
     <Box minH="100vh" h="100vh" as="section">
       <ReactFlowProvider>
@@ -133,7 +139,7 @@ const Canvas = () => {
           setInputs,
           edgeValidation,
           outputs,
-          inputDependencyGraph: inputDependencyGraphData?.inputDependencyGraph,
+          inputDependencyGraph,
         }}
         >
           <ReactFlow
