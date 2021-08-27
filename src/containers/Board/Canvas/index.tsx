@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Box, Center, useDisclosure } from '@chakra-ui/react';
 import ReactFlow, {
   ReactFlowProvider, Background, addEdge, Edge, Connection, OnLoadParams, Node,
@@ -35,7 +35,6 @@ import useVisualizationEngine from './useVisualizationEngine';
 import useGenerateInputDependencyGraph from './useGenerateInputDependencyGraph';
 
 const Canvas = () => {
-  const [initializer, setInitializer] = useState(false);
   const {
     elements, setElements,
     inputs: loadedInputs,
@@ -62,15 +61,11 @@ const Canvas = () => {
   const {
     generateInputDependencyGraph,
     inputDependencyGraph,
-  } = useGenerateInputDependencyGraph();
-
-  // TODO: Maybe we want to migrate more loading-related logic here?
-  // NOTE: This cannot be moved inside hook as the function requires
-  //       elements and inputs to be passed in
-  if (!initializer && isStrategyLoaded && inputs && Object.keys(inputs).length > 0) {
-    generateInputDependencyGraph({ elements, inputs });
-    setInitializer(true);
-  }
+  } = useGenerateInputDependencyGraph({
+    inputs,
+    elements,
+    isStrategyLoaded,
+  });
 
   const { isValid, edgeValidation } = useValidateStrategy({ inputs, elements });
   const { outputs, invokeRun, showResults } = useRunStrategy(
@@ -108,7 +103,7 @@ const Canvas = () => {
   const onConnect = (params: Edge<any> | Connection) => {
     setElements((els) => {
       const updatedEls = addEdge({ ...params, type: 'flowEdge' }, els);
-      generateInputDependencyGraph({ elements: updatedEls, inputs });
+      generateInputDependencyGraph({ elementsOverride: updatedEls });
       return updatedEls;
     });
   };
@@ -125,11 +120,6 @@ const Canvas = () => {
       return el;
     }));
   };
-
-  useEffect(() => {
-    console.log('Reloaded');
-    console.log(inputDependencyGraph);
-  }, [inputDependencyGraph]);
 
   return (
     <Box minH="100vh" h="100vh" as="section">

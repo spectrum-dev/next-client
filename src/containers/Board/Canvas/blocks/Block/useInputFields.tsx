@@ -261,7 +261,6 @@ export default function useInputFields({ id }: { id: string }) {
           />
         );
       case 'inputs_from_connection':
-        console.log('inputDependencyGraph: ', inputDependencyGraph);
         if (!inputDependencyGraph) {
           return (
             <div>
