@@ -118,7 +118,7 @@ export default function useRunStrategy(
   const onCompleted = (data: any) => {
     switch (data.taskResult.status) {
       case 'SUCCESS':
-        setState({ outputs: data.taskResult.output, showResults: 'results' in data.taskResult.output });
+        setState({ outputs: data.taskResult?.output, showResults: 'results' in data.taskResult?.output });
         setStartPolling(false);
         toast({
           title: STRATEGY_RUN_SUCCESS,
