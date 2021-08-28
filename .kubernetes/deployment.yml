@@ -25,5 +25,7 @@ spec:
           env:
             - name: "REACT_APP_API_BASE_URL"
               value: "https://api.imbue.dev"
+            - name: "GRAPHQL_API_URL"
+              value: "https://api.imbue.dev/graphql/"
       imagePullSecrets:
         - name: registry-spectrum

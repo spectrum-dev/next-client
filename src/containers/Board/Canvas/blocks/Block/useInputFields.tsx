@@ -202,7 +202,7 @@ export default function useInputFields({ id }: { id: string }) {
           <Select
             placeholder="Type here to start search"
             options={inputs?.[id]?.[inputField?.fieldVariableName].options}
-            // value={inputs?.[id]?.[input?.fieldVariableName].value}
+            value={inputs?.[id]?.[inputField?.fieldVariableName].value}
             onInputChange={(inputtedQuery: any) => {
               if (inputtedQuery !== '') {
                 handleOnSearchEvent(
