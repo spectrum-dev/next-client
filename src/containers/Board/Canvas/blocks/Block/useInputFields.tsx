@@ -27,7 +27,7 @@ export default function useInputFields({ id }: { id: string }) {
   const [additionalInputs, setAdditionalInputs] = useState([]);
 
   // @ts-ignore
-  const { inputs, setInputs } = useContext(BoardContext);
+  const { inputs, setInputs, inputDependencyGraph } = useContext(BoardContext);
 
   const handleOnSearchEvent = async (
     // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -254,6 +254,33 @@ export default function useInputFields({ id }: { id: string }) {
                   [inputField?.fieldVariableNames[1]]: {
                     rawValue: value,
                     value: formatDate(value),
+                  },
+                },
+              }));
+            }}
+          />
+        );
+      case 'inputs_from_connection':
+        if (!inputDependencyGraph || !inputDependencyGraph?.[id]) {
+          return (
+            <div>
+              Connect a block to populate this field
+            </div>
+          );
+        }
+
+        return (
+          <Dropdown
+            options={inputDependencyGraph?.[id]}
+            value={inputs?.[id]?.[inputField?.fieldVariableName].value}
+            onChange={(selectedItem: any) => {
+              setInputs((inp: any) => ({
+                ...inp,
+                [id]: {
+                  ...inp[id],
+                  [inputField?.fieldVariableName]: {
+                    ...inp[id][inputField?.fieldVariableName],
+                    value: selectedItem.value,
                   },
                 },
               }));

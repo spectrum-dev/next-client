@@ -40,7 +40,7 @@ const Block = memo((
   const { onOpen, onClose, isOpen } = useDisclosure();
 
   // @ts-ignore
-  const { inputs: managedInputs } = useContext(BoardContext);
+  const { inputs: managedInputs, inputDependencyGraph } = useContext(BoardContext);
 
   const [renderedInputFields, setRenderedInputFields] = useState<Array<React.ReactNode>>([]);
 
@@ -62,7 +62,7 @@ const Block = memo((
     // @ts-ignore
     setRenderedInputFields(normalFields.concat(additionalFields));
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, managedInputs?.[id], additionalInputs]);
+  }, [id, managedInputs?.[id], additionalInputs, inputDependencyGraph]);
 
   return (
     <>

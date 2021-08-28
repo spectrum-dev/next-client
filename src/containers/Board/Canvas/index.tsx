@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Box, Center, useDisclosure } from '@chakra-ui/react';
-
 import ReactFlow, {
   ReactFlowProvider, Background, addEdge, Edge, Connection, OnLoadParams, Node,
 } from 'react-flow-renderer';
@@ -33,6 +32,7 @@ import useSaveStrategy from './useSaveStrategy';
 import useValidateStrategy from './useValidateStrategy';
 import useRunStrategy from './useRunStrategy';
 import useVisualizationEngine from './useVisualizationEngine';
+import useGenerateInputDependencyGraph from './useGenerateInputDependencyGraph';
 
 const Canvas = () => {
   const {
@@ -57,6 +57,15 @@ const Canvas = () => {
   const { inputs, setInputs, startId } = useInputManager(
     { elements, loadedInputs, isStrategyLoaded },
   );
+
+  const {
+    generateInputDependencyGraph,
+    inputDependencyGraph,
+  } = useGenerateInputDependencyGraph({
+    inputs,
+    elements,
+    isStrategyLoaded,
+  });
 
   const { isValid, edgeValidation } = useValidateStrategy({ inputs, elements });
   const { outputs, invokeRun, showResults } = useRunStrategy(
@@ -92,7 +101,11 @@ const Canvas = () => {
   };
 
   const onConnect = (params: Edge<any> | Connection) => {
-    setElements((els) => addEdge({ ...params, type: 'flowEdge' }, els));
+    setElements((els) => {
+      const updatedEls = addEdge({ ...params, type: 'flowEdge' }, els);
+      generateInputDependencyGraph({ elementsOverride: updatedEls });
+      return updatedEls;
+    });
   };
 
   const onLoad = (params: OnLoadParams) => {
@@ -112,7 +125,11 @@ const Canvas = () => {
     <Box minH="100vh" h="100vh" as="section">
       <ReactFlowProvider>
         <BoardContext.Provider value={{
-          inputs, setInputs, edgeValidation, outputs,
+          inputs,
+          setInputs,
+          edgeValidation,
+          outputs,
+          inputDependencyGraph,
         }}
         >
           <ReactFlow
