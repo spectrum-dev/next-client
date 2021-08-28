@@ -136,6 +136,7 @@ export default function useInputManager(
           dataKeys: undefined,
           yValue: '',
           graphType: undefined,
+          ref: [],
         };
       }
     }

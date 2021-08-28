@@ -32,6 +32,7 @@ import Table from 'components/Tables/Table';
 // Hooks
 import useVisualizationData from './visualizations/useVisualizationData';
 import useGraphTypeValidation, { VisualizationType } from './visualizations/useGraphTypeValidation';
+import useMergeData from './useMergeData';
 
 // Drawer
 import SettingsDrawer from './SettingsDrawer';
@@ -66,12 +67,6 @@ export default memo(({ id, data: rawData }: NodeProps) => {
     onOpen: onVisualizationOpen,
     onClose: onVisualizationClose,
   } = useDisclosure();
-
-  const [transformedData, setTransformedData] = useState(rawData);
-
-  useEffect(() => {
-    setTransformedData(rawData);
-  }, [rawData]);
 
   // @ts-ignore
   const { inputs, setInputs } = useContext(BoardContext);
@@ -110,17 +105,16 @@ export default memo(({ id, data: rawData }: NodeProps) => {
     }));
   };
 
-  useEffect(() => {
-    if (!Array.isArray(rawData)) {
-      const tempDataKeys = Object.keys(rawData);
-      setDataKeys(inputs?.[id]?.dataKeys ? inputs?.[id]?.dataKeys : tempDataKeys);
-
-      const loadedDataKey = inputs?.[id]?.dataKey ? inputs?.[id]?.dataKey : tempDataKeys[0];
-      setDataKey(loadedDataKey);
-      setTransformedData(rawData[loadedDataKey]);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rawData]);
+  const {
+    transformedData,
+    setTransformedData,
+    refList,
+  } = useMergeData({
+    id,
+    base: rawData,
+    setDataKey,
+    setDataKeys,
+  });
 
   useEffect(() => {
     setInputs((inp: any) => ({
@@ -177,6 +171,7 @@ export default memo(({ id, data: rawData }: NodeProps) => {
             margin={{
               left: 0, right: 90, top: 10, bottom: 25,
             }}
+            overlays={refList}
           />
         );
       case VisualizationType.DataTable:
@@ -261,6 +256,7 @@ export default memo(({ id, data: rawData }: NodeProps) => {
         xValue={xValue}
         yValue={inputs?.[id]?.yValue}
         graphType={graphType}
+        overlays={refList}
       />
     </Flex>
   );

@@ -1,3 +1,5 @@
+import { useState, useEffect, ReactNode } from 'react';
+
 import { format } from 'd3-format';
 import { timeFormat } from 'd3-time-format';
 
@@ -10,10 +12,11 @@ import {
   ZoomButtons,
   CrossHairCursor,
   OHLCTooltip,
+  CurrentCoordinate,
 } from 'react-financial-charts';
 import { XAxis, YAxis } from '@react-financial-charts/axes';
 import { Chart, ChartCanvas } from '@react-financial-charts/core';
-import { CandlestickSeries, BarSeries } from '@react-financial-charts/series';
+import { CandlestickSeries, BarSeries, LineSeries } from '@react-financial-charts/series';
 
 type RecordData = Record<string, number>;
 
@@ -27,6 +30,7 @@ interface CandlestickGraphProps {
   readonly disableInteraction: boolean;
   readonly xValue?: string;
   readonly volumeChartHeight?: number;
+  readonly overlays?: Array<string>;
 }
 
 const CandlestickGraph = (
@@ -40,8 +44,10 @@ const CandlestickGraph = (
     disableInteraction,
     xValue,
     volumeChartHeight = 120,
+    overlays = [],
   }: CandlestickGraphProps,
 ) => {
+  const [overlaySeries, setOverlaySeries] = useState<Array<ReactNode> | []>([]);
   const pricesDisplayFormat = format('.4f');
   const xScaleProvider = discontinuousTimeScaleProviderBuilder().inputDateAccessor(
     (d: RecordData) => (
@@ -78,6 +84,49 @@ const CandlestickGraph = (
     volumeChartData.close > volumeChartData.open ? 'rgba(38, 166, 154, 0.3)' : 'rgba(239, 83, 80, 0.3)'
   );
 
+  const overlayYAccessor = (item: any, overlayId: string) => {
+    console.log('Processing Overlay ID: ', overlayId);
+    console.log('Item: ', item);
+    return item[overlayId];
+  };
+
+  const colors = ['blue', 'orange'];
+  const renderOverlays = () => {
+    let accessors = {};
+    const elems = [];
+
+    let i = 0;
+    if (overlays) {
+      for (const overlay of overlays) {
+        accessors = {
+          ...accessors,
+          [overlay]: (item: any) => item?.[overlay],
+        };
+
+        elems.push(
+          <>
+            <LineSeries
+              yAccessor={(item: any) => overlayYAccessor(item, overlay)}
+              strokeWidth={2}
+              strokeStyle={colors[i]}
+            />
+            <CurrentCoordinate
+              yAccessor={(item: any) => overlayYAccessor(item, overlay)}
+              fillStyle={colors[i]}
+            />
+          </>,
+        );
+        i += 1;
+      }
+    }
+    setOverlaySeries(elems);
+  };
+
+  useEffect(() => {
+    renderOverlays();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [overlays.length]);
+
   return (
     <ChartCanvas
       clamp={!disableInteraction}
@@ -99,9 +148,10 @@ const CandlestickGraph = (
         <BarSeries fillStyle={volumeColor} yAccessor={volumeSeries} />
       </Chart>
       <Chart id={1} yExtents={yExtents}>
-        <CandlestickSeries />
         <XAxis strokeStyle="white" tickLabelFill="white" tickStrokeStyle="white" tickStrokeWidth={2} zoomEnabled={false} fontSize={fontSize || 10} />
         <YAxis strokeStyle="white" tickLabelFill="white" tickStrokeStyle="white" tickStrokeWidth={2} zoomEnabled={false} fontSize={fontSize || 10} tickFormat={pricesDisplayFormat} />
+        { overlaySeries }
+        <CandlestickSeries />
         {!disableInteraction && (
           <>
             <MouseCoordinateX displayFormat={timeDisplayFormat} />
