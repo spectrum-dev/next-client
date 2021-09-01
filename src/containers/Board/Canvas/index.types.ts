@@ -62,7 +62,7 @@ type FormBlock = FormBlockMetadata & FormBlockValues;
 
 type VisualizationBlockInputs = {
   yValue: string;
-  graphType: GraphType;
+  graphType: VisualizationType;
 };
 
 type VisualizationBlock = VisualizationBlockInputs;
@@ -74,4 +74,4 @@ export type SetElements = React.Dispatch<React.SetStateAction<Elements<any>>>;
 
 export type BlockType = 'DATA_BLOCK' | 'COMPUTATIONAL_BLOCK' | 'SIGNAL_BLOCK' | 'STRATEGY_BLOCK';
 
-type GraphType = 'Candlestick Graph' | 'Data Table' | 'Line Graph';
+type VisualizationType = 'Candlestick Graph' | 'Data Table' | 'Line Graph';
