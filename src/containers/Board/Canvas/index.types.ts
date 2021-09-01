@@ -4,6 +4,7 @@ export interface URLParams {
   strategyId: string;
 }
 
+// Typings for Outputs
 export interface ResultsGraphDataRecord {
   title: string;
   data: Array<{
@@ -41,6 +42,36 @@ interface OutputResults {
 
 export type Outputs = Record<string, Array<Record<string, string | number>>> & OutputResults | {};
 
+// Typings for Inputs
+
+type FormBlockMetadata = {
+  blockId: number;
+  blockType: BlockType;
+};
+
+type FormBlockValues = {
+  [fieldName: string]: {
+    value: string; // Mandatory field
+    rawValue?: string;
+    options?: Array<string> | [];
+    onChange?: string;
+  };
+};
+
+type FormBlock = FormBlockMetadata & FormBlockValues;
+
+type VisualizationBlockInputs = {
+  yValue: string;
+  graphType: VisualizationType;
+};
+
+type VisualizationBlock = VisualizationBlockInputs;
+
+// TODO: Investigate more examples of types of inputs that could be passed in here
+export type Inputs = Record<string, FormBlock | VisualizationBlock> | {};
+
 export type SetElements = React.Dispatch<React.SetStateAction<Elements<any>>>;
 
 export type BlockType = 'DATA_BLOCK' | 'COMPUTATIONAL_BLOCK' | 'SIGNAL_BLOCK' | 'STRATEGY_BLOCK';
+
+type VisualizationType = 'Candlestick Graph' | 'Data Table' | 'Line Graph';
