@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   memo, useState, useEffect, useContext,
@@ -39,7 +40,6 @@ const Block = memo((
   const updateNodeInternals = useUpdateNodeInternals();
   const { onOpen, onClose, isOpen } = useDisclosure();
 
-  // @ts-ignore
   const { inputs: managedInputs, inputDependencyGraph } = useContext(BoardContext);
 
   const [renderedInputFields, setRenderedInputFields] = useState<Array<React.ReactNode>>([]);
@@ -61,7 +61,7 @@ const Block = memo((
     const additionalFields = renderInputFields(additionalInputs);
     // @ts-ignore
     setRenderedInputFields(normalFields.concat(additionalFields));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // @ts-ignore
   }, [id, managedInputs?.[id], additionalInputs, inputDependencyGraph]);
 
   return (

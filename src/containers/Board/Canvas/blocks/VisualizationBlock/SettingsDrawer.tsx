@@ -51,7 +51,6 @@ const SideDrawer = (
   },
 ) => {
   const btnRef = useRef();
-  // @ts-ignore
   const { inputs } = useContext(BoardContext);
 
   return (

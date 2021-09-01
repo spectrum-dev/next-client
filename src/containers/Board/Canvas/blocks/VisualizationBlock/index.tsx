@@ -73,7 +73,6 @@ export default memo(({ id, data: rawData }: NodeProps) => {
     setTransformedData(rawData);
   }, [rawData]);
 
-  // @ts-ignore
   const { inputs, setInputs } = useContext(BoardContext);
 
   const [graphType, setGraphType] = useState<VisualizationType>(
