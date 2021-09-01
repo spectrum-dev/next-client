@@ -269,23 +269,60 @@ export default function useInputFields({ id }: { id: string }) {
           );
         }
 
+        // eslint-disable-next-line no-case-declarations
+        const { inputFromConnectionValue } = inputs?.[id]?.[
+          inputField?.fieldVariableName
+        ];
+
+        // eslint-disable-next-line no-case-declarations
+        const dataKeyOptions = inputFromConnectionValue
+          ? inputDependencyGraph?.[id]?.[inputFromConnectionValue]?.outputInterface : [];
+
         return (
-          <Dropdown
-            options={inputDependencyGraph?.[id]}
-            value={inputs?.[id]?.[inputField?.fieldVariableName].value}
-            onChange={(selectedItem: any) => {
-              setInputs((inp: any) => ({
-                ...inp,
-                [id]: {
-                  ...inp[id],
-                  [inputField?.fieldVariableName]: {
-                    ...inp[id][inputField?.fieldVariableName],
-                    value: selectedItem.value,
-                  },
-                },
-              }));
-            }}
-          />
+          <>
+            <FormLabel textColor="white" fontSize={15}>
+              Block ID
+            </FormLabel>
+            <Box>
+              <Dropdown
+                options={Object.keys(inputDependencyGraph?.[id])}
+                value={inputs?.[id]?.[inputField?.fieldVariableName].inputFromConnectionValue}
+                onChange={(selectedItem: any) => {
+                  setInputs((inp: any) => ({
+                    ...inp,
+                    [id]: {
+                      ...inp[id],
+                      [inputField?.fieldVariableName]: {
+                        ...inp[id][inputField?.fieldVariableName],
+                        inputFromConnectionValue: selectedItem.value,
+                      },
+                    },
+                  }));
+                }}
+              />
+            </Box>
+            <FormLabel textColor="white" fontSize={15} marginTop={2}>
+              Selected Data
+            </FormLabel>
+            <Box>
+              <Dropdown
+                options={dataKeyOptions}
+                value={inputs?.[id]?.[inputField?.fieldVariableName].value}
+                onChange={(selectedItem: any) => {
+                  setInputs((inp: any) => ({
+                    ...inp,
+                    [id]: {
+                      ...inp[id],
+                      [inputField?.fieldVariableName]: {
+                        ...inp[id][inputField?.fieldVariableName],
+                        value: selectedItem.value,
+                      },
+                    },
+                  }));
+                }}
+              />
+            </Box>
+          </>
         );
       default:
         return (
