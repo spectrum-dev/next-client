@@ -9,16 +9,18 @@ import { formatDate } from 'app/utils';
 import fetcher from 'app/fetcher';
 
 // Types
+import { Inputs } from './index.types';
+
 interface FieldDataResponse {
   response: Array<string>;
 }
 
 export default function useInputManager(
   { elements, loadedInputs, isStrategyLoaded }:
-  { elements: Elements, loadedInputs: Record<any, any>, isStrategyLoaded: boolean },
+  { elements: Elements, loadedInputs: Inputs, isStrategyLoaded: boolean },
 ) {
   const [initializer, setInitializer] = useState<boolean>(false);
-  const [inputs, setInputs] = useState({});
+  const [inputs, setInputs] = useState<Inputs>({});
   const [startId, setStartId] = useState<number>(0);
 
   const handleInputByType = async (
@@ -83,7 +85,7 @@ export default function useInputManager(
     return {};
   };
 
-  const startIdCalculator = (responseObject: any): number => Math.max(
+  const startIdCalculator = (responseObject: Inputs): number => Math.max(
     ...Object.keys(responseObject).map((i) => {
       if (i.split('-').length === 1) {
         return Number(i);
@@ -92,9 +94,8 @@ export default function useInputManager(
     }),
   );
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const extractInputs = async () => {
-    let mergedInputs = {};
+    let mergedInputs: Inputs = {};
     for (const element of elements) {
       if (
         isNode(element)
@@ -109,8 +110,7 @@ export default function useInputManager(
           // @ts-ignore
           mergedInputs[element.id].blockId = element.data.metadata.blockId;
           for (const input of element.data.metadata.inputs) {
-            // eslint-disable-next-line no-await-in-loop
-            const inputValue = await handleInputByType(
+            const inputValue = handleInputByType(
               input.fieldType,
               input,
               element.data.metadata.blockType,

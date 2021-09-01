@@ -8,7 +8,7 @@ import {
   isNode, isEdge, Elements, Edge,
 } from 'react-flow-renderer';
 
-import { Outputs } from './index.types';
+import { Inputs, Outputs } from './index.types';
 
 // Queries & Mutations
 import {
@@ -33,7 +33,7 @@ export default function useRunStrategy(
     isStrategyLoaded,
   }:
   {
-    inputs: Record<any, any>,
+    inputs: Inputs,
     loadedOutputs: Outputs,
     elements: Elements,
     isStrategyLoaded: boolean
@@ -83,6 +83,7 @@ export default function useRunStrategy(
     for (const element of elements) {
       if (isNode(element)) {
         if (element.id.split('-').length === 1) {
+          // @ts-ignore
           nodeList[element.id] = inputs[element.id];
         }
       } else if (isEdge(element)) {

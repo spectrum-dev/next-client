@@ -7,12 +7,14 @@ import {
 
 import { QUERY_INPUT_DEPENDENCY_GRAPH } from './gql';
 
+import { Inputs } from './index.types';
+
 const NON_NODE_OR_EDGE_VALUE = 'There was an element in the list that is neither a node or edge';
 const UNHANDLED_ERROR = 'There was an error generating the dependncy graph. Please try again.';
 
 export default function useGenerateInputDependencyGraph(
   { elements, inputs, isStrategyLoaded }:
-  { elements: Elements, inputs: any, isStrategyLoaded: boolean },
+  { elements: Elements, inputs: Inputs, isStrategyLoaded: boolean },
 ) {
   const [initializer, setInitializer] = useState(false);
   const toast = useToast();
@@ -34,6 +36,7 @@ export default function useGenerateInputDependencyGraph(
       for (const element of runningElements) {
         if (isNode(element)) {
           if (element?.id.split('-').length === 1) {
+            // @ts-ignore
             nodeList[element.id] = inputs[element.id];
           }
         } else if (isEdge(element)) {
