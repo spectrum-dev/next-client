@@ -1,20 +1,23 @@
 import { useState, useEffect } from 'react';
 import { useToast } from '@chakra-ui/react';
 import { useLazyQuery } from '@apollo/client';
-import {
-  Elements, Edge, isNode, isEdge,
-} from 'react-flow-renderer';
+import { isNode, isEdge } from 'react-flow-renderer';
 
 import { QUERY_INPUT_DEPENDENCY_GRAPH } from './gql';
+
+// Types
+import {
+  Inputs, Elements, Edge,
+} from './index.types';
 
 const NON_NODE_OR_EDGE_VALUE = 'There was an element in the list that is neither a node or edge';
 const UNHANDLED_ERROR = 'There was an error generating the dependncy graph. Please try again.';
 
 export default function useGenerateInputDependencyGraph(
   { elements, inputs, isStrategyLoaded }:
-  { elements: Elements, inputs: any, isStrategyLoaded: boolean },
+  { elements: Elements, inputs: Inputs, isStrategyLoaded: boolean },
 ) {
-  const [initializer, setInitializer] = useState(false);
+  const [initializer, setInitializer] = useState<boolean>(false);
   const toast = useToast();
 
   const [
@@ -28,7 +31,7 @@ export default function useGenerateInputDependencyGraph(
   ) => {
     const runningElements = elementsOverride || elements;
     try {
-      const nodeList: any = {};
+      const nodeList: Inputs = {};
       const edgeList: Array<Edge> = [];
 
       for (const element of runningElements) {
