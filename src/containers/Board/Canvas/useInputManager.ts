@@ -6,7 +6,9 @@ import { formatDate } from 'app/utils';
 import fetcher from 'app/fetcher';
 
 // Types
-import { Inputs, BlockType, Elements } from './index.types';
+import {
+  Inputs, BlockType, Elements, NodeMetadataInputs,
+} from './index.types';
 
 interface FieldDataResponse {
   response: Array<string>;
@@ -21,19 +23,22 @@ export default function useInputManager(
   const [startId, setStartId] = useState<number>(0);
 
   const handleInputByType = async (
-    inputFieldType: string, input: Record<string, any>, blockType: BlockType, blockId: number,
+    inputFieldType: string,
+    input: NodeMetadataInputs,
+    blockType: BlockType,
+    blockId: number,
   ) => {
     switch (inputFieldType) {
       case 'search':
         return {
-          [input?.fieldVariableName]: {
+          [input.fieldVariableName]: {
             options: [],
             value: '',
           },
         };
       case 'dropdown':
         // eslint-disable-next-line no-case-declarations
-        const fieldDataResponse = await fetcher(`/orchestration/${blockType}/${blockId}${input?.fieldData?.base}`, {
+        const fieldDataResponse = await fetcher(`/orchestration/${blockType}/${blockId}${input.fieldData.base}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
           },
@@ -42,17 +47,17 @@ export default function useInputManager(
         if (fieldDataResponse.status === 200) {
           const response: FieldDataResponse = fieldDataResponse.data;
 
-          if ('onChange' in input?.fieldData) {
+          if ('onChange' in input.fieldData) {
             return {
-              [input?.fieldVariableName]: {
+              [input.fieldVariableName]: {
                 options: response.response,
                 value: '',
-                onChange: input?.fieldData?.onChange,
+                onChange: input.fieldData.onChange,
               },
             };
           }
           return {
-            [input?.fieldVariableName]: {
+            [input.fieldVariableName]: {
               options: response.response,
               value: '',
             },
@@ -61,19 +66,25 @@ export default function useInputManager(
         break;
       case 'input':
         return {
-          [input?.fieldVariableName]: {
+          [input.fieldVariableName]: {
             value: '',
           },
         };
       case 'date_range':
         // eslint-disable-next-line no-case-declarations
         const currentDate = new Date();
+
+        if (!('fieldVariableNames' in input) || !(input.fieldVariableNames)) {
+          // fieldVariableNames not in input or value is undefined
+          break;
+        }
+
         return {
-          [input?.fieldVariableNames[0]]: {
+          [input.fieldVariableNames[0]]: {
             rawValue: currentDate,
             value: formatDate(currentDate),
           },
-          [input?.fieldVariableNames[1]]: {
+          [input.fieldVariableNames[1]]: {
             rawValue: currentDate,
             value: formatDate(currentDate),
           },
@@ -84,8 +95,8 @@ export default function useInputManager(
     return {};
   };
 
-  const startIdCalculator = (responseObject: any): number => Math.max(
-    ...Object.keys(responseObject).map((i) => {
+  const startIdCalculator = (inputObject: Inputs): number => Math.max(
+    ...Object.keys(inputObject).map((i) => {
       if (i.split('-').length === 1) {
         return Number(i);
       }
@@ -93,7 +104,7 @@ export default function useInputManager(
     }),
   );
 
-  const extractInputs = async () => {
+  const extractInputs = () => {
     let mergedInputs: Inputs | {} = {};
     for (const element of elements) {
       if (

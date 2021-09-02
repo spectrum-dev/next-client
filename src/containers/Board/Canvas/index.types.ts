@@ -84,6 +84,18 @@ export type InputDependencyGraph = {
   }
 };
 
+export type NodeMetadataInputs = {
+  fieldData: {
+    base: string;
+    method: 'GET' | 'POST';
+    onChange?: string
+  }
+  fieldName: string;
+  fieldType: 'search' | 'dropdown' | 'input' | '...'
+  fieldVariableName: string;
+  fieldVariableNames?: Array<string>;
+};
+
 type Node = ReactFlowNode<{
   id: string;
   type: FlowBlockType;
@@ -96,17 +108,7 @@ type Node = ReactFlowNode<{
       blockId: number;
       blockType: BlockType;
       blockName: string;
-      inputs: Array<{
-        fieldData: {
-          base: string;
-          method: 'GET' | 'POST';
-          onChange?: string
-        }
-        fieldName: string;
-        fieldType: 'search' | 'dropdown' | 'input' | '...'
-        fieldVariableName?: string;
-        fieldVariableNames?: Array<string>;
-      }>
+      inputs: Array<NodeMetadataInputs>;
       validation: {
         input: {
           required: Array<{
