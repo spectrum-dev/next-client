@@ -124,7 +124,7 @@ type Node = ReactFlowNode<{
   }
 }>;
 
-type Edge = ReactFlowEdge<{
+export type Edge = ReactFlowEdge<{
   id: string;
   type: 'flowEdge' | 'visualizationEdge';
   source: string;
