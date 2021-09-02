@@ -61,6 +61,7 @@ const Block = memo((
     const additionalFields = renderInputFields(additionalInputs);
     // @ts-ignore
     setRenderedInputFields(normalFields.concat(additionalFields));
+    // @ts-ignore
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, managedInputs?.[id], additionalInputs, inputDependencyGraph]);
 
