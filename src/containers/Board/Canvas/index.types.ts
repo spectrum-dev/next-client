@@ -107,7 +107,7 @@ type Node = ReactFlowNode<{
         required: Array<{
           number: string;
           blockType: string
-        }>; // TODO: Type this properly
+        }>;
         allowed_blocks: Array<{
           blockId: string;
           blockType: BlockType;
@@ -126,7 +126,7 @@ type Node = ReactFlowNode<{
 
 type Edge = ReactFlowEdge<{
   id: string;
-  type: 'flowEdge'; // TODO: Implement more types here
+  type: 'flowEdge' | 'visualizationEdge';
   source: string;
   target: string;
   sourceHandle: string;
