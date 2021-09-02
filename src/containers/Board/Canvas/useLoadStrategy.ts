@@ -1,26 +1,24 @@
-/* eslint-disable no-restricted-syntax */
 import { useCallback, useEffect, useState } from 'react';
 import { useToast } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
-
 import { Elements } from 'react-flow-renderer';
 
 import fetcher from 'app/fetcher';
 
-import { URLParams, Outputs } from './index.types';
+import { URLParams, Inputs, Outputs } from './index.types';
 
 const POST_LOAD_STRATEGY_500 = 'There was an error loading your strategy. Please refresh the page.';
 
 // Types
 interface State {
   isLoaded: boolean;
-  inputs: Record<any, any> | {};
+  inputs: Inputs;
   outputs: Outputs;
 }
 
 interface GetStrategyResponse {
   elements: Elements;
-  inputs: Record<any, any> | {};
+  inputs: Inputs;
   outputs: Outputs;
 }
 
