@@ -77,6 +77,7 @@ export default memo(({ id, data: rawData }: NodeProps) => {
   const { inputs, setInputs } = useContext(BoardContext);
 
   const [graphType, setGraphType] = useState<VisualizationType>(
+    // @ts-ignore
     inputs?.[id]?.graphType ? inputs?.[id]?.graphType : VisualizationType.Line,
   );
 
@@ -113,8 +114,10 @@ export default memo(({ id, data: rawData }: NodeProps) => {
   useEffect(() => {
     if (!Array.isArray(rawData)) {
       const tempDataKeys = Object.keys(rawData);
+      // @ts-ignore
       setDataKeys(inputs?.[id]?.dataKeys ? inputs?.[id]?.dataKeys : tempDataKeys);
 
+      // @ts-ignore
       const loadedDataKey = inputs?.[id]?.dataKey ? inputs?.[id]?.dataKey : tempDataKeys[0];
       setDataKey(loadedDataKey);
       setTransformedData(rawData[loadedDataKey]);
@@ -159,6 +162,7 @@ export default memo(({ id, data: rawData }: NodeProps) => {
             data={data}
             disableInteraction
             xValue={xValue}
+            // @ts-ignore
             yValue={inputs?.[id]?.yValue}
             fontSize={20}
             margin={{
@@ -259,6 +263,7 @@ export default memo(({ id, data: rawData }: NodeProps) => {
         title={title}
         data={data}
         xValue={xValue}
+        // @ts-ignore
         yValue={inputs?.[id]?.yValue}
         graphType={graphType}
       />

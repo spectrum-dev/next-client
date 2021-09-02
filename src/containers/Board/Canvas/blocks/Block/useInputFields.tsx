@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable no-prototype-builtins */
 import { useState, useContext } from 'react';
 import {

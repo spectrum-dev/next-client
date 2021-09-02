@@ -70,6 +70,16 @@ type VisualizationBlock = VisualizationBlockInputs;
 // TODO: Investigate more examples of types of inputs that could be passed in here
 export type Inputs = Record<string, FormBlock | VisualizationBlock> | {};
 
+// Typings for InputDependencyGraph
+export type InputDependencyGraph = {
+  [blockIdInFlow: string]: {
+    [dependencyGraph: string]: {
+      name: string;
+      outputInterface: Array<string>;
+    }
+  }
+};
+
 export type SetElements = React.Dispatch<React.SetStateAction<Elements<any>>>;
 
 export type BlockType = 'DATA_BLOCK' | 'COMPUTATIONAL_BLOCK' | 'SIGNAL_BLOCK' | 'STRATEGY_BLOCK';

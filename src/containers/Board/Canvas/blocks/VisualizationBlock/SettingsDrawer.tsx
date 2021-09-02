@@ -94,13 +94,16 @@ const SideDrawer = (
             </Box>
 
             {
+                // @ts-ignore
                 inputs?.[id]?.dataKeys ? (
                   <Box>
                     <FormLabel textColor="white" fontSize="20px">
                       Data Key
                     </FormLabel>
                     <Dropdown
+                      // @ts-ignore
                       options={inputs?.[id]?.dataKeys}
+                      // @ts-ignore
                       value={inputs?.[id]?.dataKey}
                       onChange={(selectedItem) => {
                         setDataKey(selectedItem.value);
@@ -130,6 +133,7 @@ const SideDrawer = (
                     </FormLabel>
                     <Dropdown
                       options={yValues}
+                      // @ts-ignore
                       value={inputs?.[id]?.yValue}
                       onChange={(selectedItem) => setYValue(selectedItem.value)}
                     />

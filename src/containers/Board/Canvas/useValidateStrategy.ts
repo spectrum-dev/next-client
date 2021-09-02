@@ -12,7 +12,7 @@ const POST_RUN_STRATEGY_500 = 'There was an error validating this strategy. Plea
 
 const BreakException = {};
 
-type EdgeValidation = Record<string, {
+export type EdgeValidation = Record<string, {
   status: boolean,
   target_block: string,
   allowed_connections: Array<string>,
