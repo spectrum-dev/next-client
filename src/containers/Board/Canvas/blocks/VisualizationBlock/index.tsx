@@ -114,11 +114,9 @@ export default memo(({ id, data: rawData }: NodeProps) => {
   useEffect(() => {
     if (!Array.isArray(rawData)) {
       const tempDataKeys = Object.keys(rawData);
-      // @ts-ignore
-      setDataKeys(inputs?.[id]?.dataKeys ? inputs?.[id]?.dataKeys : tempDataKeys);
+      setDataKeys(inputs?.[id].dataKeys || tempDataKeys);
 
-      // @ts-ignore
-      const loadedDataKey = inputs?.[id]?.dataKey ? inputs?.[id]?.dataKey : tempDataKeys[0];
+      const loadedDataKey = inputs?.[id].dataKey || tempDataKeys[0];
       setDataKey(loadedDataKey);
       setTransformedData(rawData[loadedDataKey]);
     }

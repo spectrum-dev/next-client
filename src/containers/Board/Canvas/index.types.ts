@@ -1,4 +1,4 @@
-import { Elements } from 'react-flow-renderer';
+import { Node as ReactFlowNode, Edge as ReactFlowEdge } from 'react-flow-renderer';
 
 export interface URLParams {
   strategyId: string;
@@ -63,12 +63,16 @@ type FormBlock = FormBlockMetadata & FormBlockValues;
 type VisualizationBlockInputs = {
   yValue: string;
   graphType: VisualizationType;
+  dataKey: string;
+  dataKeys: Array<string>;
 };
 
 type VisualizationBlock = VisualizationBlockInputs;
 
 // TODO: Investigate more examples of types of inputs that could be passed in here
-export type Inputs = Record<string, FormBlock | VisualizationBlock> | {};
+export type Inputs = {
+  [blockIdInFlow: string]: FormBlock & VisualizationBlock;
+};
 
 // Typings for InputDependencyGraph
 export type InputDependencyGraph = {
@@ -80,7 +84,61 @@ export type InputDependencyGraph = {
   }
 };
 
-export type SetElements = React.Dispatch<React.SetStateAction<Elements<any>>>;
+export type NodeMetadataInputs = {
+  fieldData: {
+    base: string;
+    method: 'GET' | 'POST';
+    onChange?: string
+  }
+  fieldName: string;
+  fieldType: 'search' | 'dropdown' | 'input' | '...'
+  fieldVariableName: string;
+  fieldVariableNames?: Array<string>;
+};
+
+type Node = ReactFlowNode<{
+  metadata: {
+    blockId: number;
+    blockType: BlockType;
+    blockName: string;
+    inputs: Array<NodeMetadataInputs>;
+    validation: {
+      input: {
+        required: Array<{
+          number: string;
+          blockType: string
+        }>;
+        allowed_blocks: Array<{
+          blockId: string;
+          blockType: BlockType;
+        }>;
+      };
+      output: Array<{
+        number: string;
+        blockType: BlockType;
+      }>
+    }
+    outputInterface: {
+      interface: Array<string>;
+    }
+  }
+}>;
+
+type Edge = ReactFlowEdge<{
+  id: string;
+  type: 'flowEdge' | 'visualizationEdge';
+  source: string;
+  target: string;
+  sourceHandle: string;
+  targetHandle: string;
+}>;
+
+type FlowElement = Node | Edge;
+
+// Typing for Elements
+export type Elements = Array<FlowElement>;
+
+export type SetElements = React.Dispatch<React.SetStateAction<Elements>>;
 
 export type BlockType = 'DATA_BLOCK' | 'COMPUTATIONAL_BLOCK' | 'SIGNAL_BLOCK' | 'STRATEGY_BLOCK';
 

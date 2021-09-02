@@ -1,39 +1,44 @@
-/* eslint-disable no-case-declarations */
-/* eslint-disable no-prototype-builtins */
-/* eslint-disable no-restricted-syntax */
 import { useState, useEffect } from 'react';
-import { isNode, Elements } from 'react-flow-renderer';
+import { isNode } from 'react-flow-renderer';
 
 import { formatDate } from 'app/utils';
 
 import fetcher from 'app/fetcher';
 
 // Types
+import {
+  Inputs, BlockType, Elements, NodeMetadataInputs,
+} from './index.types';
+
 interface FieldDataResponse {
   response: Array<string>;
 }
 
 export default function useInputManager(
   { elements, loadedInputs, isStrategyLoaded }:
-  { elements: Elements, loadedInputs: Record<any, any>, isStrategyLoaded: boolean },
+  { elements: Elements, loadedInputs: Inputs, isStrategyLoaded: boolean },
 ) {
   const [initializer, setInitializer] = useState<boolean>(false);
-  const [inputs, setInputs] = useState({});
+  const [inputs, setInputs] = useState<Inputs>({});
   const [startId, setStartId] = useState<number>(0);
 
   const handleInputByType = async (
-    inputFieldType: string, input: Record<string, any>, blockType: string, blockId: string,
+    inputFieldType: string,
+    input: NodeMetadataInputs,
+    blockType: BlockType,
+    blockId: number,
   ) => {
     switch (inputFieldType) {
       case 'search':
         return {
-          [input?.fieldVariableName]: {
+          [input.fieldVariableName]: {
             options: [],
             value: '',
           },
         };
       case 'dropdown':
-        const fieldDataResponse = await fetcher(`/orchestration/${blockType}/${blockId}${input?.fieldData?.base}`, {
+        // eslint-disable-next-line no-case-declarations
+        const fieldDataResponse = await fetcher(`/orchestration/${blockType}/${blockId}${input.fieldData.base}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
           },
@@ -42,17 +47,17 @@ export default function useInputManager(
         if (fieldDataResponse.status === 200) {
           const response: FieldDataResponse = fieldDataResponse.data;
 
-          if ('onChange' in input?.fieldData) {
+          if ('onChange' in input.fieldData) {
             return {
-              [input?.fieldVariableName]: {
+              [input.fieldVariableName]: {
                 options: response.response,
                 value: '',
-                onChange: input?.fieldData?.onChange,
+                onChange: input.fieldData.onChange,
               },
             };
           }
           return {
-            [input?.fieldVariableName]: {
+            [input.fieldVariableName]: {
               options: response.response,
               value: '',
             },
@@ -61,18 +66,25 @@ export default function useInputManager(
         break;
       case 'input':
         return {
-          [input?.fieldVariableName]: {
+          [input.fieldVariableName]: {
             value: '',
           },
         };
       case 'date_range':
+        // eslint-disable-next-line no-case-declarations
         const currentDate = new Date();
+
+        if (!('fieldVariableNames' in input) || !(input.fieldVariableNames)) {
+          // fieldVariableNames not in input or value is undefined
+          break;
+        }
+
         return {
-          [input?.fieldVariableNames[0]]: {
+          [input.fieldVariableNames[0]]: {
             rawValue: currentDate,
             value: formatDate(currentDate),
           },
-          [input?.fieldVariableNames[1]]: {
+          [input.fieldVariableNames[1]]: {
             rawValue: currentDate,
             value: formatDate(currentDate),
           },
@@ -83,8 +95,8 @@ export default function useInputManager(
     return {};
   };
 
-  const startIdCalculator = (responseObject: any): number => Math.max(
-    ...Object.keys(responseObject).map((i) => {
+  const startIdCalculator = (inputObject: Inputs): number => Math.max(
+    ...Object.keys(inputObject).map((i) => {
       if (i.split('-').length === 1) {
         return Number(i);
       }
@@ -92,35 +104,38 @@ export default function useInputManager(
     }),
   );
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const extractInputs = async () => {
-    let mergedInputs = {};
+    let mergedInputs: Inputs | {} = {};
     for (const element of elements) {
       if (
         isNode(element)
         && (element.id.split('-').length === 1)
       ) {
-        // @ts-ignore
-        if (!inputs?.[element.id]) {
-          // @ts-ignore
-          mergedInputs[element.id] = {};
-          // @ts-ignore
-          mergedInputs[element.id].blockType = element.data.metadata.blockType;
-          // @ts-ignore
-          mergedInputs[element.id].blockId = element.data.metadata.blockId;
-          for (const input of element.data.metadata.inputs) {
+        const { id, data } = element;
+
+        mergedInputs = {
+          ...mergedInputs,
+          [id]: {
+            blockType: data?.metadata.blockType,
+            blockId: data?.metadata.blockId,
+          },
+        };
+
+        if (data?.metadata.inputs) {
+          for (const input of data.metadata.inputs) {
             // eslint-disable-next-line no-await-in-loop
             const inputValue = await handleInputByType(
               input.fieldType,
               input,
-              element.data.metadata.blockType,
-              element.data.metadata.blockId,
+              data.metadata.blockType,
+              data.metadata.blockId,
             );
+
             mergedInputs = {
               ...mergedInputs,
-              [element.id]: {
+              [id]: {
                 // @ts-ignore
-                ...mergedInputs?.[element.id],
+                ...mergedInputs?.[id],
                 ...inputValue,
               },
             };
@@ -130,12 +145,15 @@ export default function useInputManager(
         isNode(element)
         && (element.id.split('-').length === 3)
       ) {
-        // @ts-ignore
-        mergedInputs[element.id] = {
-          dataKey: undefined,
-          dataKeys: undefined,
-          yValue: '',
-          graphType: undefined,
+        const { id } = element;
+        mergedInputs = {
+          ...mergedInputs,
+          [id]: {
+            dataKey: undefined,
+            dataKeys: undefined,
+            yValue: '',
+            graphType: undefined,
+          },
         };
       }
     }
