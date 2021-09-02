@@ -97,37 +97,29 @@ export type NodeMetadataInputs = {
 };
 
 type Node = ReactFlowNode<{
-  id: string;
-  type: FlowBlockType;
-  position: {
-    x: number;
-    y: number;
-  }
-  data: {
-    metadata: {
-      blockId: number;
-      blockType: BlockType;
-      blockName: string;
-      inputs: Array<NodeMetadataInputs>;
-      validation: {
-        input: {
-          required: Array<{
-            number: string;
-            blockType: string
-          }>; // TODO: Type this properly
-          allowed_blocks: Array<{
-            blockId: string;
-            blockType: BlockType;
-          }>;
-        };
-        output: Array<{
+  metadata: {
+    blockId: number;
+    blockType: BlockType;
+    blockName: string;
+    inputs: Array<NodeMetadataInputs>;
+    validation: {
+      input: {
+        required: Array<{
           number: string;
+          blockType: string
+        }>; // TODO: Type this properly
+        allowed_blocks: Array<{
+          blockId: string;
           blockType: BlockType;
-        }>
-      }
-      outputInterface: {
-        interface: Array<string>;
-      }
+        }>;
+      };
+      output: Array<{
+        number: string;
+        blockType: BlockType;
+      }>
+    }
+    outputInterface: {
+      interface: Array<string>;
     }
   }
 }>;
@@ -145,8 +137,6 @@ type FlowElement = Node | Edge;
 
 // Typing for Elements
 export type Elements = Array<FlowElement>;
-
-type FlowBlockType = 'block';
 
 export type SetElements = React.Dispatch<React.SetStateAction<Elements>>;
 

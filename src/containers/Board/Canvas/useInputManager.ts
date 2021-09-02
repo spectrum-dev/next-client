@@ -104,34 +104,31 @@ export default function useInputManager(
     }),
   );
 
-  const extractInputs = () => {
+  const extractInputs = async () => {
     let mergedInputs: Inputs | {} = {};
     for (const element of elements) {
       if (
         isNode(element)
         && (element.id.split('-').length === 1)
       ) {
-        const { id, data: elementData } = element;
-        if (inputs?.[id]) {
-          mergedInputs = {
-            ...mergedInputs,
-            [id]: {
-              blockType: elementData?.data.metadata.blockType,
-              blockId: elementData?.data.metadata.blockId,
-            },
-          };
+        const { id, data } = element;
 
-          if (!elementData?.data.metadata.inputs) {
-            // If empty, skip
-            break;
-          }
+        mergedInputs = {
+          ...mergedInputs,
+          [id]: {
+            blockType: data?.metadata.blockType,
+            blockId: data?.metadata.blockId,
+          },
+        };
 
-          for (const input of elementData?.data.metadata.inputs) {
-            const inputValue = handleInputByType(
+        if (data?.metadata.inputs) {
+          for (const input of data.metadata.inputs) {
+            // eslint-disable-next-line no-await-in-loop
+            const inputValue = await handleInputByType(
               input.fieldType,
               input,
-              elementData?.data.metadata.blockType,
-              elementData?.data.metadata.blockId,
+              data.metadata.blockType,
+              data.metadata.blockId,
             );
 
             mergedInputs = {
