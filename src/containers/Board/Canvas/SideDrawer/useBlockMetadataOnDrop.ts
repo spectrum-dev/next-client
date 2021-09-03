@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useToast } from '@chakra-ui/react';
 
-import { Elements, Node, OnLoadParams } from 'react-flow-renderer';
+import { Node, OnLoadParams } from 'react-flow-renderer';
 
 import fetcher from 'app/fetcher';
 
@@ -62,7 +62,7 @@ export default function useBlockMetadataOnDrop({ startId }: { startId: number })
           },
         };
 
-        setElements((es: Elements) => es.concat(newNode));
+        setElements((es) => es.concat(newNode));
       } else {
         throw new Error(GET_BLOCK_METADATA_RESPONSE_500);
       }
