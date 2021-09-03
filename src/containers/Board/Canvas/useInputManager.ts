@@ -8,6 +8,7 @@ import fetcher from 'app/fetcher';
 // Types
 import {
   Inputs, BlockType, Elements, NodeMetadataInputs,
+  isFormNode,
 } from './index.types';
 
 interface FieldDataResponse {
@@ -108,7 +109,7 @@ export default function useInputManager(
     let mergedInputs: Inputs | {} = {};
     for (const element of elements) {
       if (
-        isNode(element)
+        isFormNode(element)
         && (element.id.split('-').length === 1)
       ) {
         const { id, data } = element;

@@ -1,4 +1,4 @@
-import { Node as ReactFlowNode, Edge as ReactFlowEdge } from 'react-flow-renderer';
+import { Node as ReactFlowNode, Edge as ReactFlowEdge, isNode as isReactFlowNode } from 'react-flow-renderer';
 
 export interface URLParams {
   strategyId: string;
@@ -96,7 +96,7 @@ export type NodeMetadataInputs = {
   fieldVariableNames?: Array<string>;
 };
 
-type Node = ReactFlowNode<{
+export type FormNode = ReactFlowNode<{
   metadata: {
     blockId: number;
     blockType: BlockType;
@@ -124,6 +124,10 @@ type Node = ReactFlowNode<{
   }
 }>;
 
+export type VisualizationNode = ReactFlowNode<Array<{
+  [key: string]: string | number;
+}>>;
+
 export type Edge = ReactFlowEdge<{
   id: string;
   type: 'flowEdge' | 'visualizationEdge';
@@ -133,7 +137,16 @@ export type Edge = ReactFlowEdge<{
   targetHandle: string;
 }>;
 
-type FlowElement = Node | Edge;
+type FlowElement = FormNode | VisualizationNode | Edge;
+
+// Type Guards
+export function isFormNode(element: FlowElement): element is FormNode {
+  return isReactFlowNode(element) && Object.keys(element?.data || {}).includes('metadata');
+}
+
+export function isVisualizationNode(element: FlowElement): element is VisualizationNode {
+  return isReactFlowNode(element) && Object.keys(element).includes('data') && Array.isArray(element.data);
+}
 
 // Typing for Elements
 export type Elements = Array<FlowElement>;

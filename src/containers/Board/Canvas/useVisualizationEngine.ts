@@ -1,9 +1,13 @@
 import { useEffect } from 'react';
 import {
-  Elements, OnLoadParams, Node, Edge, FlowElement,
+  OnLoadParams,
 } from 'react-flow-renderer';
 
-import { SetElements, Outputs } from './index.types';
+import {
+  SetElements, Outputs,
+  Edge, VisualizationNode,
+  isVisualizationNode,
+} from './index.types';
 
 export default function useVisualizationEngine({
   outputs, setElements, reactFlowInstance,
@@ -29,7 +33,7 @@ export default function useVisualizationEngine({
 
       const position = reactFlowInstance.project({ x: 100, y: 100 });
 
-      const newNode: Node = {
+      const newNode: VisualizationNode = {
         id: key,
         type: 'visualizationBlock',
         position,
@@ -45,7 +49,7 @@ export default function useVisualizationEngine({
         id: `reactflow__edge-${key}output_id${BLOCK_ID_IN_FLOW}-2input_id${key}`,
       };
 
-      setElements((es: Elements) => {
+      setElements((es) => {
         let idExists = false;
         for (const tempElem of es) {
           if (tempElem.id === key) {
@@ -54,8 +58,8 @@ export default function useVisualizationEngine({
         }
 
         if (idExists) {
-          return es.map((el: FlowElement) => {
-            if (el?.id === key) {
+          return es.map((el) => {
+            if (el.id === key && isVisualizationNode(el)) {
               // eslint-disable-next-line no-param-reassign
               el.data = value;
             }
