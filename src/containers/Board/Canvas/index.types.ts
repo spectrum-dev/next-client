@@ -140,12 +140,12 @@ export type Edge = ReactFlowEdge<{
 type FlowElement = FormNode | VisualizationNode | Edge;
 
 // Type Guards
-export function isFormNode(arg: any): arg is FormNode {
-  return isReactFlowNode(arg) && Object.keys(arg?.data || {}).includes('metadata');
+export function isFormNode(element: FlowElement): element is FormNode {
+  return isReactFlowNode(element) && Object.keys(element?.data || {}).includes('metadata');
 }
 
-export function isVisualizationNode(arg: any): arg is VisualizationNode {
-  return isReactFlowNode(arg) && Object.keys(arg).includes('data') && Array.isArray(arg.data);
+export function isVisualizationNode(element: FlowElement): element is VisualizationNode {
+  return isReactFlowNode(element) && Object.keys(element).includes('data') && Array.isArray(element.data);
 }
 
 // Typing for Elements
