@@ -1,8 +1,8 @@
 import {
-  Node, FlowElement, isNode, OnLoadParams,
+  FlowElement, OnLoadParams,
 } from 'react-flow-renderer';
 
-import { SetElements } from 'containers/Board/Canvas/index.types';
+import { SetElements, ResultsNode, isResultsNode } from 'containers/Board/Canvas/index.types';
 
 export default function useResultsOnDrop() {
   const onDrop = async (
@@ -22,7 +22,7 @@ export default function useResultsOnDrop() {
     }
 
     const position = reactFlowInstance.project({ x: event.clientX, y: event.clientY - 40 });
-    const newNode: Node = {
+    const newNode: ResultsNode = {
       id: `RESULTS-${flowBlockType}-${label}`,
       type: flowBlockType,
       position,
@@ -32,7 +32,7 @@ export default function useResultsOnDrop() {
     setElements((es) => {
       let isExists = false;
       const updatedElements = es.map((el: FlowElement) => {
-        if (isNode(el) && el.id === newNode.id) {
+        if (isResultsNode(el) && el.id === newNode.id) {
           isExists = true;
           return newNode;
         }

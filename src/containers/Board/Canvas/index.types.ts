@@ -128,6 +128,10 @@ export type VisualizationNode = ReactFlowNode<Array<{
   [key: string]: string | number;
 }>>;
 
+export type ResultsNode = ReactFlowNode<{
+  label: string;
+}>;
+
 export type Edge = ReactFlowEdge<{
   id: string;
   type: 'flowEdge' | 'visualizationEdge';
@@ -137,7 +141,7 @@ export type Edge = ReactFlowEdge<{
   targetHandle: string;
 }>;
 
-type FlowElement = FormNode | VisualizationNode | Edge;
+type FlowElement = FormNode | VisualizationNode | ResultsNode | Edge;
 
 // Type Guards
 export function isFormNode(element: FlowElement): element is FormNode {
@@ -146,6 +150,10 @@ export function isFormNode(element: FlowElement): element is FormNode {
 
 export function isVisualizationNode(element: FlowElement): element is VisualizationNode {
   return isReactFlowNode(element) && Object.keys(element).includes('data') && Array.isArray(element.data);
+}
+
+export function isResultsNode(element: FlowElement): element is ResultsNode {
+  return isReactFlowNode(element) && Object.keys(element?.data || {}).includes('label');
 }
 
 // Typing for Elements
