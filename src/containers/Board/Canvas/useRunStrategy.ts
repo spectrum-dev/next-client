@@ -5,10 +5,12 @@ import {
 import { useToast } from '@chakra-ui/react';
 
 import {
-  isNode, isEdge, Elements, Edge,
+  isNode, isEdge,
 } from 'react-flow-renderer';
 
-import { Outputs } from './index.types';
+import {
+  Outputs, Inputs, Elements, Edge,
+} from './index.types';
 
 // Queries & Mutations
 import {
@@ -33,7 +35,7 @@ export default function useRunStrategy(
     isStrategyLoaded,
   }:
   {
-    inputs: Record<any, any>,
+    inputs: Inputs,
     loadedOutputs: Outputs,
     elements: Elements,
     isStrategyLoaded: boolean
@@ -78,7 +80,7 @@ export default function useRunStrategy(
    */
   const fetchData = useCallback(async () => {
     // Pre-processing to assemble a list of nodes and edges
-    const nodeList: any = {};
+    const nodeList: Inputs = {};
     const edgeList: Array<Edge> = [];
     for (const element of elements) {
       if (isNode(element)) {
