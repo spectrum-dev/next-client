@@ -6,6 +6,7 @@ import {
 import {
   SetElements, Outputs,
   Edge, VisualizationNode,
+  isVisualizationNode,
 } from './index.types';
 
 export default function useVisualizationEngine({
@@ -58,7 +59,7 @@ export default function useVisualizationEngine({
 
         if (idExists) {
           return es.map((el) => {
-            if (el?.id === key) {
+            if (el.id === key && isVisualizationNode(el)) {
               // eslint-disable-next-line no-param-reassign
               el.data = value;
             }
