@@ -14,9 +14,6 @@ import {
 // Contexts
 import BoardContext from 'app/contexts/board';
 
-// Types
-import { Outputs } from 'containers/Board/Canvas/index.types';
-
 /**
  *
  * @param value Numerical Value to be displayed
@@ -49,8 +46,7 @@ const ResultBlock = memo((
     value: 0,
   });
 
-  // @ts-ignore
-  const { outputs } = useContext<{ outputs: Outputs }>(BoardContext);
+  const { outputs } = useContext(BoardContext);
 
   const findResults = () => {
     if (!('results' in outputs)) {
