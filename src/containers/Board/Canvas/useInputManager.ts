@@ -90,6 +90,13 @@ export default function useInputManager(
             value: formatDate(currentDate),
           },
         };
+      case 'inputs_from_connection':
+        return {
+          [input.fieldVariableName]: {
+            inputFromConnectionValue: '',
+            value: '',
+          },
+        };
       default:
         break;
     }
