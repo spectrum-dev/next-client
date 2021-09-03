@@ -18,7 +18,7 @@ import BoardContext from 'app/contexts/board';
 // Custom UI
 import Dropdown from 'components/Dropdown';
 
-import { VisualizationType } from './visualizations/useGraphTypeValidation';
+import { VisualizationType } from 'containers/Board/Canvas/index.types';
 
 const SideDrawer = (
   {
