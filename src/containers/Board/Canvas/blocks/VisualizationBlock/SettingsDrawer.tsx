@@ -93,14 +93,14 @@ const SideDrawer = (
             </Box>
 
             {
-                inputs?.[id].dataKeys ? (
+                inputs?.[id]?.dataKeys ? (
                   <Box>
                     <FormLabel textColor="white" fontSize="20px">
                       Data Key
                     </FormLabel>
                     <Dropdown
-                      options={inputs?.[id].dataKeys}
-                      value={inputs?.[id].dataKey}
+                      options={inputs?.[id]?.dataKeys}
+                      value={inputs?.[id]?.dataKey}
                       onChange={(selectedItem) => {
                         setDataKey(selectedItem.value);
                         setTransformedData(rawData[selectedItem.value]);
@@ -129,7 +129,7 @@ const SideDrawer = (
                     </FormLabel>
                     <Dropdown
                       options={yValues}
-                      value={inputs?.[id].yValue}
+                      value={inputs?.[id]?.yValue}
                       onChange={(selectedItem) => setYValue(selectedItem.value)}
                     />
                   </Box>

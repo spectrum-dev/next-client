@@ -82,6 +82,7 @@ export default function useInputFields({ id }: { id: string }) {
           let additionalInputs = {};
 
           for (const inputValue of onChangeResponse?.data?.response) {
+            // eslint-disable-next-line no-prototype-builtins
             if (inputValue.hasOwnProperty('fieldData') && inputValue?.fieldData.hasOwnProperty('options')) {
               additionalInputs = {
                 ...additionalInputs,
