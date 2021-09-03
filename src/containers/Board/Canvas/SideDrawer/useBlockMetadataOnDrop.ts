@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useToast } from '@chakra-ui/react';
 
-import { Node, OnLoadParams } from 'react-flow-renderer';
+import { OnLoadParams } from 'react-flow-renderer';
 
 import fetcher from 'app/fetcher';
 
-import { SetElements } from 'containers/Board/Canvas/index.types';
+import { SetElements, FormNode } from 'containers/Board/Canvas/index.types';
 
 const GET_BLOCK_METADATA_RESPONSE_500 = "There was an error retrieving the block's metadata. Please try again";
 
@@ -53,7 +53,7 @@ export default function useBlockMetadataOnDrop({ startId }: { startId: number })
       });
 
       if (metadataResponse.status === 200) {
-        const newNode: Node = {
+        const newNode: FormNode = {
           id: generateID(),
           type: 'block',
           position,
