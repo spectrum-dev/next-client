@@ -79,7 +79,7 @@ export default memo(({ id, data: rawData }: NodeProps) => {
   const { inputs, setInputs } = useContext(BoardContext);
 
   const [graphType, setGraphType] = useState<VisualizationType>(
-    inputs?.[id].graphType || VisualizationType.Line,
+    inputs?.[id]?.graphType || VisualizationType.Line,
   );
 
   const setDataKey = (dataKey: string) => {
@@ -115,7 +115,7 @@ export default memo(({ id, data: rawData }: NodeProps) => {
   useEffect(() => {
     if (!Array.isArray(rawData)) {
       const tempDataKeys = Object.keys(rawData);
-      setDataKeys(inputs?.[id].dataKeys || tempDataKeys);
+      setDataKeys(inputs?.[id]?.dataKeys || tempDataKeys);
 
       const loadedDataKey = inputs?.[id].dataKey || tempDataKeys[0];
       setDataKey(loadedDataKey);
@@ -161,7 +161,7 @@ export default memo(({ id, data: rawData }: NodeProps) => {
             data={data}
             disableInteraction
             xValue={xValue}
-            yValue={inputs?.[id].yValue}
+            yValue={inputs?.[id]?.yValue}
             fontSize={20}
             margin={{
               left: 0, right: 90, top: 10, bottom: 25,
@@ -261,7 +261,7 @@ export default memo(({ id, data: rawData }: NodeProps) => {
         title={title}
         data={data}
         xValue={xValue}
-        yValue={inputs?.[id].yValue}
+        yValue={inputs?.[id]?.yValue}
         graphType={graphType}
       />
     </Flex>
