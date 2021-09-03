@@ -18,7 +18,7 @@ import BoardContext from 'app/contexts/board';
 // Custom UI
 import Dropdown from 'components/Dropdown';
 
-import { VisualizationType } from 'containers/Board/Canvas/index.types';
+import { VisualizationType } from './visualizations/useGraphTypeValidation';
 
 const SideDrawer = (
   {
@@ -51,6 +51,7 @@ const SideDrawer = (
   },
 ) => {
   const btnRef = useRef();
+  // @ts-ignore
   const { inputs } = useContext(BoardContext);
 
   return (
@@ -93,14 +94,17 @@ const SideDrawer = (
             </Box>
 
             {
-                inputs?.[id].dataKeys ? (
+                // @ts-ignore
+                inputs?.[id]?.dataKeys ? (
                   <Box>
                     <FormLabel textColor="white" fontSize="20px">
                       Data Key
                     </FormLabel>
                     <Dropdown
-                      options={inputs?.[id].dataKeys}
-                      value={inputs?.[id].dataKey}
+                      // @ts-ignore
+                      options={inputs?.[id]?.dataKeys}
+                      // @ts-ignore
+                      value={inputs?.[id]?.dataKey}
                       onChange={(selectedItem) => {
                         setDataKey(selectedItem.value);
                         setTransformedData(rawData[selectedItem.value]);
@@ -129,7 +133,8 @@ const SideDrawer = (
                     </FormLabel>
                     <Dropdown
                       options={yValues}
-                      value={inputs?.[id].yValue}
+                      // @ts-ignore
+                      value={inputs?.[id]?.yValue}
                       onChange={(selectedItem) => setYValue(selectedItem.value)}
                     />
                   </Box>

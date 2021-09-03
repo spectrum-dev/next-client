@@ -19,6 +19,7 @@ const FlowEdge = memo((
     markerEndId,
   }: WrapEdgeProps,
 ) => {
+  // @ts-ignore
   const { edgeValidation } = useContext(BoardContext);
 
   const edgePath = getSmoothStepPath({

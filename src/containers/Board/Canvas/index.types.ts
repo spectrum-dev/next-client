@@ -165,8 +165,4 @@ export type SetElements = React.Dispatch<React.SetStateAction<Elements>>;
 
 export type BlockType = 'DATA_BLOCK' | 'COMPUTATIONAL_BLOCK' | 'SIGNAL_BLOCK' | 'STRATEGY_BLOCK';
 
-export enum VisualizationType {
-  Line = 'Line Graph',
-  Candlestick = 'Candlestick Graph',
-  DataTable = 'Data Table',
-}
+type VisualizationType = 'Candlestick Graph' | 'Data Table' | 'Line Graph';

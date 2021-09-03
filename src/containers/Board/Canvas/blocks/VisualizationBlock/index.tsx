@@ -29,12 +29,9 @@ import LineGraph from 'components/Graphs/LineGraph';
 import CandlestickGraph from 'components/Graphs/CandlestickGraph';
 import Table from 'components/Tables/Table';
 
-// Types
-import { VisualizationType } from 'containers/Board/Canvas/index.types';
-
 // Hooks
 import useVisualizationData from './visualizations/useVisualizationData';
-import useGraphTypeValidation from './visualizations/useGraphTypeValidation';
+import useGraphTypeValidation, { VisualizationType } from './visualizations/useGraphTypeValidation';
 
 // Drawer
 import SettingsDrawer from './SettingsDrawer';
@@ -76,10 +73,12 @@ export default memo(({ id, data: rawData }: NodeProps) => {
     setTransformedData(rawData);
   }, [rawData]);
 
+  // @ts-ignore
   const { inputs, setInputs } = useContext(BoardContext);
 
   const [graphType, setGraphType] = useState<VisualizationType>(
-    inputs?.[id].graphType || VisualizationType.Line,
+    // @ts-ignore
+    inputs?.[id]?.graphType ? inputs?.[id]?.graphType : VisualizationType.Line,
   );
 
   const setDataKey = (dataKey: string) => {
@@ -161,7 +160,8 @@ export default memo(({ id, data: rawData }: NodeProps) => {
             data={data}
             disableInteraction
             xValue={xValue}
-            yValue={inputs?.[id].yValue}
+            // @ts-ignore
+            yValue={inputs?.[id]?.yValue}
             fontSize={20}
             margin={{
               left: 0, right: 90, top: 10, bottom: 25,
@@ -261,7 +261,8 @@ export default memo(({ id, data: rawData }: NodeProps) => {
         title={title}
         data={data}
         xValue={xValue}
-        yValue={inputs?.[id].yValue}
+        // @ts-ignore
+        yValue={inputs?.[id]?.yValue}
         graphType={graphType}
       />
     </Flex>
