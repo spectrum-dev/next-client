@@ -96,7 +96,7 @@ export type NodeMetadataInputs = {
   fieldVariableNames?: Array<string>;
 };
 
-type Node = ReactFlowNode<{
+export type Node = ReactFlowNode<{
   metadata: {
     blockId: number;
     blockType: BlockType;
@@ -124,6 +124,10 @@ type Node = ReactFlowNode<{
   }
 }>;
 
+export type VisualizationNode = ReactFlowNode<Array<{
+  [key: string]: string | number;
+}>>;
+
 export type Edge = ReactFlowEdge<{
   id: string;
   type: 'flowEdge' | 'visualizationEdge';
@@ -133,7 +137,7 @@ export type Edge = ReactFlowEdge<{
   targetHandle: string;
 }>;
 
-type FlowElement = Node | Edge;
+type FlowElement = Node | VisualizationNode | Edge;
 
 // Typing for Elements
 export type Elements = Array<FlowElement>;
