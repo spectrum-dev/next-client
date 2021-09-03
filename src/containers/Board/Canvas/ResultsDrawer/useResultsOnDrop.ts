@@ -1,6 +1,4 @@
-import {
-  FlowElement, OnLoadParams,
-} from 'react-flow-renderer';
+import { OnLoadParams } from 'react-flow-renderer';
 
 import { SetElements, ResultsNode, isResultsNode } from 'containers/Board/Canvas/index.types';
 
@@ -31,7 +29,7 @@ export default function useResultsOnDrop() {
 
     setElements((es) => {
       let isExists = false;
-      const updatedElements = es.map((el: FlowElement) => {
+      const updatedElements = es.map((el) => {
         if (isResultsNode(el) && el.id === newNode.id) {
           isExists = true;
           return newNode;
