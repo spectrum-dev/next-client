@@ -15,7 +15,7 @@ import LineGraph from 'components/Graphs/LineGraph';
 import CandlestickGraph from 'components/Graphs/CandlestickGraph';
 
 // Types
-import { VisualizationType } from './visualizations/useGraphTypeValidation';
+import { VisualizationType } from 'containers/Board/Canvas/index.types';
 
 const VisualizationDrawer = (
   {

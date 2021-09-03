@@ -16,9 +16,6 @@ import { GiExpand } from 'react-icons/gi';
 // Contexts
 import BoardContext from 'app/contexts/board';
 
-// Types
-import { Outputs } from 'containers/Board/Canvas/index.types';
-
 // Graphs
 import LineGraph from 'components/Graphs/LineGraph';
 
@@ -36,8 +33,7 @@ const ResultGraphBlock = memo((
 ) => {
   const { onOpen, onClose, isOpen } = useDisclosure();
   const [displayData, setDisplayData] = useState<any>([]);
-  // @ts-ignore
-  const { outputs } = useContext<{ outputs: Outputs }>(BoardContext);
+  const { outputs } = useContext(BoardContext);
 
   const findResults = () => {
     if (!('results' in outputs)) {
