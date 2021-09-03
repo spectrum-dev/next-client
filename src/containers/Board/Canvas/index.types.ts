@@ -49,7 +49,7 @@ type FormBlockMetadata = {
   blockType: BlockType;
 };
 
-type FormBlockValues = {
+export type FormBlockValues = {
   [fieldName: string]: {
     value: string; // Mandatory field
     rawValue?: string;

@@ -1,11 +1,15 @@
-/* eslint-disable no-restricted-syntax */
 import { useCallback, useEffect, useState } from 'react';
 import { useToast } from '@chakra-ui/react';
 import {
-  isNode, isEdge, Elements, Edge,
+  isNode, isEdge,
 } from 'react-flow-renderer';
 
 import fetcher from 'app/fetcher';
+
+// Types
+import {
+  Inputs, Elements, Edge, FormBlockValues,
+} from './index.types';
 
 const NON_NODE_OR_EDGE_VALUE = 'There was an error validating this strategy. Please try again.';
 const POST_RUN_STRATEGY_500 = 'There was an error validating this strategy. Please try again.';
@@ -29,7 +33,7 @@ interface ValidateResponse {
 }
 
 export default function useValidateStrategy(
-  { inputs, elements }: { inputs: Record<any, any>, elements: Elements },
+  { inputs, elements }: { inputs: Inputs, elements: Elements },
 ) {
   const [state, setState] = useState<State>({
     isValid: false,
@@ -37,9 +41,13 @@ export default function useValidateStrategy(
   });
   const toast = useToast();
 
-  const checkInputsValid = (blockInputs: any) => {
+  const checkInputsValid = (blockInputs: FormBlockValues) => {
     for (const blockInput of Object.keys(blockInputs)) {
-      if (blockInput !== 'blockType' && blockInput !== 'blockId' && blockInputs?.[blockInput]?.value === '') {
+      if (
+        blockInput !== 'blockType'
+        && blockInput !== 'blockId'
+        && blockInputs?.[blockInput].value === ''
+      ) {
         return false;
       }
     }
@@ -48,11 +56,11 @@ export default function useValidateStrategy(
 
   const fetchData = useCallback(async () => {
     try {
-      const nodeList: any = {};
+      const nodeList: Inputs = {};
       const edgeList: Array<Edge> = [];
       for (const element of elements) {
         if (isNode(element)) {
-          if (element?.id.split('-').length === 1) {
+          if (element.id.split('-').length === 1) {
             if (!checkInputsValid(inputs[element.id])) {
               // eslint-disable-next-line @typescript-eslint/no-throw-literal
               throw BreakException;
