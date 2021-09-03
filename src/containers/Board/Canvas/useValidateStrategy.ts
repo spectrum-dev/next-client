@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax */
 import { useCallback, useEffect, useState } from 'react';
 import { useToast } from '@chakra-ui/react';
 import {
