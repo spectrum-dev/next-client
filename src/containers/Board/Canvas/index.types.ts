@@ -132,6 +132,8 @@ export type ResultsNode = ReactFlowNode<{
   label: string;
 }>;
 
+export type Node = FormNode | VisualizationNode | ResultsNode;
+
 export type Edge = ReactFlowEdge<{
   id: string;
   type: 'flowEdge' | 'visualizationEdge';
@@ -141,7 +143,7 @@ export type Edge = ReactFlowEdge<{
   targetHandle: string;
 }>;
 
-type FlowElement = FormNode | VisualizationNode | ResultsNode | Edge;
+type FlowElement = Node | Edge;
 
 // Type Guards
 export function isFormNode(element: FlowElement): element is FormNode {

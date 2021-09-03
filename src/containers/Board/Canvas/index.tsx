@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Box, Center, useDisclosure } from '@chakra-ui/react';
 import ReactFlow, {
-  ReactFlowProvider, Background, addEdge, Edge, Connection, OnLoadParams, Node,
+  ReactFlowProvider, Background, addEdge, Connection, OnLoadParams,
 } from 'react-flow-renderer';
 
 // Contexts
@@ -33,6 +33,11 @@ import useValidateStrategy from './useValidateStrategy';
 import useRunStrategy from './useRunStrategy';
 import useVisualizationEngine from './useVisualizationEngine';
 import useGenerateInputDependencyGraph from './useGenerateInputDependencyGraph';
+
+// Types
+import {
+  Edge, Node,
+} from './index.types';
 
 const Canvas = () => {
   const {
@@ -100,7 +105,7 @@ const Canvas = () => {
     event.preventDefault();
   };
 
-  const onConnect = (params: Edge<any> | Connection) => {
+  const onConnect = (params: Edge | Connection) => {
     setElements((els) => {
       const updatedEls = addEdge({ ...params, type: 'flowEdge' }, els);
       generateInputDependencyGraph({ elementsOverride: updatedEls });
