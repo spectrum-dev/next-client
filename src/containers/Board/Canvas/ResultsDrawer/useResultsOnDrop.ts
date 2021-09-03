@@ -1,5 +1,5 @@
 import {
-  Node, Elements, FlowElement, isNode, OnLoadParams,
+  Node, FlowElement, isNode, OnLoadParams,
 } from 'react-flow-renderer';
 
 import { SetElements } from 'containers/Board/Canvas/index.types';
@@ -29,7 +29,7 @@ export default function useResultsOnDrop() {
       data: { label },
     };
 
-    setElements((es: Elements) => {
+    setElements((es) => {
       let isExists = false;
       const updatedElements = es.map((el: FlowElement) => {
         if (isNode(el) && el.id === newNode.id) {
