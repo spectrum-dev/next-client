@@ -2,11 +2,11 @@ import { useCallback } from 'react';
 import { useToast } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 
-import { Elements } from 'react-flow-renderer';
-
 import fetcher from 'app/fetcher';
 
-import { URLParams, Outputs } from './index.types';
+import {
+  URLParams, Inputs, Outputs, Elements,
+} from './index.types';
 
 const STRATEGY_SAVE_SUCCESS = 'Your strategy has been saved successfully';
 const GET_COMMIT_ID_ERROR = 'There was an error getting the commit ID. Please refresh the page.';
@@ -21,12 +21,12 @@ interface CommitIDResponse {
 interface SaveStrategyRequestBody {
   metadata: Elements;
   outputs: Outputs;
-  inputs: Record<any, any>;
+  inputs: Inputs;
 }
 
 export default function useSaveStrategy(
   { inputs, outputs, elements }:
-  { inputs: Record<any, any>, outputs: Outputs, elements: Elements },
+  { inputs: Inputs, outputs: Outputs, elements: Elements },
 ) {
   const toast = useToast();
 
