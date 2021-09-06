@@ -280,6 +280,33 @@ export default function useInputFields({ id }: { id: string }) {
         const dataKeyOptions = inputFromConnectionValue
           ? inputDependencyGraph?.[id]?.[inputFromConnectionValue]?.outputInterface : [];
 
+        if (Object.keys(inputDependencyGraph?.[id]).length === 1) {
+          return (
+            <Box>
+              <Dropdown
+                options={
+                  inputDependencyGraph?.[id]?.[
+                    Object.keys(inputDependencyGraph?.[id])[0]
+                  ]?.outputInterface
+                }
+                value={inputs?.[id]?.[inputField?.fieldVariableName].value}
+                onChange={(selectedItem: any) => {
+                  setInputs((inp: any) => ({
+                    ...inp,
+                    [id]: {
+                      ...inp[id],
+                      [inputField?.fieldVariableName]: {
+                        ...inp[id][inputField?.fieldVariableName],
+                        value: selectedItem.value,
+                      },
+                    },
+                  }));
+                }}
+              />
+            </Box>
+          );
+        }
+
         return (
           <>
             <FormLabel textColor="white" fontSize={15}>
