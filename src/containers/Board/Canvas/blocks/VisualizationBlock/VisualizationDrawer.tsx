@@ -50,6 +50,7 @@ const VisualizationDrawer = (
       case VisualizationType.Candlestick:
         return (
           <CandlestickGraph
+            // @ts-ignore
             data={data}
             xValue={xValue}
             margin={{
