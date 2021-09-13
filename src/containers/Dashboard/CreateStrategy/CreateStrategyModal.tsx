@@ -10,8 +10,8 @@ import useCreateStrategy from './useCreateStrategy';
 const CreateStrategyModal = (
   { isOpen, onClose }: { isOpen: boolean; onClose: () => void },
 ) => {
-  const initialRef = useRef();
-  const finalRef = useRef();
+  const initialRef = useRef(null);
+  const finalRef = useRef(null);
 
   const [strategyName, setStrategyName] = useState('');
 
@@ -20,9 +20,7 @@ const CreateStrategyModal = (
   return (
     <>
       <Modal
-        // @ts-ignore
         initialFocusRef={initialRef}
-        // @ts-ignore
         finalFocusRef={finalRef}
         isOpen={isOpen}
         onClose={onClose}
@@ -35,7 +33,6 @@ const CreateStrategyModal = (
             <FormControl>
               <FormLabel>Strategy Name</FormLabel>
               <Input
-                // @ts-ignore
                 ref={initialRef}
                 value={strategyName}
                 onChange={(event) => setStrategyName(event.target.value)}

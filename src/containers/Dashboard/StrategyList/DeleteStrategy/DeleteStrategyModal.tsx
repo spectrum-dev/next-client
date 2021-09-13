@@ -11,15 +11,13 @@ const DeleteStrategyModal = (
   }:
   { isOpen: boolean; onClose: () => void, strategyId: String, onDelete: Function },
 ) => {
-  const initialRef = useRef();
-  const finalRef = useRef();
+  const initialRef = useRef(null);
+  const finalRef = useRef(null);
 
   return (
     <>
       <Modal
-        // @ts-ignore
         initialFocusRef={initialRef}
-        // @ts-ignore
         finalFocusRef={finalRef}
         isOpen={isOpen}
         onClose={onClose}
