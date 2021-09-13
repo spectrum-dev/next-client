@@ -19,7 +19,7 @@ const VisualizationDrawer = (
   }:
   { isOpen: boolean, onClose: () => void, title: string, data: any },
 ) => {
-  const btnRef: React.RefObject<any> = useRef();
+  const btnRef = useRef(null);
 
   return (
     <div className="nowheel">

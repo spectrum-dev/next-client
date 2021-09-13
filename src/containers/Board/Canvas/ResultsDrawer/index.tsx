@@ -19,7 +19,7 @@ const ResultsDrawer = (
   { isOpen, onClose, outputs }:
   { isOpen: boolean, onClose: () => void, outputs: Outputs },
 ) => {
-  const btnRef: React.RefObject<any> = useRef();
+  const btnRef = useRef(null);
 
   const renderStatCards = () => {
     const response = [];
