@@ -27,7 +27,6 @@ import BoardContext from 'app/contexts/board';
 export default function useInputFields({ id }: { id: string }) {
   const [additionalInputs, setAdditionalInputs] = useState([]);
 
-  // @ts-ignore
   const { inputs, setInputs, inputDependencyGraph } = useContext(BoardContext);
 
   const handleOnSearchEvent = async (

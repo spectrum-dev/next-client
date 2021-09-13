@@ -65,7 +65,6 @@ const Dashboard = () => {
               </Stack>
               <NavGroup label="Backtesting Tools">
                 <NavItem active={pageState === PageState.Strategies} icon={<BsViewList />} label="Strategies" onClick={() => setPageState(PageState.Strategies)} />
-                {/* @ts-ignore */}
                 <NavItem icon={<BsFillGearFill />} label="Create Strategy" onClick={onCreateStrategyOpen} />
               </NavGroup>
             </Stack>
