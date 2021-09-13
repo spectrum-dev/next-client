@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Box, Center, useDisclosure } from '@chakra-ui/react';
 import ReactFlow, {
-  ReactFlowProvider, Background, addEdge, Connection, OnLoadParams,
+  ReactFlowProvider, Background, addEdge, Connection, OnLoadParams, BackgroundVariant,
 } from 'react-flow-renderer';
 
 // Contexts
@@ -163,8 +163,7 @@ const Canvas = () => {
             snapGrid={[1, 1]}
           >
             <Background
-              // @ts-ignore
-              variant="lines"
+              variant={BackgroundVariant.Lines}
               color="#5c6874"
               gap={80}
               style={{ backgroundColor: '#212B3B' }}
