@@ -50,7 +50,7 @@ const SideDrawer = (
     rawData: any,
   },
 ) => {
-  const btnRef = useRef();
+  const btnRef = useRef(null);
   const { inputs } = useContext(BoardContext);
 
   return (
@@ -58,7 +58,6 @@ const SideDrawer = (
       isOpen={isOpen}
       placement="right"
       onClose={onClose}
-      // @ts-ignore
       finalFocusRef={btnRef}
     >
       <DrawerOverlay />

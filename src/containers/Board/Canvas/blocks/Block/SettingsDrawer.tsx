@@ -14,7 +14,7 @@ const SettingsDrawer = (
   { isOpen, onClose, renderedInputFields }:
   { isOpen: boolean, onClose: () => void, renderedInputFields: Array<React.ReactNode> },
 ) => {
-  const btnRef = useRef();
+  const btnRef = useRef(null);
 
   return (
     <div className="nowheel">
@@ -22,7 +22,6 @@ const SettingsDrawer = (
         isOpen={isOpen}
         placement="right"
         onClose={onClose}
-        // @ts-ignore
         finalFocusRef={btnRef}
       >
         <DrawerOverlay />

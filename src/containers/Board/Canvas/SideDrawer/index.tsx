@@ -21,7 +21,7 @@ import GenericBlock from './GenericBlock';
 import useBlockMetadataRetriever from './useBlockMetadataRetriever';
 
 const SideDrawer = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
-  const btnRef = useRef();
+  const btnRef = useRef(null);
   const { blockMetadata: blockMetadataFromRetriever } = useBlockMetadataRetriever();
 
   const onDrag = (
@@ -79,7 +79,6 @@ const SideDrawer = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void 
       isOpen={isOpen}
       placement="right"
       onClose={onClose}
-      // @ts-ignore
       finalFocusRef={btnRef}
     >
       <DrawerOverlay />

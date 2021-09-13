@@ -31,7 +31,7 @@ const VisualizationDrawer = (
     graphType: VisualizationType,
   },
 ) => {
-  const btnRef: React.RefObject<any> = useRef();
+  const btnRef = useRef(null);
 
   const renderGraph = (): ReactNode => {
     switch (graphType) {
