@@ -23,6 +23,7 @@ import useHandles from './useHandles';
 import useInputField from './useInputFields';
 
 // UI Component
+import ContextMenu from './ContextMenu';
 import SettingsDrawer from './SettingsDrawer';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -40,8 +41,10 @@ const Block = memo((
     blockName, blockType, inputs, validation, isMenuVisible,
   } = data.metadata;
 
+  const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
+
   const updateNodeInternals = useUpdateNodeInternals();
-  const { onOpen, onClose, isOpen } = useDisclosure({ isOpen: isMenuVisible });
+  const { onOpen, onClose, isOpen } = useDisclosure();
 
   const { inputs: managedInputs, inputDependencyGraph } = useContext(BoardContext);
 
@@ -56,6 +59,10 @@ const Block = memo((
   }, [id, inputHandle, outputHandle]);
 
   useEffect(() => {
+    setIsContextMenuOpen(isMenuVisible);
+  }, [isMenuVisible]);
+
+  useEffect(() => {
     const normalFields = renderInputFields(inputs);
     const additionalFields = renderInputFields(additionalInputs);
     setRenderedInputFields(normalFields.concat(additionalFields));
@@ -64,49 +71,52 @@ const Block = memo((
 
   return (
     <>
-      <Box
-        width="350px"
-        height="160px"
-        borderRadius="25px"
-        border={isOpen ? '3px solid #ed8936;' : '1px solid #1a202c;'}
-        background="linear-gradient(0deg, #151a23 0% 40%, #1a202c 40% 100%)"
-        textAlign="center"
-        onClick={(e) => {
-          onOpen();
-        }}
+      <ContextMenu
+        isContextMenuOpen={isContextMenuOpen}
+        setIsContextMenuOpen={setIsContextMenuOpen}
+        onEditOpen={onOpen}
       >
-        {
-          inputHandle ? (
-            <Handle
-              type="target"
-              position={Position.Left}
-              id={`input_${id}`}
-              onConnect={() => null}
-              isValidConnection={() => true}
-              style={{ backgroundColor: '#ed8936', left: '-12px', marginTop: '-2px' }}
-            />
-          ) : <></>
-        }
-        <Text color="white" marginTop="20px" fontSize="32px">
-          { blockName }
-        </Text>
+        <Box
+          width="350px"
+          height="160px"
+          borderRadius="25px"
+          border={isOpen ? '3px solid #ed8936;' : '1px solid #1a202c;'}
+          background="linear-gradient(0deg, #151a23 0% 40%, #1a202c 40% 100%)"
+          textAlign="center"
+        >
+          {
+            inputHandle ? (
+              <Handle
+                type="target"
+                position={Position.Left}
+                id={`input_${id}`}
+                onConnect={() => null}
+                isValidConnection={() => true}
+                style={{ backgroundColor: '#ed8936', left: '-12px', marginTop: '-2px' }}
+              />
+            ) : <></>
+          }
+          <Text color="white" marginTop="20px" fontSize="32px">
+            { blockName }
+          </Text>
 
-        <Text color="white" marginTop="35px" fontWeight="bold" fontSize="27px">
-          { blockType.replace('_', ' ') }
-        </Text>
-        {
-          outputHandle ? (
-            <Handle
-              type="source"
-              position={Position.Right}
-              id={`output_${id}`}
-              onConnect={() => null}
-              isValidConnection={() => true}
-              style={{ backgroundColor: '#ed8936', right: '-12px', marginTop: '-2px' }}
-            />
-          ) : <></>
-        }
-      </Box>
+          <Text color="white" marginTop="35px" fontWeight="bold" fontSize="27px">
+            { blockType.replace('_', ' ') }
+          </Text>
+          {
+            outputHandle ? (
+              <Handle
+                type="source"
+                position={Position.Right}
+                id={`output_${id}`}
+                onConnect={() => null}
+                isValidConnection={() => true}
+                style={{ backgroundColor: '#ed8936', right: '-12px', marginTop: '-2px' }}
+              />
+            ) : <></>
+          }
+        </Box>
+      </ContextMenu>
       <SettingsDrawer
         isOpen={isOpen}
         onClose={onClose}

@@ -13,7 +13,8 @@ export default function useOnNodeContextMenu({ setElements }: { setElements: Set
             metadata: {
               // @ts-ignore
               ...node?.data?.metadata,
-              isMenuVisible: true,
+              // @ts-ignore
+              isMenuVisible: !node?.data?.metadata.isMenuVisible,
             },
           },
         };
