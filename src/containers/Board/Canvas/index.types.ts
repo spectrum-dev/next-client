@@ -121,6 +121,7 @@ export type FormNode = ReactFlowNode<{
     outputInterface: {
       interface: Array<string>;
     }
+    isMenuVisible: boolean;
   }
 }>;
 

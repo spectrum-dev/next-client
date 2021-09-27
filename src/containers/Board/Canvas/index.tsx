@@ -27,6 +27,7 @@ import VisualizationEdge from './Edge/VisualizationEdge';
 import useBlockMetadataOnDrop from './SideDrawer/useBlockMetadataOnDrop';
 import useResultsOnDrop from './ResultsDrawer/useResultsOnDrop';
 import useLoadStrategy from './useLoadStrategy';
+import useOnNodeContextMenu from './useOnNodeContextMenu';
 import useInputManager from './useInputManager';
 import useSaveStrategy from './useSaveStrategy';
 import useValidateStrategy from './useValidateStrategy';
@@ -84,6 +85,8 @@ const Canvas = () => {
   });
 
   const { saveStrategy } = useSaveStrategy({ elements, inputs, outputs });
+
+  const { onNodeContextMenu } = useOnNodeContextMenu({ setElements });
 
   const {
     isOpen: isSideDrawerOpen,
@@ -155,6 +158,8 @@ const Canvas = () => {
             // Loading and Node Updating Functions
             onLoad={onLoad}
             onNodeDragStop={onNodeDragStop}
+            // Context Menu
+            onNodeContextMenu={onNodeContextMenu}
             // Canvas Formating
             maxZoom={0.5}
             zoomOnScroll={false}

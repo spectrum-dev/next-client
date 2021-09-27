@@ -36,16 +36,16 @@ const Handle = styled(RawHandle)`
 const Block = memo((
   { id, data }: NodeProps,
 ) => {
+  const {
+    blockName, blockType, inputs, validation, isMenuVisible,
+  } = data.metadata;
+
   const updateNodeInternals = useUpdateNodeInternals();
-  const { onOpen, onClose, isOpen } = useDisclosure();
+  const { onOpen, onClose, isOpen } = useDisclosure({ isOpen: isMenuVisible });
 
   const { inputs: managedInputs, inputDependencyGraph } = useContext(BoardContext);
 
   const [renderedInputFields, setRenderedInputFields] = useState<Array<React.ReactNode>>([]);
-
-  const {
-    blockName, blockType, inputs, validation,
-  } = data.metadata;
 
   const { inputHandle, outputHandle } = useHandles({ validationData: validation });
   const { renderInputFields, additionalInputs } = useInputField({ id });
