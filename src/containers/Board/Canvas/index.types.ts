@@ -74,6 +74,8 @@ export type Inputs = {
   [blockIdInFlow: string]: FormBlock & VisualizationBlock;
 };
 
+export type SetInputs = React.Dispatch<React.SetStateAction<Inputs>>;
+
 // Typings for InputDependencyGraph
 export type InputDependencyGraph = {
   [blockIdInFlow: string]: {
@@ -145,7 +147,7 @@ export type Edge = ReactFlowEdge<{
   targetHandle: string;
 }>;
 
-type FlowElement = Node | Edge;
+export type FlowElement = Node | Edge;
 
 // Type Guards
 export function isFormNode(element: FlowElement): element is FormNode {

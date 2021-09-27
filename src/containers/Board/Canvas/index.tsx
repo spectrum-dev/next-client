@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Box, Center, useDisclosure } from '@chakra-ui/react';
 import ReactFlow, {
-  ReactFlowProvider, Background, addEdge, Connection, OnLoadParams, BackgroundVariant,
+  ReactFlowProvider, Background, addEdge,
+  Connection, OnLoadParams, BackgroundVariant,
 } from 'react-flow-renderer';
 
 // Contexts
@@ -34,6 +35,7 @@ import useValidateStrategy from './useValidateStrategy';
 import useRunStrategy from './useRunStrategy';
 import useVisualizationEngine from './useVisualizationEngine';
 import useGenerateInputDependencyGraph from './useGenerateInputDependencyGraph';
+import useOnElementsRemove from './useOnElementsRemove';
 
 // Types
 import {
@@ -129,6 +131,8 @@ const Canvas = () => {
     }));
   };
 
+  const { onElementsRemove } = useOnElementsRemove({ setElements, setInputs });
+
   return (
     <Box minH="100vh" h="100vh" as="section">
       <ReactFlowProvider>
@@ -160,6 +164,8 @@ const Canvas = () => {
             onNodeDragStop={onNodeDragStop}
             // Context Menu
             onNodeContextMenu={onNodeContextMenu}
+            // Removing Elements
+            onElementsRemove={onElementsRemove}
             // Canvas Formating
             maxZoom={0.5}
             zoomOnScroll={false}

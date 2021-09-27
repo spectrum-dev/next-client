@@ -173,6 +173,8 @@ export default function useInputManager(
       };
 
       setStartId(startIdCalculator(response));
+
+      console.log('Inputs Response: ', response);
       return response;
     });
   };
