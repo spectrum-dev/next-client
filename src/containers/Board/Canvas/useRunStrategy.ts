@@ -42,10 +42,6 @@ export default function useRunStrategy(
   const [initializer, setInitializer] = useState<boolean>(false);
   const [outputs, setOutputs] = useState<Outputs>({});
   const [showResults, setShowResults] = useState<boolean>(false);
-  // const [state, setState] = useState<State>({
-  //   outputs: {},
-  //   showResults: false,
-  // });
 
   // Triggered when loading data into the board
   useEffect(() => {
@@ -56,17 +52,9 @@ export default function useRunStrategy(
           if (loadedOutputs) {
             setShowResults('results' in loadedOutputs);
             return outputs;
-            // return {
-            //   outputs: loadedOutputs,
-            //   showResults: 'results' in loadedOutputs,
-            // };
           }
           setShowResults(false);
           return {};
-          // return {
-          //   outputs: {},
-          //   showResults: false,
-          // };
         });
       }
     }

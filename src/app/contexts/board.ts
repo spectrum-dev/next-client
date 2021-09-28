@@ -1,4 +1,4 @@
-import React, { createContext } from 'react';
+import { createContext } from 'react';
 
 // Types
 import { EdgeValidation } from 'containers/Board/Canvas/useValidateStrategy';
