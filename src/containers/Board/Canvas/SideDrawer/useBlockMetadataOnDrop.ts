@@ -60,7 +60,7 @@ export default function useBlockMetadataOnDrop({ startId }: { startId: number })
           data: {
             metadata: {
               ...metadataResponse?.data,
-              isMenuVisible: false,
+              isMenuVisible: true,
             },
           },
         };

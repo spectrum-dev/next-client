@@ -21,12 +21,14 @@ const ContextMenu = (
     <PopoverTrigger>
       {children}
     </PopoverTrigger>
-    <PopoverContent width="320px" marginLeft="180px" marginTop="84px">
+    <PopoverContent width="320px" marginLeft="180px" marginTop="84px" backgroundColor="#1a202c" borderColor="#1a202c">
       <PopoverBody fontSize="30px">
         <Button
           onClick={() => onEditOpen()}
           width="100%"
           fontSize={25}
+          backgroundColor="#2D3748"
+          color="white"
         >
           Edit
         </Button>
