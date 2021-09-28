@@ -24,7 +24,7 @@ export default function useResultsOnDrop() {
       id: `RESULTS-${flowBlockType}-${label}`,
       type: flowBlockType,
       position,
-      data: { label },
+      data: { label, isMenuVisible: false },
     };
 
     setElements((es) => {
