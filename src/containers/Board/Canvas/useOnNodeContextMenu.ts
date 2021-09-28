@@ -5,7 +5,8 @@ export default function useOnNodeContextMenu({ setElements }: { setElements: Set
     event.preventDefault();
 
     setElements((els) => els.map((el) => {
-      if (el.id === node.id) {
+      // NOTE: Currently this prevents right clicks from being performed on graphs
+      if (el.id.split('-').length === 1 && el.id === node.id) {
         return {
           ...node,
           data: {
