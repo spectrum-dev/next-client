@@ -75,7 +75,9 @@ const Canvas = () => {
   });
 
   const { isValid, edgeValidation } = useValidateStrategy({ inputs, elements });
-  const { outputs, invokeRun, showResults } = useRunStrategy(
+  const {
+    outputs, setOutputs, invokeRun, showResults,
+  } = useRunStrategy(
     {
       inputs, elements, loadedOutputs, isStrategyLoaded,
     },
@@ -137,6 +139,7 @@ const Canvas = () => {
           inputs,
           setInputs,
           setElements,
+          setOutputs,
           edgeValidation,
           outputs,
           inputDependencyGraph,

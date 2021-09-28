@@ -6,7 +6,7 @@ import {
 import BoardContext from 'app/contexts/board';
 
 export default function useOnDeleteBlock({ id }: { id: string }) {
-  const { setElements, setInputs } = useContext(BoardContext);
+  const { setElements, setInputs, setOutputs } = useContext(BoardContext);
 
   const onDeleteBlock = () => {
     setElements((els) => {
@@ -41,7 +41,6 @@ export default function useOnDeleteBlock({ id }: { id: string }) {
 
       // Iterates through inputs and updates the inputs payload
       setInputs((inps) => {
-        console.log('Initial Inputs: ', inps);
         const updatedInputs = {};
         for (const inp of Object.keys(inps)) {
           let isFound = false;
@@ -56,8 +55,26 @@ export default function useOnDeleteBlock({ id }: { id: string }) {
             updatedInputs[inp] = inps[inp];
           }
         }
-        console.log('Updated Inputs: ', updatedInputs);
         return updatedInputs;
+      });
+
+      // Iterates through outputs and updates the outputs payload
+      setOutputs((outputs) => {
+        const updatedOutputs = {};
+        for (const output of Object.keys(outputs)) {
+          let isFound = false;
+          for (const elem of elementsToRemove) {
+            if (elem.id === output) {
+              isFound = true;
+              break;
+            }
+          }
+          if (!isFound) {
+            // @ts-ignore
+            updatedInputs[output] = outputs[output];
+          }
+        }
+        return updatedOutputs;
       });
 
       return removeElements(elementsToRemove, els);
