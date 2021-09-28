@@ -22,11 +22,6 @@ const NON_NODE_OR_EDGE_VALUE = 'There was an error running this strategy. Please
 const POST_RUN_STRATEGY_500 = 'There was an error running this strategy. Please try again.';
 const STRATEGY_RUN_SUCCESS = 'The strategy was run successfully.';
 
-interface State {
-  outputs: Outputs;
-  showResults: boolean;
-}
-
 export default function useRunStrategy(
   {
     inputs,
@@ -45,27 +40,21 @@ export default function useRunStrategy(
 
   const [startPolling, setStartPolling] = useState<boolean>(false);
   const [initializer, setInitializer] = useState<boolean>(false);
-  const [state, setState] = useState<State>({
-    outputs: {},
-    showResults: false,
-  });
+  const [outputs, setOutputs] = useState<Outputs>({});
+  const [showResults, setShowResults] = useState<boolean>(false);
 
   // Triggered when loading data into the board
   useEffect(() => {
     if (isStrategyLoaded) {
       if (!initializer) {
-        setState(() => {
+        setOutputs(() => {
           setInitializer(true);
           if (loadedOutputs) {
-            return {
-              outputs: loadedOutputs,
-              showResults: 'results' in loadedOutputs,
-            };
+            setShowResults('results' in loadedOutputs);
+            return outputs;
           }
-          return {
-            outputs: {},
-            showResults: false,
-          };
+          setShowResults(false);
+          return {};
         });
       }
     }
@@ -120,7 +109,8 @@ export default function useRunStrategy(
   const onCompleted = (data: any) => {
     switch (data.taskResult.status) {
       case 'SUCCESS':
-        setState({ outputs: data.taskResult?.output, showResults: 'results' in data.taskResult?.output });
+        setOutputs(data.taskResult?.output);
+        setShowResults('results' in data.taskResult?.output);
         setStartPolling(false);
         toast({
           title: STRATEGY_RUN_SUCCESS,
@@ -166,7 +156,9 @@ export default function useRunStrategy(
   });
 
   return {
-    ...state,
+    outputs,
+    setOutputs,
+    showResults,
     invokeRun: fetchData,
   };
 }

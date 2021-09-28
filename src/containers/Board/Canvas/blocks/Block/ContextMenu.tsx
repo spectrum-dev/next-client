@@ -6,9 +6,15 @@ import {
 
 const ContextMenu = (
   {
-    children, isContextMenuOpen, setIsContextMenuOpen, onEditOpen,
+    children, isContextMenuOpen, setIsContextMenuOpen, onEditOpen, onDelete,
   }:
-  { children: ReactNode, isContextMenuOpen: boolean, setIsContextMenuOpen: any, onEditOpen: any },
+  {
+    children: ReactNode,
+    isContextMenuOpen: boolean,
+    setIsContextMenuOpen: any,
+    onEditOpen: any,
+    onDelete: any,
+  },
 ) => (
   <Popover
     returnFocusOnClose={false}
@@ -30,6 +36,15 @@ const ContextMenu = (
           color="white"
         >
           Edit
+        </Button>
+        <Button
+          onClick={() => onDelete()}
+          width="100%"
+          fontSize={25}
+          backgroundColor="#2D3748"
+          color="white"
+        >
+          Delete
         </Button>
       </PopoverBody>
     </PopoverContent>

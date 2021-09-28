@@ -173,6 +173,7 @@ export default function useInputManager(
       };
 
       setStartId(startIdCalculator(response));
+
       return response;
     });
   };

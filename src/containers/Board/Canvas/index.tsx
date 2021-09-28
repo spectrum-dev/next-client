@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Box, Center, useDisclosure } from '@chakra-ui/react';
 import ReactFlow, {
-  ReactFlowProvider, Background, addEdge, Connection, OnLoadParams, BackgroundVariant,
+  ReactFlowProvider, Background, addEdge,
+  Connection, OnLoadParams, BackgroundVariant,
 } from 'react-flow-renderer';
 
 // Contexts
@@ -74,7 +75,9 @@ const Canvas = () => {
   });
 
   const { isValid, edgeValidation } = useValidateStrategy({ inputs, elements });
-  const { outputs, invokeRun, showResults } = useRunStrategy(
+  const {
+    outputs, setOutputs, invokeRun, showResults,
+  } = useRunStrategy(
     {
       inputs, elements, loadedOutputs, isStrategyLoaded,
     },
@@ -135,6 +138,8 @@ const Canvas = () => {
         <BoardContext.Provider value={{
           inputs,
           setInputs,
+          setElements,
+          setOutputs,
           edgeValidation,
           outputs,
           inputDependencyGraph,
