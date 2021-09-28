@@ -20,6 +20,7 @@ import BoardContext from 'app/contexts/board';
 // Hooks
 import useHandles from './useHandles';
 import useInputField from './useInputFields';
+import useOnDeleteBlock from './useOnDeleteBlock';
 
 // UI Component
 import ContextMenu from './ContextMenu';
@@ -50,6 +51,7 @@ const Block = memo((
 
   const { inputHandle, outputHandle } = useHandles({ validationData: validation });
   const { renderInputFields, additionalInputs } = useInputField({ id });
+  const { onDeleteBlock } = useOnDeleteBlock({ id });
 
   useEffect(() => {
     updateNodeInternals(id);
@@ -73,6 +75,7 @@ const Block = memo((
         isContextMenuOpen={isContextMenuOpen}
         setIsContextMenuOpen={setIsContextMenuOpen}
         onEditOpen={onOpen}
+        onDelete={onDeleteBlock}
       >
         <Box
           width="350px"

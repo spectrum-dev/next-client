@@ -35,7 +35,6 @@ import useValidateStrategy from './useValidateStrategy';
 import useRunStrategy from './useRunStrategy';
 import useVisualizationEngine from './useVisualizationEngine';
 import useGenerateInputDependencyGraph from './useGenerateInputDependencyGraph';
-import useOnElementsRemove from './useOnElementsRemove';
 
 // Types
 import {
@@ -131,14 +130,13 @@ const Canvas = () => {
     }));
   };
 
-  const { onElementsRemove } = useOnElementsRemove({ setElements, setInputs });
-
   return (
     <Box minH="100vh" h="100vh" as="section">
       <ReactFlowProvider>
         <BoardContext.Provider value={{
           inputs,
           setInputs,
+          setElements,
           edgeValidation,
           outputs,
           inputDependencyGraph,
@@ -164,8 +162,6 @@ const Canvas = () => {
             onNodeDragStop={onNodeDragStop}
             // Context Menu
             onNodeContextMenu={onNodeContextMenu}
-            // Removing Elements
-            onElementsRemove={onElementsRemove}
             // Canvas Formating
             maxZoom={0.5}
             zoomOnScroll={false}
