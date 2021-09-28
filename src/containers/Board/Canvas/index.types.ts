@@ -126,11 +126,12 @@ export type FormNode = ReactFlowNode<{
 }>;
 
 export type VisualizationNode = ReactFlowNode<Array<{
-  [key: string]: string | number;
+  [key: string]: string | number | boolean;
 }>>;
 
 export type ResultsNode = ReactFlowNode<{
   label: string;
+  isMenuVisible: boolean;
 }>;
 
 export type Node = FormNode | VisualizationNode | ResultsNode;

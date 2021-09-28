@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { useState, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import {
   Button, Popover, PopoverTrigger,
   PopoverContent, PopoverBody,

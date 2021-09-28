@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   memo, useState, useEffect, useContext,
 } from 'react';
@@ -26,7 +25,6 @@ import useInputField from './useInputFields';
 import ContextMenu from './ContextMenu';
 import SettingsDrawer from './SettingsDrawer';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Handle = styled(RawHandle)`
   /* Overrides for .react-flow__handle */
   width: 30px;
