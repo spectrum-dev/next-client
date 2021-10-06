@@ -174,3 +174,6 @@ export enum VisualizationType {
   Candlestick = 'Candlestick Graph',
   DataTable = 'Data Table',
 }
+
+// Strategy Types
+export type StrategyType = 'BACKTEST' | 'SCREENER';

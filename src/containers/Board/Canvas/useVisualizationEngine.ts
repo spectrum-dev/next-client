@@ -27,7 +27,8 @@ export default function useVisualizationEngine({
       const BLOCK_ID_IN_FLOW = splitKey[2];
 
       // Backtest data is kept in the results drawer, so we shouldn't generate graphs here
-      if (splitKey[0] === 'STRATEGY_BLOCK') {
+      // Furthermore, for screener data, we do not want to display the list of data
+      if (splitKey[0] === 'STRATEGY_BLOCK' || splitKey[0] === 'BULK_DATA_BLOCK') {
         return;
       }
 

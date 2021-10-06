@@ -74,12 +74,12 @@ const Canvas = () => {
     isStrategyLoaded,
   });
 
-  const { isValid, edgeValidation } = useValidateStrategy({ inputs, elements });
+  const { isValid, edgeValidation, strategyType } = useValidateStrategy({ inputs, elements });
   const {
     outputs, setOutputs, invokeRun, showResults,
   } = useRunStrategy(
     {
-      inputs, elements, loadedOutputs, isStrategyLoaded,
+      inputs, elements, loadedOutputs, isStrategyLoaded, strategyType,
     },
   );
 
