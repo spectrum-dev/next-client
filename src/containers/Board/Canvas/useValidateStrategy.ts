@@ -69,12 +69,14 @@ export default function useValidateStrategy(
               throw BreakException;
             }
 
-            // TODO: Check here
             // @ts-ignore
             if (element?.data?.metadata?.blockType === 'BULK_DATA_BLOCK') {
-              console.log('In Screener');
               setState((elems) => ({
                 ...elems, strategyType: 'SCREENER',
+              }));
+            } else {
+              setState((elems) => ({
+                ...elems, strategyType: 'BACKTEST',
               }));
             }
 
