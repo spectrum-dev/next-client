@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@apollo/client": "^3.4.8",
+    "@apollo/client": "3.4.8",
     "@chakra-ui/button": "^1.4.1",
     "@chakra-ui/react": "^1.0.0",
     "@chakra-ui/system": "^1.7.1",
@@ -72,7 +72,7 @@
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "husky": "^7.0.0"
+    "husky": "7.0.2"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx}": [
