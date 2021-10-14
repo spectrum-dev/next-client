@@ -1,10 +1,11 @@
 import { gql } from '@apollo/client';
 
 export const DISPATCH_RUN_STRATEGY = gql`
-    mutation DISPATCH_RUN_STRATEGY($nodeList: JSON!, $edgeList: [JSON!]) {
+    mutation DISPATCH_RUN_STRATEGY($nodeList: JSON!, $edgeList: [JSON!], $strategyType: String!) {
         dispatchRunStrategy(
             nodeList: $nodeList,
             edgeList: $edgeList
+            strategyType: $strategyType,
         ) {
             status
             taskId

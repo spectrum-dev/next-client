@@ -9,7 +9,7 @@ import {
 } from 'react-flow-renderer';
 
 import {
-  Outputs, Inputs, Elements, Edge,
+  Outputs, Inputs, Elements, Edge, StrategyType,
 } from './index.types';
 
 // Queries & Mutations
@@ -28,12 +28,14 @@ export default function useRunStrategy(
     elements,
     loadedOutputs,
     isStrategyLoaded,
+    strategyType,
   }:
   {
     inputs: Inputs,
     loadedOutputs: Outputs,
     elements: Elements,
-    isStrategyLoaded: boolean
+    isStrategyLoaded: boolean,
+    strategyType: StrategyType
   },
 ) {
   const toast = useToast();
@@ -89,6 +91,7 @@ export default function useRunStrategy(
       variables: {
         nodeList,
         edgeList,
+        strategyType,
       },
     });
 

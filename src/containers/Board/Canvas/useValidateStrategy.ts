@@ -8,7 +8,7 @@ import fetcher from 'app/fetcher';
 
 // Types
 import {
-  Inputs, Elements, Edge, FormBlockValues,
+  Inputs, Elements, Edge, FormBlockValues, StrategyType,
 } from './index.types';
 
 const NON_NODE_OR_EDGE_VALUE = 'There was an error validating this strategy. Please try again.';
@@ -25,6 +25,7 @@ export type EdgeValidation = Record<string, {
 interface State {
   isValid: boolean;
   edgeValidation: EdgeValidation;
+  strategyType: StrategyType;
 }
 
 interface ValidateResponse {
@@ -38,6 +39,7 @@ export default function useValidateStrategy(
   const [state, setState] = useState<State>({
     isValid: false,
     edgeValidation: {},
+    strategyType: 'BACKTEST',
   });
   const toast = useToast();
 
@@ -61,10 +63,23 @@ export default function useValidateStrategy(
       for (const element of elements) {
         if (isNode(element)) {
           if (element.id.split('-').length === 1) {
+            console.log(element);
             if (!checkInputsValid(inputs[element.id])) {
               // eslint-disable-next-line @typescript-eslint/no-throw-literal
               throw BreakException;
             }
+
+            // @ts-ignore
+            if (element?.data?.metadata?.blockType === 'BULK_DATA_BLOCK') {
+              setState((elems) => ({
+                ...elems, strategyType: 'SCREENER',
+              }));
+            } else {
+              setState((elems) => ({
+                ...elems, strategyType: 'BACKTEST',
+              }));
+            }
+
             nodeList[element.id] = inputs[element.id];
           }
         } else if (isEdge(element)) {
@@ -89,7 +104,11 @@ export default function useValidateStrategy(
 
       if (validateResponse.status === 200) {
         const response: ValidateResponse = validateResponse.data;
-        setState({ isValid: response.valid, edgeValidation: response.edges });
+        setState((elems) => ({
+          ...elems,
+          isValid: response.valid,
+          edgeValidation: response.edges,
+        }));
       } else {
         throw new Error(POST_RUN_STRATEGY_500);
       }
