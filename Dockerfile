@@ -6,6 +6,9 @@ ARG REACT_APP_GRAPHQL_API_URL
 ENV REACT_APP_API_BASE_URL ${REACT_APP_API_BASE_URL}
 ENV REACT_APP_GRAPHQL_API_URL ${REACT_APP_GRAPHQL_API_URL}
 
+# Used to fix erroring renavate artifact updating 
+ENV RENOVATE_BINARY_SOURCE=global
+
 # Build
 WORKDIR /usr/src/app
 COPY package*.json ./
