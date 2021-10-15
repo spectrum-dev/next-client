@@ -15,7 +15,7 @@ RUN npm install
 RUN npm run build
 
 # Stage - Production
-FROM nginx:1.17
+FROM nginx:1.21
 
 RUN rm -rf /etc/nginx/conf.d
 COPY .nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
