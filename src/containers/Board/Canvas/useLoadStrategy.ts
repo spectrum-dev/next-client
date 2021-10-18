@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useToast } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 
 import fetcher from 'app/fetcher';
@@ -12,6 +11,7 @@ const POST_LOAD_STRATEGY_500 = 'There was an error loading your strategy. Please
 
 // Types
 interface State {
+  hasAccess: boolean;
   isLoaded: boolean;
   inputs: Inputs;
   outputs: Outputs;
@@ -26,11 +26,11 @@ interface GetStrategyResponse {
 export default function useLoadStrategy() {
   const [elements, setElements] = useState<Elements>([]);
   const [state, setState] = useState<State>({
+    hasAccess: false,
     isLoaded: false,
     inputs: {},
     outputs: {},
   });
-  const toast = useToast();
   const { strategyId } = useParams<URLParams>();
 
   const fetchData = useCallback(async () => {
@@ -47,6 +47,7 @@ export default function useLoadStrategy() {
           setElements(response.elements);
 
           return {
+            hasAccess: true,
             isLoaded: true,
             inputs: response.inputs,
             outputs: response.outputs,
@@ -56,18 +57,11 @@ export default function useLoadStrategy() {
         throw new Error(POST_LOAD_STRATEGY_500);
       }
     } catch (e) {
-      toast({
-        title: POST_LOAD_STRATEGY_500,
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-        position: 'top',
-      });
-
       setState(() => {
         setElements([]);
 
         return {
+          hasAccess: false,
           isLoaded: true,
           inputs: {},
           outputs: {},

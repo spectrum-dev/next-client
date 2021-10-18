@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Center, useDisclosure } from '@chakra-ui/react';
+import { Flex, Text, Box, Center, useDisclosure } from '@chakra-ui/react';
 import ReactFlow, {
   ReactFlowProvider, Background, addEdge,
   Connection, OnLoadParams, BackgroundVariant,
@@ -43,11 +43,13 @@ import {
 
 const Canvas = () => {
   const {
+    hasAccess,
     elements, setElements,
     inputs: loadedInputs,
     outputs: loadedOutputs,
     isLoaded: isStrategyLoaded,
   } = useLoadStrategy();
+
   const [reactFlowInstance, setReactFlowInstance] = useState<OnLoadParams>();
   const [nodeTypes] = useState({
     block: Block,
@@ -131,6 +133,16 @@ const Canvas = () => {
       return el;
     }));
   };
+
+  if (isStrategyLoaded && !hasAccess) {
+    return (
+      <Flex minH="100vh" h="100vh" as="section" backgroundColor="#212B3B" justifyContent="center">
+        <Center>
+          <Text fontSize="xl" fontWeight="bold" color="white"> You are not authorized to view this strategy </Text>
+        </Center>
+      </Flex>
+    );
+  }
 
   return (
     <Box minH="100vh" h="100vh" as="section">
