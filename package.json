@@ -21,7 +21,7 @@
     "@testing-library/user-event": "13.4.1",
     "@types/history": "4.7.9",
     "@types/jest": "25.2.3",
-    "@types/node": "12.20.33",
+    "@types/node": "14.17.27",
     "@types/react": "17.0.30",
     "@types/react-dom": "17.0.9",
     "@types/react-router-dom": "5.3.1",
