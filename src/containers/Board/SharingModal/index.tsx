@@ -35,7 +35,7 @@ const ReadWrite = (
 );
 
 const SharedUsers = ({ email, permission }: { email: string, permission: string }) => (
-    <Input value={`${email} (${permission === '2' ? 'Write' : 'Read'})`} disabled />
+    <Input value={`${email} (${permission === '2' ? 'Write' : 'Read'})`} disabled marginBottom="1rem" />
 );
 
 const SharingModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
@@ -53,8 +53,6 @@ const SharingModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => voi
       QUERY_SHARED_USERS,
     ],
   });
-
-  console.log(sharedUserData);
 
   useEffect(() => {
     if (error) {
@@ -85,13 +83,13 @@ const SharingModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => voi
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent backgroundColor="#212838" color="white">
         <ModalHeader>Sharing Preferences</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
             <InputGroup size="sm" marginBottom="1rem">
                 <Input placeholder="Add people" value={email} onChange={(e) => setEmail(e.target.value)}/>
-                <InputRightAddon children={<ReadWrite permissions={permissions} setPermissions={setPermissions}/>} backgroundColor="white" border="none" size="xs"/>
+                <InputRightAddon children={<ReadWrite permissions={permissions} setPermissions={setPermissions}/>} backgroundColor="#212838" border="none" size="xs"/>
             </InputGroup>
             {
                 sharedUserData && sharedUserData.sharedUsers.map((item: SharedUser) => (
@@ -101,12 +99,12 @@ const SharingModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => voi
         </ModalBody>
 
         <ModalFooter>
-          <Button colorScheme="blue" mr={3} onClick={onClose}>
-            Close
-          </Button>
-          <Button colorScheme="blue" mr={3} onClick={() => shareStrategy({ variables: { strategyId, email, permissions } })}
+          <Button colorScheme="green" mr={3} onClick={() => shareStrategy({ variables: { strategyId, email, permissions } })}
             disabled={email === '' || permissions === ''}>
-            Send
+            Add
+          </Button>
+          <Button colorScheme="red" mr={3} onClick={onClose}>
+            Close
           </Button>
         </ModalFooter>
       </ModalContent>
