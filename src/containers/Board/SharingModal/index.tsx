@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from 'react';
 
 import { useToast } from '@chakra-ui/react';
@@ -21,12 +20,16 @@ import {
 
 import { QUERY_SHARED_USERS, MUTATION_SHARE_STRATEGY } from './gql';
 
+import { URLParams } from '../Canvas/index.types';
+
+type SharedUser = { email: string; permissions: string; };
+
 const ReadWrite = (
   { permissions, setPermissions }:
-  { permissions: string, setPermissions: any },
+  { permissions: string, setPermissions: React.Dispatch<React.SetStateAction<string>> },
 ) => (
     <Select placeholder="Select option" value={permissions} onChange={(e) => setPermissions(e.target.value)}>
-        {/* <option value="read">Read</option> */}
+        {/* <option value="1">Read</option> */}
         <option value="2">Write</option>
     </Select>
 );
@@ -35,13 +38,13 @@ const SharedUsers = ({ email, permission }: { email: string, permission: string 
     <Input value={`${email} (${permission === '2' ? 'Write' : 'Read'})`} disabled />
 );
 
-const SharingModal = ({ isOpen, onClose }: { isOpen: any, onClose: any }) => {
+const SharingModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
   const [email, setEmail] = useState('');
   const [permissions, setPermissions] = useState('');
   
   const toast = useToast();
 
-  const { strategyId } = useParams<any>();
+  const { strategyId } = useParams<URLParams>();
 
   const { data: sharedUserData } = useQuery(QUERY_SHARED_USERS, { variables: { strategyId } });
   const [shareStrategy, { data: shareStrategyData, error }] = useMutation(MUTATION_SHARE_STRATEGY, {
@@ -91,7 +94,7 @@ const SharingModal = ({ isOpen, onClose }: { isOpen: any, onClose: any }) => {
                 <InputRightAddon children={<ReadWrite permissions={permissions} setPermissions={setPermissions}/>} backgroundColor="white" border="none" size="xs"/>
             </InputGroup>
             {
-                sharedUserData && sharedUserData.sharedUsers.map((item: any) => (
+                sharedUserData && sharedUserData.sharedUsers.map((item: SharedUser) => (
                     <SharedUsers email={item.email} permission={item.permissions} />
                 ))
             }
