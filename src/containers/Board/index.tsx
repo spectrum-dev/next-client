@@ -1,15 +1,21 @@
-import { Flex } from '@chakra-ui/react';
+import { Flex, useDisclosure } from '@chakra-ui/react';
 
 import Canvas from './Canvas';
 import TopBar from './TopBar';
+import SharingModal from './SharingModal';
 
-const Board = () => (
-  <Flex direction="column" height="100vh">
-    <Flex align="center" bg="#212B3B" color="white" px="6" minH="12" textAlign="center">
-      <TopBar />
+const Board = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  return (
+    <Flex direction="column" height="100vh">
+      <Flex align="center" bg="#212B3B" color="white" px="6" minH="12" textAlign="center">
+        <TopBar onShareOpen={onOpen} />
+      </Flex>
+      <Canvas />
+      <SharingModal isOpen={isOpen} onClose={onClose}/>
     </Flex>
-    <Canvas />
-  </Flex>
-);
+  );
+};
 
 export default Board;

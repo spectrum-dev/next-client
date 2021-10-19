@@ -1,12 +1,12 @@
 import {
-  Heading, Flex, Tag, Spacer, Box,
+  Heading, Flex, Tag, Spacer, Button,
 } from '@chakra-ui/react';
 import { useHistory } from 'react-router';
 import { IoIosArrowBack } from 'react-icons/io';
 
 import useGetStrategyInformation from './useGetStrategyInformation';
 
-const TopBar = () => {
+const TopBar = ({ onShareOpen }: { onShareOpen: any }) => {
   const history = useHistory();
 
   const { strategyInformation } = useGetStrategyInformation();
@@ -31,10 +31,13 @@ const TopBar = () => {
         </Heading>
       </Flex>
 
-      {/* This is done to center the other text content */}
-      <Box width="120px" />
-
       <Spacer />
+
+      <Flex>
+        <Button size="xs" backgroundColor="#2D3748" color="white" onClick={() => onShareOpen()}>
+          Share
+        </Button>
+      </Flex>
     </Flex>
   );
 };
