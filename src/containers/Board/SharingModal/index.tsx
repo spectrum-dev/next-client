@@ -1,4 +1,9 @@
-import { useState } from 'react'; 
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { useEffect, useState } from 'react';
+
+import { useToast } from '@chakra-ui/react';
+import { useQuery, useMutation } from '@apollo/client';
+import { useParams } from 'react-router-dom';
 import {
   Button,
   Input,
@@ -14,23 +19,66 @@ import {
   Select,
 } from '@chakra-ui/react';
 
+import { QUERY_SHARED_USERS, MUTATION_SHARE_STRATEGY } from './gql';
+
 const ReadWrite = (
-  { addPermissions, setAddPermissions }:
-  { addPermissions: any, setAddPermissions: any },
+  { permissions, setPermissions }:
+  { permissions: string, setPermissions: any },
 ) => (
-    <Select placeholder="Select option" value={addPermissions} onChange={(e) => setAddPermissions(e.target.value)}>
-        <option value="read">Read</option>
-        <option value="write">Write</option>
+    <Select placeholder="Select option" value={permissions} onChange={(e) => setPermissions(e.target.value)}>
+        {/* <option value="read">Read</option> */}
+        <option value="2">Write</option>
     </Select>
 );
 
 const SharedUsers = ({ email, permission }: { email: string, permission: string }) => (
-    <Input value={`${email} (${permission})`} disabled />
+    <Input value={`${email} (${permission === '2' ? 'Write' : 'Read'})`} disabled />
 );
 
 const SharingModal = ({ isOpen, onClose }: { isOpen: any, onClose: any }) => {
-  const [addPeople, setAddPeople] = useState('');
-  const [addPermissions, setAddPermissions] = useState('');
+  const [email, setEmail] = useState('');
+  const [permissions, setPermissions] = useState('');
+  
+  const toast = useToast();
+
+  const { strategyId } = useParams<any>();
+
+  const { data: sharedUserData } = useQuery(QUERY_SHARED_USERS, { variables: { strategyId } });
+  const [shareStrategy, { data: shareStrategyData, error }] = useMutation(MUTATION_SHARE_STRATEGY, {
+    errorPolicy: 'all',
+    refetchQueries: [
+      QUERY_SHARED_USERS,
+    ],
+  });
+
+  console.log(sharedUserData);
+
+  useEffect(() => {
+    if (error) {
+      toast({
+        title: error.message,
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+        position: 'top',
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error]);
+
+  useEffect(() => {
+    if (shareStrategyData?.shareStrategy?.shared) {
+      toast({
+        title: `Strategy was shared with ${email}`,
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+        position: 'top',
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shareStrategyData]);
+  
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -39,17 +87,22 @@ const SharingModal = ({ isOpen, onClose }: { isOpen: any, onClose: any }) => {
         <ModalCloseButton />
         <ModalBody>
             <InputGroup size="sm" marginBottom="1rem">
-                <Input placeholder="Add people" value={addPeople} onChange={(e) => setAddPeople(e.target.value)}/>
-                <InputRightAddon children={<ReadWrite addPermissions={addPermissions} setAddPermissions={setAddPermissions}/>} backgroundColor="white" border="none" size="xs"/>
+                <Input placeholder="Add people" value={email} onChange={(e) => setEmail(e.target.value)}/>
+                <InputRightAddon children={<ReadWrite permissions={permissions} setPermissions={setPermissions}/>} backgroundColor="white" border="none" size="xs"/>
             </InputGroup>
-            <SharedUsers email="rahul@imbue.dev" permission="Read" />
+            {
+                sharedUserData && sharedUserData.sharedUsers.map((item: any) => (
+                    <SharedUsers email={item.email} permission={item.permissions} />
+                ))
+            }
         </ModalBody>
 
         <ModalFooter>
           <Button colorScheme="blue" mr={3} onClick={onClose}>
             Close
           </Button>
-          <Button colorScheme="blue" mr={3} onClick={() => console.log('Clicked Send')} disabled={addPeople === ''}>
+          <Button colorScheme="blue" mr={3} onClick={() => shareStrategy({ variables: { strategyId, email, permissions } })}
+            disabled={email === '' || permissions === ''}>
             Send
           </Button>
         </ModalFooter>
