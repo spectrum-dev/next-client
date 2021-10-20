@@ -1,12 +1,18 @@
+import { useContext } from 'react';
 import {
   Heading, Flex, Tag, Spacer, Button,
 } from '@chakra-ui/react';
 import { useHistory } from 'react-router';
 import { IoIosArrowBack } from 'react-icons/io';
 
+// Contexts
+import BoardContext from 'app/contexts/board';
+
 import useGetStrategyInformation from './useGetStrategyInformation';
 
 const TopBar = ({ onShareOpen }: { onShareOpen: any }) => {
+  const { strategyType } = useContext(BoardContext);
+  
   const history = useHistory();
 
   const { strategyInformation } = useGetStrategyInformation();
@@ -19,7 +25,7 @@ const TopBar = ({ onShareOpen }: { onShareOpen: any }) => {
           onClick={() => history.push('/dashboard')}
         />
         <Tag marginLeft="20px">
-          Alpha
+          {strategyType}
         </Tag>
       </Flex>
 
