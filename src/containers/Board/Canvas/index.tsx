@@ -43,7 +43,6 @@ import {
 } from './index.types';
 
 const Canvas = () => {
-  const { strategyType } = useContext(BoardContext);
   const {
     hasAccess,
     elements, setElements,
@@ -79,6 +78,7 @@ const Canvas = () => {
   });
 
   const { isValid, edgeValidation } = useValidateStrategy({ inputs, elements });
+  const { strategyType } = useContext(BoardContext);
   const {
     outputs, setOutputs, invokeRun, showResults,
   } = useRunStrategy(

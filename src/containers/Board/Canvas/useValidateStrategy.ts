@@ -76,9 +76,6 @@ export default function useValidateStrategy(
             if (element?.data?.metadata?.blockType === 'BULK_DATA_BLOCK') {
               setStrategyType('SCREENER');
             } else {
-              console.log('Inside Here');
-              // @ts-ignore
-              console.log(element?.data?.metadata?.blockType);
               setStrategyType('BACKTEST');
             }
 
