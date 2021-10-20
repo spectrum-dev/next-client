@@ -176,4 +176,4 @@ export enum VisualizationType {
 }
 
 // Strategy Types
-export type StrategyType = 'BACKTEST' | 'SCREENER';
+export type StrategyType = 'BACKTEST' | 'SCREENER' | 'PENDING';

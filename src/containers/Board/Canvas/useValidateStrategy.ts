@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useContext, useCallback, useEffect, useState } from 'react';
 import { useToast } from '@chakra-ui/react';
 import {
   isNode, isEdge,
@@ -6,9 +6,12 @@ import {
 
 import fetcher from 'app/fetcher';
 
+// Contexts
+import BoardContext from 'app/contexts/board';
+
 // Types
 import {
-  Inputs, Elements, Edge, FormBlockValues, StrategyType,
+  Inputs, Elements, Edge, FormBlockValues,
 } from './index.types';
 
 const NON_NODE_OR_EDGE_VALUE = 'There was an error validating this strategy. Please try again.';
@@ -25,7 +28,6 @@ export type EdgeValidation = Record<string, {
 interface State {
   isValid: boolean;
   edgeValidation: EdgeValidation;
-  strategyType: StrategyType;
 }
 
 interface ValidateResponse {
@@ -39,8 +41,9 @@ export default function useValidateStrategy(
   const [state, setState] = useState<State>({
     isValid: false,
     edgeValidation: {},
-    strategyType: 'BACKTEST',
   });
+  const { setStrategyType } = useContext(BoardContext);
+
   const toast = useToast();
 
   const checkInputsValid = (blockInputs: FormBlockValues) => {
@@ -71,13 +74,9 @@ export default function useValidateStrategy(
 
             // @ts-ignore
             if (element?.data?.metadata?.blockType === 'BULK_DATA_BLOCK') {
-              setState((elems) => ({
-                ...elems, strategyType: 'SCREENER',
-              }));
+              setStrategyType('SCREENER');
             } else {
-              setState((elems) => ({
-                ...elems, strategyType: 'BACKTEST',
-              }));
+              setStrategyType('BACKTEST');
             }
 
             nodeList[element.id] = inputs[element.id];

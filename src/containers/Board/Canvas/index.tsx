@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Flex, Text, Box, Center, useDisclosure } from '@chakra-ui/react';
 import ReactFlow, {
   ReactFlowProvider, Background, addEdge,
@@ -7,6 +7,7 @@ import ReactFlow, {
 
 // Contexts
 import CanvasContext from 'app/contexts/canvas';
+import BoardContext from 'app/contexts/board';
 
 // Canvas Components
 import Controls from './Controls';
@@ -76,7 +77,8 @@ const Canvas = () => {
     isStrategyLoaded,
   });
 
-  const { isValid, edgeValidation, strategyType } = useValidateStrategy({ inputs, elements });
+  const { isValid, edgeValidation } = useValidateStrategy({ inputs, elements });
+  const { strategyType } = useContext(BoardContext);
   const {
     outputs, setOutputs, invokeRun, showResults,
   } = useRunStrategy(
