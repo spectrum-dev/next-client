@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 
 // Contexts
-import BoardContext from 'app/contexts/board';
+import CanvasContext from 'app/contexts/canvas';
 
 /**
  *
@@ -46,7 +46,7 @@ const ResultBlock = memo((
     value: 0,
   });
 
-  const { outputs } = useContext(BoardContext);
+  const { outputs } = useContext(CanvasContext);
 
   const findResults = () => {
     if (!('results' in outputs)) {

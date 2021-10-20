@@ -22,7 +22,7 @@ import { Handle as RawHandle, Position, NodeProps } from 'react-flow-renderer';
 import { formatBlockTypeHeader } from 'app/utils';
 
 // Contexts
-import BoardContext from 'app/contexts/board';
+import CanvasContext from 'app/contexts/canvas';
 
 // Visualizations
 import LineGraph from 'components/Graphs/LineGraph';
@@ -76,7 +76,7 @@ export default memo(({ id, data: rawData }: NodeProps) => {
     setTransformedData(rawData);
   }, [rawData]);
 
-  const { inputs, setInputs } = useContext(BoardContext);
+  const { inputs, setInputs } = useContext(CanvasContext);
 
   const [graphType, setGraphType] = useState<VisualizationType>(
     inputs?.[id]?.graphType || VisualizationType.Line,

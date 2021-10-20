@@ -15,7 +15,7 @@ import {
 import styled from '@emotion/styled';
 
 // Contexts
-import BoardContext from 'app/contexts/board';
+import CanvasContext from 'app/contexts/canvas';
 
 // Hooks
 import useHandles from './useHandles';
@@ -45,7 +45,7 @@ const Block = memo((
   const updateNodeInternals = useUpdateNodeInternals();
   const { onOpen, onClose, isOpen } = useDisclosure();
 
-  const { inputs: managedInputs, inputDependencyGraph } = useContext(BoardContext);
+  const { inputs: managedInputs, inputDependencyGraph } = useContext(CanvasContext);
 
   const [renderedInputFields, setRenderedInputFields] = useState<Array<React.ReactNode>>([]);
 
