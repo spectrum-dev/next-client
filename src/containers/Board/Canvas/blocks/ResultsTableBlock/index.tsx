@@ -14,7 +14,7 @@ import {
 import { GiExpand } from 'react-icons/gi';
 
 // Contexts
-import BoardContext from 'app/contexts/board';
+import CanvasContext from 'app/contexts/canvas';
 
 // Graphs
 import Table from 'components/Tables/Table';
@@ -33,7 +33,7 @@ const ResultTableBlock = memo((
 ) => {
   const { onOpen, onClose, isOpen } = useDisclosure();
   const [displayData, setDisplayData] = useState<any>([]);
-  const { outputs } = useContext(BoardContext);
+  const { outputs } = useContext(CanvasContext);
 
   const findResults = () => {
     if (!('results' in outputs)) {

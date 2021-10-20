@@ -3,10 +3,10 @@ import {
   removeElements, isNode, isEdge, Elements,
 } from 'react-flow-renderer';
 
-import BoardContext from 'app/contexts/board';
+import CanvasContext from 'app/contexts/canvas';
 
 export default function useOnDeleteBlock({ id }: { id: string }) {
-  const { setElements, setInputs, setOutputs } = useContext(BoardContext);
+  const { setElements, setInputs, setOutputs } = useContext(CanvasContext);
 
   const onDeleteBlock = () => {
     setElements((els) => {

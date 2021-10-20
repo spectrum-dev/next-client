@@ -6,7 +6,7 @@ import ReactFlow, {
 } from 'react-flow-renderer';
 
 // Contexts
-import BoardContext from 'app/contexts/board';
+import CanvasContext from 'app/contexts/canvas';
 
 // Canvas Components
 import Controls from './Controls';
@@ -147,7 +147,7 @@ const Canvas = () => {
   return (
     <Box minH="100vh" h="100vh" as="section">
       <ReactFlowProvider>
-        <BoardContext.Provider value={{
+        <CanvasContext.Provider value={{
           inputs,
           setInputs,
           setElements,
@@ -211,7 +211,7 @@ const Canvas = () => {
             onClose={onResultsDrawerClose}
             outputs={outputs}
           />
-        </BoardContext.Provider>
+        </CanvasContext.Provider>
       </ReactFlowProvider>
     </Box>
   );

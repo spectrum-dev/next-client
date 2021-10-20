@@ -6,7 +6,7 @@ import {
   Inputs, Outputs, Elements, InputDependencyGraph,
 } from 'containers/Board/Canvas/index.types';
 
-type BoardContextProps = {
+type CanvasContextProps = {
   inputs: Inputs;
   setInputs: React.Dispatch<React.SetStateAction<Inputs>>;
   setElements: React.Dispatch<React.SetStateAction<Elements>>;
@@ -16,7 +16,7 @@ type BoardContextProps = {
   inputDependencyGraph: InputDependencyGraph;
 };
 
-const BoardContext = createContext<BoardContextProps>({
+const CanvasContext = createContext<CanvasContextProps>({
   inputs: {},
   setInputs: () => undefined,
   setElements: () => undefined,
@@ -26,4 +26,4 @@ const BoardContext = createContext<BoardContextProps>({
   inputDependencyGraph: {},
 });
 
-export default BoardContext;
+export default CanvasContext;
