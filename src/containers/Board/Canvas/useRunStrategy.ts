@@ -167,6 +167,9 @@ export default function useRunStrategy(
     },
   });
 
+  /**
+   * Creates a 'loading' toast that will be updated depending on the outcome / result
+   */
   useEffect(() => {
     if (isLoading) {
       // @ts-ignore
@@ -177,6 +180,26 @@ export default function useRunStrategy(
         isClosable: false,
         position: 'top-right',
       });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading]);
+
+  /**
+   * If the strategy is loading and the user tries to close 
+   * the browser, a prompt will now appear asking them to confirm
+   * whether they would like to close the browser window
+   */
+  useEffect(() => {
+    // @ts-ignore
+    const unloadCallback = (event) => {
+      event.preventDefault();
+      event.returnValue = '';
+      return '';
+    };
+    
+    if (isLoading) {
+      window.addEventListener('beforeunload', unloadCallback);
+      return () => window.removeEventListener('beforeunload', unloadCallback);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading]);
