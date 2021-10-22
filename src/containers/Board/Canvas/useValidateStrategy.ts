@@ -63,6 +63,7 @@ export default function useValidateStrategy(
     try {
       const nodeList: Inputs = {};
       const edgeList: Array<Edge> = [];
+      let ifScreener = false;
       for (const element of elements) {
         if (isNode(element)) {
           if (element.id.split('-').length === 1) {
@@ -74,9 +75,7 @@ export default function useValidateStrategy(
 
             // @ts-ignore
             if (element?.data?.metadata?.blockType === 'BULK_DATA_BLOCK') {
-              setStrategyType('SCREENER');
-            } else {
-              setStrategyType('BACKTEST');
+              ifScreener = true;
             }
 
             nodeList[element.id] = inputs[element.id];
@@ -88,6 +87,12 @@ export default function useValidateStrategy(
         } else {
           throw new Error(NON_NODE_OR_EDGE_VALUE);
         }
+      }
+
+      if (ifScreener) {
+        setStrategyType('SCREENER');
+      } else {
+        setStrategyType('BACKTEST');
       }
 
       const requestBody = {
