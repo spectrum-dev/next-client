@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect } from 'react';
+import { useCallback, useState, useEffect, useRef } from 'react';
 import {
   useMutation, useQuery,
 } from '@apollo/client';
@@ -18,9 +18,10 @@ import {
   QUERY_TASK_RESULT,
 } from './gql';
 
-const NON_NODE_OR_EDGE_VALUE = 'There was an error running this strategy. Please try again.';
-const POST_RUN_STRATEGY_500 = 'There was an error running this strategy. Please try again.';
-const STRATEGY_RUN_SUCCESS = 'The strategy was run successfully.';
+const NON_NODE_OR_EDGE_VALUE = 'There was an error running your strategy. Please try again.';
+const STRATEGY_LOADING = 'Processing your strategy';
+const POST_RUN_STRATEGY_500 = 'There was an error running your strategy. Please try again.';
+const STRATEGY_RUN_SUCCESS = 'Your strategy ran successfully';
 
 export default function useRunStrategy(
   {
@@ -39,6 +40,7 @@ export default function useRunStrategy(
   },
 ) {
   const toast = useToast();
+  const toastIdRef = useRef();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [startPolling, setStartPolling] = useState<boolean>(false);
@@ -118,24 +120,24 @@ export default function useRunStrategy(
         setShowResults('results' in data.taskResult?.output);
         setStartPolling(false);
         setIsLoading(false);
-        toast({
-          title: STRATEGY_RUN_SUCCESS,
-          status: 'success',
-          duration: 3000,
-          isClosable: true,
-          position: 'top',
-        });
+        if (toastIdRef.current) {
+          toast.update(toastIdRef.current, {
+            title: STRATEGY_RUN_SUCCESS,
+            status: 'success',
+            duration: 2000,
+          });
+        }
         break;
       case 'FAILURE':
         setStartPolling(false);
         setIsLoading(false);
-        toast({
-          title: POST_RUN_STRATEGY_500,
-          status: 'error',
-          duration: 3000,
-          isClosable: true,
-          position: 'top',
-        });
+        if (toastIdRef.current) {
+          toast.update(toastIdRef.current, {
+            title: POST_RUN_STRATEGY_500,
+            status: 'error',
+            duration: 2000,
+          });
+        }
         break;
       case 'PENDING':
         // Ensures logging for pending state (which is valid) is not misleading
@@ -164,6 +166,20 @@ export default function useRunStrategy(
       setIsLoading(false);
     },
   });
+
+  useEffect(() => {
+    if (isLoading) {
+      // @ts-ignore
+      toastIdRef.current = toast({
+        title: STRATEGY_LOADING,
+        status: 'warning',
+        duration: null,
+        isClosable: false,
+        position: 'top-right',
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading]);
 
   return {
     invokeRun: fetchData,
