@@ -13,6 +13,7 @@ const Controls = (
     hasStartedStrategy,
     isStrategyValid,
     onRunStrategy,
+    isRunStrategyLoading,
   }:
   {
     showResults: boolean;
@@ -22,6 +23,7 @@ const Controls = (
     hasStartedStrategy: boolean;
     isStrategyValid: boolean;
     onRunStrategy: Function;
+    isRunStrategyLoading: boolean;
   },
 ) => (
   <Box zIndex={10} position="absolute" top="90%" background="#1a202c" borderRadius="30px" padding="0px 10px 0px 10px">
@@ -39,7 +41,7 @@ const Controls = (
       isOpen={!isStrategyValid}
       textAlign="center"
     >
-      <IconButton aria-label="Run strategy" icon={<BsPlayFill color="white" size={20} />} background="#1a202c" disabled={!isStrategyValid} onClick={() => onRunStrategy()} />
+      <IconButton aria-label="Run strategy" icon={<BsPlayFill color="white" size={20} />} background="#1a202c" disabled={!isStrategyValid || isRunStrategyLoading} onClick={() => onRunStrategy()} />
     </Tooltip>
     <IconButton aria-label="View blocks" icon={<FaRobot color="white" size={20} />} background="#1a202c" onClick={() => onViewBlocks()} />
     <IconButton aria-label="View results" icon={<BsGraphUp color="white" size={20} />} background="#1a202c" disabled={!showResults} onClick={() => onResultsPane()} />

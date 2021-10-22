@@ -40,6 +40,7 @@ export default function useRunStrategy(
 ) {
   const toast = useToast();
 
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [startPolling, setStartPolling] = useState<boolean>(false);
   const [initializer, setInitializer] = useState<boolean>(false);
   const [outputs, setOutputs] = useState<Outputs>({});
@@ -70,6 +71,7 @@ export default function useRunStrategy(
    * Function invoked to request data from API
    */
   const fetchData = useCallback(async () => {
+    setIsLoading(true);
     // Pre-processing to assemble a list of nodes and edges
     const nodeList: Inputs = {};
     const edgeList: Array<Edge> = [];
@@ -115,6 +117,7 @@ export default function useRunStrategy(
         setOutputs(data.taskResult?.output);
         setShowResults('results' in data.taskResult?.output);
         setStartPolling(false);
+        setIsLoading(false);
         toast({
           title: STRATEGY_RUN_SUCCESS,
           status: 'success',
@@ -125,6 +128,7 @@ export default function useRunStrategy(
         break;
       case 'FAILURE':
         setStartPolling(false);
+        setIsLoading(false);
         toast({
           title: POST_RUN_STRATEGY_500,
           status: 'error',
@@ -155,13 +159,17 @@ export default function useRunStrategy(
     skip: !startPolling,
     pollInterval: !startPolling ? 0 : 2000,
     onCompleted,
-    onError: () => setStartPolling(false),
+    onError: () => {
+      setStartPolling(false);
+      setIsLoading(false);
+    },
   });
 
   return {
+    invokeRun: fetchData,
+    isLoading,
     outputs,
     setOutputs,
     showResults,
-    invokeRun: fetchData,
   };
 }
