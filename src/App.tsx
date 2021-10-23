@@ -30,8 +30,8 @@ function AuthenticatedRoute(props: RouteProps) {
 
 export const App = () => (
   <ChakraProvider theme={theme}>
-    <ApolloProvider client={client}>
       <AuthProvider>
+        <ApolloProvider client={client}>
           <HashRouter>
             <Switch>
               <Route path="/login" component={Login} />
@@ -40,7 +40,7 @@ export const App = () => (
               <Redirect from="/" to="/login" />
             </Switch>
           </HashRouter>
+        </ApolloProvider>
       </AuthProvider>
-    </ApolloProvider>
   </ChakraProvider>
 );

@@ -5,7 +5,14 @@ import {
   useState,
 } from 'react';
 
-import { useApolloClient } from '@apollo/client';
+import { httpLink } from '../../../app/apolloClient';
+
+import {
+  ApolloClient,
+  InMemoryCache,
+} from '@apollo/client';
+
+import { setContext } from '@apollo/client/link/context';
 
 import { useToast } from '@chakra-ui/react';
 import {
@@ -44,7 +51,6 @@ export function AuthProvider({
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingInitial, setLoadingInitial] = useState<boolean>(true);
 
-  const client = useApolloClient();
   const toast = useToast();
 
   const getAuthenticationStatus = () => ({
@@ -91,6 +97,18 @@ export function AuthProvider({
       if (!('profileObj' in response)) {
         return;
       }
+      
+      const authLink = setContext((_, { headers }) => ({
+        headers: {
+          ...headers,
+          authorization: response.accessToken ? `Bearer ${response.accessToken}` : '',
+        },
+      }));
+
+      const client = new ApolloClient({
+        cache: new InMemoryCache(),
+        link: authLink.concat(httpLink),
+      });
 
       const { data: { accountWhitelistStatus: { status } }, errors } = await client.query({ query: ACCOUNT_WHITELIST_STATUS, variables: { email: response.profileObj.email } });
 
