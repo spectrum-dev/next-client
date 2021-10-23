@@ -1,7 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState } from 'react';
+
+import { useQuery } from '@apollo/client';
 import { useToast } from '@chakra-ui/react';
 
-import fetcher from 'app/fetcher';
+import { QUERY_ALL_METADATA } from './gql';
 
 const GET_ALL_METADATA_RESPONSE_500 = 'Error retrieving block metadata';
 
@@ -14,41 +16,30 @@ interface BlockMetadata {
   }
 }
 interface MetadataResponse {
-  response: BlockMetadata;
+  allMetadata: BlockMetadata;
 }
 
 export default function useBlockMetadataRetriever() {
   const [blockMetadata, setBlockMetadata] = useState<BlockMetadata | undefined>(undefined);
   const toast = useToast();
+  
+  const onCompleted = (data: MetadataResponse) => {
+    setBlockMetadata(data.allMetadata);
+  };
 
-  const fetchData = useCallback(async () => {
-    try {
-      const metadataResponse = await fetcher('/orchestration/metadata', {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-        },
-      });
-
-      if (metadataResponse.status === 200) {
-        const response: MetadataResponse = metadataResponse.data;
-        setBlockMetadata(response.response);
-      } else {
-        throw new Error(GET_ALL_METADATA_RESPONSE_500);
-      }
-    } catch (e) {
-      toast({
-        title: GET_ALL_METADATA_RESPONSE_500,
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+  const onError = () => {
+    toast({
+      title: GET_ALL_METADATA_RESPONSE_500,
+      status: 'error',
+      duration: 3000,
+      isClosable: true,
+    });
+  };
+  
+  useQuery(QUERY_ALL_METADATA, {
+    onCompleted,
+    onError,
+  });
 
   return { blockMetadata };
 }
