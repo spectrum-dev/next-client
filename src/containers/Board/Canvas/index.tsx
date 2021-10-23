@@ -80,7 +80,7 @@ const Canvas = () => {
   const { isValid, edgeValidation } = useValidateStrategy({ inputs, elements });
   const { strategyType } = useContext(BoardContext);
   const {
-    outputs, setOutputs, invokeRun, showResults,
+    outputs, setOutputs, invokeRun, showResults, isLoading: isRunStrategyLoading,
   } = useRunStrategy(
     {
       inputs, elements, loadedOutputs, isStrategyLoaded, strategyType,
@@ -195,6 +195,7 @@ const Canvas = () => {
           </ReactFlow>
           <Center>
             <Controls
+              isRunStrategyLoading={isRunStrategyLoading}
               onViewBlocks={onSideDrawerOpen}
               showResults={showResults}
               onResultsPane={onResultsDrawerOpen}

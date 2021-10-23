@@ -67,7 +67,6 @@ export default function useValidateStrategy(
       for (const element of elements) {
         if (isNode(element)) {
           if (element.id.split('-').length === 1) {
-            console.log(element);
             if (!checkInputsValid(inputs[element.id])) {
               // eslint-disable-next-line @typescript-eslint/no-throw-literal
               throw BreakException;

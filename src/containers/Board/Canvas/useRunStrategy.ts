@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect } from 'react';
+import { useCallback, useState, useEffect, useRef } from 'react';
 import {
   useMutation, useQuery,
 } from '@apollo/client';
@@ -18,9 +18,10 @@ import {
   QUERY_TASK_RESULT,
 } from './gql';
 
-const NON_NODE_OR_EDGE_VALUE = 'There was an error running this strategy. Please try again.';
-const POST_RUN_STRATEGY_500 = 'There was an error running this strategy. Please try again.';
-const STRATEGY_RUN_SUCCESS = 'The strategy was run successfully.';
+const NON_NODE_OR_EDGE_VALUE = 'There was an error running your strategy. Please try again.';
+const STRATEGY_LOADING = 'Processing your strategy';
+const POST_RUN_STRATEGY_500 = 'There was an error running your strategy. Please try again.';
+const STRATEGY_RUN_SUCCESS = 'Your strategy ran successfully';
 
 export default function useRunStrategy(
   {
@@ -39,7 +40,9 @@ export default function useRunStrategy(
   },
 ) {
   const toast = useToast();
+  const toastIdRef = useRef();
 
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [startPolling, setStartPolling] = useState<boolean>(false);
   const [initializer, setInitializer] = useState<boolean>(false);
   const [outputs, setOutputs] = useState<Outputs>({});
@@ -70,6 +73,7 @@ export default function useRunStrategy(
    * Function invoked to request data from API
    */
   const fetchData = useCallback(async () => {
+    setIsLoading(true);
     // Pre-processing to assemble a list of nodes and edges
     const nodeList: Inputs = {};
     const edgeList: Array<Edge> = [];
@@ -115,23 +119,25 @@ export default function useRunStrategy(
         setOutputs(data.taskResult?.output);
         setShowResults('results' in data.taskResult?.output);
         setStartPolling(false);
-        toast({
-          title: STRATEGY_RUN_SUCCESS,
-          status: 'success',
-          duration: 3000,
-          isClosable: true,
-          position: 'top',
-        });
+        setIsLoading(false);
+        if (toastIdRef.current) {
+          toast.update(toastIdRef.current, {
+            title: STRATEGY_RUN_SUCCESS,
+            status: 'success',
+            duration: 2000,
+          });
+        }
         break;
       case 'FAILURE':
         setStartPolling(false);
-        toast({
-          title: POST_RUN_STRATEGY_500,
-          status: 'error',
-          duration: 3000,
-          isClosable: true,
-          position: 'top',
-        });
+        setIsLoading(false);
+        if (toastIdRef.current) {
+          toast.update(toastIdRef.current, {
+            title: POST_RUN_STRATEGY_500,
+            status: 'error',
+            duration: 2000,
+          });
+        }
         break;
       case 'PENDING':
         // Ensures logging for pending state (which is valid) is not misleading
@@ -155,13 +161,54 @@ export default function useRunStrategy(
     skip: !startPolling,
     pollInterval: !startPolling ? 0 : 2000,
     onCompleted,
-    onError: () => setStartPolling(false),
+    onError: () => {
+      setStartPolling(false);
+      setIsLoading(false);
+    },
   });
 
+  /**
+   * Creates a 'loading' toast that will be updated depending on the outcome / result
+   */
+  useEffect(() => {
+    if (isLoading) {
+      // @ts-ignore
+      toastIdRef.current = toast({
+        title: STRATEGY_LOADING,
+        status: 'warning',
+        duration: null,
+        isClosable: false,
+        position: 'top-right',
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading]);
+
+  /**
+   * If the strategy is loading and the user tries to close 
+   * the browser, a prompt will now appear asking them to confirm
+   * whether they would like to close the browser window
+   */
+  useEffect(() => {
+    // @ts-ignore
+    const unloadCallback = (event) => {
+      event.preventDefault();
+      event.returnValue = '';
+      return '';
+    };
+    
+    if (isLoading) {
+      window.addEventListener('beforeunload', unloadCallback);
+      return () => window.removeEventListener('beforeunload', unloadCallback);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading]);
+
   return {
+    invokeRun: fetchData,
+    isLoading,
     outputs,
     setOutputs,
     showResults,
-    invokeRun: fetchData,
   };
 }
