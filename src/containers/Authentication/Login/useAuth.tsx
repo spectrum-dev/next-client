@@ -5,6 +5,8 @@ import {
   useState,
 } from 'react';
 
+import { useApolloClient } from '@apollo/client';
+
 import { useToast } from '@chakra-ui/react';
 import {
   useGoogleLogin, useGoogleLogout, GoogleLoginResponse, GoogleLoginResponseOffline,
@@ -14,6 +16,8 @@ import fetcher from 'app/fetcher';
 import history from 'app/history';
 import { User } from 'app/types';
 import AuthContext, { AuthContextType } from 'app/contexts/auth';
+
+import { ACCOUNT_WHITELIST_STATUS } from './gql';
 
 const CLIENT_ID = '127712187286-65rpilkupfcu9h7b87u944kcs5f6e3j6.apps.googleusercontent.com';
 
@@ -26,10 +30,6 @@ const WHITELIST_RESPONSE_ERROR = 'This accounts has not been added to the whitel
 const DJANGO_AUTHENTICATION_ERROR = 'There was an error sending the authentication token to the backend';
 
 // Types
-interface WhitelistRequestBody {
-  email: string;
-}
-
 interface AuthenticationRequestBody {
   access_token: string;
 }
@@ -44,6 +44,7 @@ export function AuthProvider({
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingInitial, setLoadingInitial] = useState<boolean>(true);
 
+  const client = useApolloClient();
   const toast = useToast();
 
   const getAuthenticationStatus = () => ({
@@ -91,17 +92,9 @@ export function AuthProvider({
         return;
       }
 
-      const whitelistRequestBody: WhitelistRequestBody = {
-        email: response.profileObj.email,
-      };
+      const { data: { accountWhitelistStatus: { status } }, errors } = await client.query({ query: ACCOUNT_WHITELIST_STATUS, variables: { email: response.profileObj.email } });
 
-      const whitelistResponse = await fetcher.post('authentication/validate', whitelistRequestBody, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-        },
-      });
-
-      if (whitelistResponse.status === 200) {
+      if (!errors && status) {
         const authenticationRequestBody: AuthenticationRequestBody = {
           access_token: response.accessToken,
         };

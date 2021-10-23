@@ -30,17 +30,17 @@ function AuthenticatedRoute(props: RouteProps) {
 
 export const App = () => (
   <ChakraProvider theme={theme}>
-    <AuthProvider>
-      <ApolloProvider client={client}>
-        <HashRouter>
-          <Switch>
-            <Route path="/login" component={Login} />
-            <AuthenticatedRoute path="/dashboard" component={Dashboard} />
-            <AuthenticatedRoute path="/board/:strategyId" component={Board} />
-            <Redirect from="/" to="/login" />
-          </Switch>
-        </HashRouter>
-      </ApolloProvider>
-    </AuthProvider>
+    <ApolloProvider client={client}>
+      <AuthProvider>
+          <HashRouter>
+            <Switch>
+              <Route path="/login" component={Login} />
+              <AuthenticatedRoute path="/dashboard" component={Dashboard} />
+              <AuthenticatedRoute path="/board/:strategyId" component={Board} />
+              <Redirect from="/" to="/login" />
+            </Switch>
+          </HashRouter>
+      </AuthProvider>
+    </ApolloProvider>
   </ChakraProvider>
 );
