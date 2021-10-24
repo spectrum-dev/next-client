@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+
+import BoardContext from 'app/contexts/board';
 
 import { useQuery } from '@apollo/client';
 import { useToast } from '@chakra-ui/react';
@@ -23,6 +25,10 @@ export default function useBlockMetadataRetriever() {
   const [blockMetadata, setBlockMetadata] = useState<BlockMetadata | undefined>(undefined);
   const toast = useToast();
   
+  const { strategyType } = useContext(BoardContext);
+
+  console.log('Strategy Type: ', strategyType);
+  
   const onCompleted = (data: MetadataResponse) => {
     setBlockMetadata(data.allMetadata);
   };
@@ -37,6 +43,9 @@ export default function useBlockMetadataRetriever() {
   };
   
   useQuery(QUERY_ALL_METADATA, {
+    variables: {
+      strategyType,
+    },
     onCompleted,
     onError,
   });
