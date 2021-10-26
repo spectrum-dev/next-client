@@ -11,17 +11,9 @@ const customStyles = {
     backgroundColor: '#2D3748',
     borderColor: '#2D3748',
   }),
-  valueContainer: () => ({
-    color: 'white',
-  }),
   input: (provided: any) => ({
     ...provided,
     color: 'white',
-    paddingLeft: 10,
-  }),
-  placeholder: (provided: any) => ({
-    ...provided,
-    paddingLeft: 10,
   }),
   singleValue: (provided: any) => ({
     ...provided, color: 'white', borderColor: 'green', paddingLeft: 10,
