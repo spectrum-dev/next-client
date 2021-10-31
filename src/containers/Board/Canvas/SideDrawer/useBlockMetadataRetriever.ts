@@ -26,8 +26,6 @@ export default function useBlockMetadataRetriever() {
   const toast = useToast();
   
   const { strategyType } = useContext(BoardContext);
-
-  console.log('Strategy Type: ', strategyType);
   
   const onCompleted = (data: MetadataResponse) => {
     setBlockMetadata(data.allMetadata);

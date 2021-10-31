@@ -90,7 +90,8 @@ export type NodeMetadataInputs = {
   fieldData: {
     base: string;
     method: 'GET' | 'POST';
-    onChange?: string
+    onChange?: string;
+    data?: Array<string>;
   }
   fieldName: string;
   fieldType: 'search' | 'dropdown' | 'input' | '...'
