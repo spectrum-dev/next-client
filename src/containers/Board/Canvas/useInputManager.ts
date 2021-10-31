@@ -38,31 +38,41 @@ export default function useInputManager(
           },
         };
       case 'dropdown':
-        // eslint-disable-next-line no-case-declarations
-        const fieldDataResponse = await fetcher(`/orchestration/${blockType}/${blockId}${input.fieldData.base}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-          },
-        });
+        // TODO: Remove the API Endpoints When Fully Deprecated
+        if ('data' in input.fieldData) {
+          return {
+            [input.fieldVariableName]: {
+              options: input.fieldData.data,
+              value: '',
+            },
+          };
+        } else {
+          // eslint-disable-next-line no-case-declarations
+          const fieldDataResponse = await fetcher(`/orchestration/${blockType}/${blockId}${input.fieldData.base}`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            },
+          });
 
-        if (fieldDataResponse.status === 200) {
-          const response: FieldDataResponse = fieldDataResponse.data;
+          if (fieldDataResponse.status === 200) {
+            const response: FieldDataResponse = fieldDataResponse.data;
 
-          if ('onChange' in input.fieldData) {
+            if ('onChange' in input.fieldData) {
+              return {
+                [input.fieldVariableName]: {
+                  options: response.response,
+                  value: '',
+                  onChange: input.fieldData.onChange,
+                },
+              };
+            }
             return {
               [input.fieldVariableName]: {
                 options: response.response,
                 value: '',
-                onChange: input.fieldData.onChange,
               },
             };
           }
-          return {
-            [input.fieldVariableName]: {
-              options: response.response,
-              value: '',
-            },
-          };
         }
         break;
       case 'input':
