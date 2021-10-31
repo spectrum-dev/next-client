@@ -34,7 +34,7 @@
     "graphql": "16.0.0",
     "history": "4.10.1",
     "react": "17.0.2",
-    "react-data-table-component": "7.0.0-rc2",
+    "react-data-table-component": "7.4.5",
     "react-datepicker": "4.3.0",
     "react-dom": "17.0.2",
     "react-dropdown": "1.9.2",
