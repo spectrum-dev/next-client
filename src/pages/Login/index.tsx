@@ -5,7 +5,7 @@ import {
 import { ButtonProps } from '@chakra-ui/button';
 import { Button } from '@chakra-ui/react';
 import { FaGoogle } from 'react-icons/fa';
-import useAuth from './useAuth';
+import useAuth from './useLogin';
 
 /**
  * Google Login Button Styling

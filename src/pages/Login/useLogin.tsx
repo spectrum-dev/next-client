@@ -5,7 +5,7 @@ import {
   useState,
 } from 'react';
 
-import { httpLink } from '../../../app/apolloClient';
+import { httpLink } from '../../app/apolloClient';
 
 import {
   ApolloClient,

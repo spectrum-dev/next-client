@@ -4,7 +4,7 @@ import { render } from 'test-utils';
 import Login from './index';
 
 describe('Login', () => {
-  test('Renders login screen', () => {
+  test('Renders login screen base state', () => {
     render(<Login />);
     const title = screen.getByText(/Log In/i);
     const subHeaderText = screen.getByText(/Currently open to registered beta users/i);
