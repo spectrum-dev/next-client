@@ -1,11 +1,11 @@
 import { screen } from '@testing-library/react';
-import { render } from 'test-utils';
 
-import Login from './index';
+import { App } from 'App';
+import { renderWithRouter } from 'testingUtils';
 
 describe('Login', () => {
   test('Renders login screen base state', () => {
-    render(<Login />);
+    renderWithRouter(<App />, { route: '/login' });
     const title = screen.getByText(/Log In/i);
     const subHeaderText = screen.getByText(/Currently open to registered beta users/i);
     const signInWithGoogle = screen.getByText(/Continue with Google/i);

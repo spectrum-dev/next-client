@@ -75,7 +75,7 @@
     "husky": "7.0.4"
   },
   "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx}": [
+    "src/**/*.{jsx,ts,tsx}": [
       "eslint --fix --max-warnings 0",
       "git add"
     ],
@@ -105,6 +105,11 @@
       "react/require-default-props": "off",
       "no-restricted-syntax": "off"
     }
+  },
+  "jest": {
+    "transformIgnorePatterns": [
+      "/node_modules/(?!react-financial-charts|@react-financial-charts|d3-(array|format|time-format)|react-datepicker|react-dropdown)"
+    ]
   },
   "browserslist": {
     "production": [
