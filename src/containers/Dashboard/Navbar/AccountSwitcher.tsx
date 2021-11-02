@@ -9,7 +9,7 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 
-import useAuth from 'containers/Authentication/Login/useAuth';
+import useAuth from 'pages/Login/useLogin';
 
 import { AccountSwitcherButton } from './AccountSwitcherButton';
 

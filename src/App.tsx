@@ -13,12 +13,12 @@ import {
   ApolloProvider,
 } from '@apollo/client';
 
-import useAuth, { AuthProvider } from 'containers/Authentication/Login/useAuth';
+import useAuth, { AuthProvider } from 'pages/Login/useLogin';
 
 import { client } from 'app/apolloClient';
 
 // Screens
-import Login from 'containers/Authentication/Login';
+import Login from 'pages/Login';
 import Dashboard from 'containers/Dashboard';
 import Board from 'containers/Board';
 

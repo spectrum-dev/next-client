@@ -1,22 +1,45 @@
 import {
-  Box, Heading, LightMode, Stack, Text, useColorModeValue,
+  Box, BoxProps, Heading, LightMode, Stack, Text, useColorModeValue,
 } from '@chakra-ui/react';
 
-import { Card } from './Card';
-import { GoogleLoginButton } from './GoogleLoginButton';
-import { Logo } from './Logo';
+import { ButtonProps } from '@chakra-ui/button';
+import { Button } from '@chakra-ui/react';
+import { FaGoogle } from 'react-icons/fa';
+import useAuth from './useLogin';
 
-import useAuth from './useAuth';
+/**
+ * Google Login Button Styling
+ */
+const GoogleLoginButton = (props: ButtonProps) => (
+  <Button
+    fontSize="sm"
+    fontWeight="bold"
+    size="lg"
+    leftIcon={<FaGoogle fontSize="18px" />}
+    iconSpacing="3"
+    colorScheme="red"
+    width="full"
+    {...props}
+  >
+    Continue with Google
+  </Button>
+);
+
+
+/**
+ * Login Card
+ */
+export const LoginCard = (props: BoxProps) => (
+  <Box bg={useColorModeValue('white', 'gray.800')} rounded={{ md: '2xl' }} p="8" {...props} />
+);
 
 const Login = () => {
   const { signIn } = useAuth();
 
   return (
     <Box minH="100vh" as="section" bgGradient={{ md: 'linear(to-r, red.600, purple.600)' }} py="20">
-      <Card maxW="2xl" mx="auto" textAlign="center">
+      <LoginCard maxW="2xl" mx="auto" textAlign="center">
         <Stack maxW="xs" mx="auto" spacing="8">
-          {/* TODO: Swap out this top logo with my logo (can be basic) */}
-          <Logo />
           <Stack spacing="3">
             <Heading as="h1" letterSpacing="tight">
               Log In
@@ -46,7 +69,7 @@ const Login = () => {
           By continuing, you acknowledge that you have read, understood, and agree to our terms and
           condition
         </Text>
-      </Card>
+      </LoginCard>
     </Box>
   );
 };
