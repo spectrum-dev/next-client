@@ -40,7 +40,6 @@ const Login = () => {
     <Box minH="100vh" as="section" bgGradient={{ md: 'linear(to-r, red.600, purple.600)' }} py="20">
       <LoginCard maxW="2xl" mx="auto" textAlign="center">
         <Stack maxW="xs" mx="auto" spacing="8">
-          {/* TODO: Swap out this top logo with my logo (can be basic) */}
           <Stack spacing="3">
             <Heading as="h1" letterSpacing="tight">
               Log In
