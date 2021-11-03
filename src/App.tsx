@@ -4,6 +4,7 @@ import {
   Switch,
   Route,
   RouteProps,
+  useLocation,
 } from 'react-router-dom';
 import {
   ChakraProvider,
@@ -22,6 +23,12 @@ import Login from 'pages/Login';
 import Dashboard from 'containers/Dashboard';
 import Board from 'containers/Board';
 
+const LocationDisplay = () => {
+  const location = useLocation();
+
+  return <div data-testid="location-display">{`/#${location.pathname}`}</div>;
+};
+
 function AuthenticatedRoute(props: RouteProps) {
   const { user } = useAuth();
   if (!user) return <Redirect to="/login" />;
@@ -39,6 +46,8 @@ export const App = () => (
               <AuthenticatedRoute path="/board/:strategyId" component={Board} />
               <Redirect from="/" to="/login" />
             </Switch>
+
+            <LocationDisplay />
           </HashRouter>
         </ApolloProvider>
       </AuthProvider>
