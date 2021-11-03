@@ -1,19 +1,52 @@
 import { screen } from '@testing-library/react';
 
 import { App } from 'App';
-import { renderWithRouter } from 'testingUtils';
+import { renderWithRouter, setupAuthenticatedUser } from 'testingUtils';
 
 describe('Login', () => {
-  test('Renders login screen base state', () => {
-    renderWithRouter(<App />, { route: '/login' });
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
+  test('Renders login screen', () => {
+    const route = '/#/login';
+    renderWithRouter(<App />, { route });
+
     const title = screen.getByText(/Log In/i);
-    const subHeaderText = screen.getByText(/Currently open to registered beta users/i);
-    const signInWithGoogle = screen.getByText(/Continue with Google/i);
-    const termsAndConditions = screen.getByText(/By continuing, you acknowledge that you have read, understood, and agree to our terms and condition/i);
 
     expect(title).toBeInTheDocument();
-    expect(subHeaderText).toBeInTheDocument();
-    expect(signInWithGoogle).toBeInTheDocument();
-    expect(termsAndConditions).toBeInTheDocument();
+    expect(screen.getByTestId('location-display')).toHaveTextContent(route);
+  });
+  
+  test('Invalid route redirects to login for non-authenticated user', () => {
+    const route = '/#/invalidRoute';
+    renderWithRouter(<App />, { route });
+    
+    expect(screen.getByTestId('location-display')).toHaveTextContent('/#/login');
+  });
+
+  test('Invalid route redirects to login for authenticated user', () => {
+    setupAuthenticatedUser();
+
+    const route = '/#/invalidRoute';
+    renderWithRouter(<App />, { route });
+    
+    expect(screen.getByTestId('location-display')).toHaveTextContent('/#/login');
+  });
+
+  test('Non-authenticated user accessing valid route gets redirected to login', () => {
+    const route = '/#/dashboard';
+    renderWithRouter(<App />, { route });
+    
+    expect(screen.getByTestId('location-display')).toHaveTextContent('/#/login');
+  });
+
+  test('Authenticated user accessing valid route does not get redirected to login', () => {
+    setupAuthenticatedUser();
+
+    const route = '/#/dashboard';
+    renderWithRouter(<App />, { route });
+
+    expect(screen.getByTestId('location-display')).toHaveTextContent(route);
   });
 });
