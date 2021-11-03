@@ -26,7 +26,7 @@ import Board from 'containers/Board';
 const LocationDisplay = () => {
   const location = useLocation();
 
-  return <div data-testid="location-display">{`/#${location.pathname}`}</div>;
+  return <div data-testid="location-display" style={{ display: 'none' }}>{`/#${location.pathname}`}</div>;
 };
 
 function AuthenticatedRoute(props: RouteProps) {
