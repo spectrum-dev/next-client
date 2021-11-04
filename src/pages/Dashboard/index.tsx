@@ -1,32 +1,24 @@
 import { useState } from 'react';
 
 import {
-  Box, Circle, Flex, Stack, useColorModeValue as mode, useDisclosure,
+  Box, Flex, Stack, useColorModeValue as mode, useDisclosure,
 } from '@chakra-ui/react';
-import {
-  BiBuoy,
-  BiCog,
-  BiHome,
-} from 'react-icons/bi';
 
 import {
   BsViewList,
-  BsFillGearFill,
 } from 'react-icons/bs';
 
 // Navbar
 import { AccountSwitcher } from './Navbar/AccountSwitcher';
-import { NavGroup } from './Navbar/NavGroup';
 import { NavItem } from './Navbar/NavItem';
 
 // Create Strategy
-import { CreateStrategyModal } from './CreateStrategy/CreateStrategyModal';
+import { CreateStrategyModal } from './CreateStrategyModal/CreateStrategyModal';
 
 // Strategy List
 import { StrategyList } from './StrategyList';
 
 enum PageState {
-  GettingStarted = 'GETTING_STARTED',
   Strategies = 'STRATEGIES',
 }
 
@@ -44,8 +36,6 @@ const Dashboard = () => {
    */
   const renderPage = () => {
     switch (pageState) {
-      case PageState.GettingStarted:
-        return <></>;
       case PageState.Strategies:
         return <StrategyList onCreateStrategyOpen={onCreateStrategyOpen} />;
       default:
@@ -60,25 +50,8 @@ const Dashboard = () => {
           <Flex h="full" direction="column" px="4" py="4">
             <AccountSwitcher />
             <Stack spacing="8" flex="1" overflow="auto" pt="8">
-              <Stack spacing="1">
-                <NavItem active={pageState === PageState.GettingStarted} icon={<BiHome />} label="Get Started" onClick={() => setPageState(PageState.GettingStarted)} />
-              </Stack>
-              <NavGroup label="Backtesting Tools">
-                <NavItem active={pageState === PageState.Strategies} icon={<BsViewList />} label="Strategies" onClick={() => setPageState(PageState.Strategies)} />
-                <NavItem icon={<BsFillGearFill />} label="Create Strategy" onClick={onCreateStrategyOpen} />
-              </NavGroup>
+              <NavItem active={pageState === PageState.Strategies} icon={<BsViewList />} label="Strategies" onClick={() => setPageState(PageState.Strategies)} />
             </Stack>
-            <Box>
-              <Stack spacing="1">
-                <NavItem subtle icon={<BiCog />} label="Settings" />
-                <NavItem
-                  subtle
-                  icon={<BiBuoy />}
-                  label="Help & Support"
-                  endElement={<Circle size="2" bg="blue.400" />}
-                />
-              </Stack>
-            </Box>
           </Flex>
         </Box>
         <Box bg={mode('gray.100', 'gray.800')} flex="1" p="6" overflow="scroll">

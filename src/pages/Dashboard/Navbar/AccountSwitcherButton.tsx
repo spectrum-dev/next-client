@@ -30,15 +30,11 @@ export const AccountSwitcherButton = (props: FlexProps) => {
           h="8"
           rounded="md"
           objectFit="cover"
-          src="https://images.unsplash.com/photo-1564564321837-a57b7070ac4f?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MzV8fG1hbiUyMHNpbWxpbmd8ZW58MHx8MHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=100"
           alt="Chakra UI"
         />
         <Box textAlign="start">
           <Box isTruncated fontWeight="semibold">
             Spectrum Alpha
-          </Box>
-          <Box fontSize="xs" color="gray.400">
-            ID Placeholder
           </Box>
         </Box>
       </HStack>

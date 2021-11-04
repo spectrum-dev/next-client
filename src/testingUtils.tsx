@@ -24,3 +24,8 @@ export const setupAuthenticatedUser = () => {
   localStorage.setItem('firstName', FIRST_NAME);
   localStorage.setItem('lastName', LAST_NAME);
 };
+
+export const renderWithAuthenticatedRouter = (ui: ReactElement, { route = '/' }: RenderWithRouterProps = {}) => {
+  setupAuthenticatedUser();
+  renderWithRouter(ui, { route });
+};
