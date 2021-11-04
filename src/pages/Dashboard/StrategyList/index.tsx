@@ -22,13 +22,13 @@ const StrategyList = ({ onCreateStrategyOpen }: { onCreateStrategyOpen: Function
   const { onDelete } = useDeleteStrategy({ setAllStrategies });
 
   const renderStrategies = () => allStrategies.map((item) => {
-    const createdAtDate = new Date(item.created_at);
+    const createdAtDate = new Date(item.createdAt);
     return (
       <Description
-        key={item.strategy_id}
-        title={item.strategy_name}
+        key={item.strategyId}
+        title={item.strategyName}
         creationDate={`${createdAtDate.toDateString()} at ${createdAtDate.toTimeString()}`}
-        strategyId={item.strategy_id}
+        strategyId={item.strategyId}
         onDelete={onDelete}
       >
         No Strategy Description ...

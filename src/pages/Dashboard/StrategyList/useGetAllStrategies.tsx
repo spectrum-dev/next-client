@@ -6,10 +6,10 @@ import { QUERY_USER_STRATEGIES } from '../gql';
 
 const GET_ALL_STRATEGIES_RESPONSE_500 = 'There was an error retrieving your strategies. Please try again.';
 
-interface GetStrategyRecordResponse {
-  strategy_id: string;
-  strategy_name: string;
-  created_at: string;
+export interface GetStrategyRecordResponse {
+  strategyId: string;
+  strategyName: string;
+  createdAt: string;
 }
 
 interface GetStrategyResponse {
