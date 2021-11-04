@@ -1,8 +1,8 @@
-import { useCallback, useState, useEffect } from 'react';
+import { useState } from 'react';
 
+import { useQuery } from '@apollo/client';
 import { useToast } from '@chakra-ui/react';
-
-import fetcher from 'app/fetcher';
+import { QUERY_USER_STRATEGIES } from '../gql';
 
 const GET_ALL_STRATEGIES_RESPONSE_500 = 'There was an error retrieving your strategies. Please try again.';
 
@@ -12,48 +12,33 @@ interface GetStrategyRecordResponse {
   created_at: string;
 }
 
-export type GetStrategyArrayResponse = Array<GetStrategyRecordResponse> | [];
-
 interface GetStrategyResponse {
-  strategies: Array<GetStrategyRecordResponse>
+  userStrategies: GetStrategyRecordResponse[];
 }
 
 export default function useGetAllStrategies() {
-  const [allStrategies, setAllStrategies] = useState<GetStrategyArrayResponse>([]);
+  const [allStrategies, setAllStrategies] = useState<GetStrategyRecordResponse[]>([]);
 
   const toast = useToast();
 
-  const fetchData = useCallback(async () => {
-    try {
-      const getStrategiesResponse = await fetcher('/strategy/getStrategies', {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-        },
-      });
+  const onCompleted = (data: GetStrategyResponse) => {
+    setAllStrategies(data.userStrategies);
+  };
 
-      if (getStrategiesResponse.status === 200) {
-        const response: GetStrategyResponse = getStrategiesResponse.data;
-        setAllStrategies(response.strategies);
-      } else {
-        throw new Error(GET_ALL_STRATEGIES_RESPONSE_500);
-      }
-    } catch (e) {
-      toast({
-        title: GET_ALL_STRATEGIES_RESPONSE_500,
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
+  const onError = () => {
+    toast({
+      title: GET_ALL_STRATEGIES_RESPONSE_500,
+      status: 'error',
+      duration: 3000,
+      isClosable: true,
+    });
+    setAllStrategies([]);
+  };
 
-      setAllStrategies([]);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    fetchData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  useQuery(QUERY_USER_STRATEGIES, {
+    onCompleted,
+    onError,
+  });
 
   return { allStrategies, setAllStrategies };
 }
