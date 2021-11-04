@@ -20,7 +20,7 @@ import { client } from 'app/apolloClient';
 
 // Screens
 import Login from 'pages/Login';
-import Dashboard from 'containers/Dashboard';
+import Dashboard from 'pages/Dashboard';
 import Board from 'containers/Board';
 
 const LocationDisplay = () => {
