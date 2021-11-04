@@ -2,7 +2,7 @@ import { useToast } from '@chakra-ui/react';
 
 import fetcher from 'app/fetcher';
 
-import { GetStrategyArrayResponse } from './useGetAllStrategies';
+import { GetStrategyRecordResponse } from './useGetAllStrategies';
 
 const SUCCESS_DELETING_STRATEGY = 'The strategy has been successfully deleted';
 const ERROR_UNHANDLED_DELETING_STRATEGY = 'There was an error deleting the strategy. Please try again';
@@ -13,7 +13,7 @@ interface OnDeleteResponse {
 
 export default function useDeleteStrategy(
   { setAllStrategies }:
-  { setAllStrategies: React.Dispatch<React.SetStateAction<GetStrategyArrayResponse>> },
+  { setAllStrategies: React.Dispatch<React.SetStateAction<GetStrategyRecordResponse[]>> },
 ) {
   const toast = useToast();
 
@@ -34,11 +34,11 @@ export default function useDeleteStrategy(
           position: 'top',
         });
 
-        setAllStrategies((allStrategies: GetStrategyArrayResponse) => {
+        setAllStrategies((allStrategies: GetStrategyRecordResponse[]) => {
           const updatedStrategies = [];
 
           for (const strategy of allStrategies) {
-            if (strategy.strategy_id !== strategyId) {
+            if (strategy.strategyId !== strategyId) {
               updatedStrategies.push(strategy);
             }
           }
