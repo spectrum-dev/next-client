@@ -1,3 +1,5 @@
+import { useQuery, useMutation, ApolloError } from '@apollo/client';
+
 import {
   Box,
   Button,
@@ -7,21 +9,46 @@ import {
   StackDivider,
   Text,
   useColorModeValue as mode,
+  useToast,
 } from '@chakra-ui/react';
 import { HiPlus } from 'react-icons/hi';
-
-// Hooks
-import useGetAllStrategies from './useGetAllStrategies';
-import useDeleteStrategy from './useDeleteStrategy';
 
 // Components
 import { Description } from './Description';
 
-const StrategyList = ({ onCreateStrategyOpen }: { onCreateStrategyOpen: Function }) => {
-  const { allStrategies, setAllStrategies } = useGetAllStrategies();
-  const { onDelete } = useDeleteStrategy({ setAllStrategies });
+import { MUTATION_DELETE_USER_STRATEGY, QUERY_USER_STRATEGIES } from '../gql';
 
-  const renderStrategies = () => allStrategies.map((item) => {
+interface GetStrategyRecordResponse {
+  strategyId: string;
+  strategyName: string;
+  createdAt: string;
+}
+
+const StrategyList = ({ onCreateStrategyOpen }: { onCreateStrategyOpen: Function }) => {
+  const toast = useToast();
+
+  const onError = ({ graphQLErrors }: ApolloError) => {
+    toast({
+      title: graphQLErrors?.[0].message,
+      status: 'error',
+      duration: 3000,
+      isClosable: true,
+    });
+  };
+
+  const { data } = useQuery<{ userStrategies: GetStrategyRecordResponse[]; }>(QUERY_USER_STRATEGIES, {
+    onError,
+  });
+  
+  const [deleteStrategy] = useMutation(MUTATION_DELETE_USER_STRATEGY, {
+    errorPolicy: 'all',
+    refetchQueries: [
+      QUERY_USER_STRATEGIES,
+    ],
+    onError,
+  });
+
+  const renderStrategies = () => data?.userStrategies.map((item) => {
     const createdAtDate = new Date(item.createdAt);
     return (
       <Description
@@ -29,7 +56,7 @@ const StrategyList = ({ onCreateStrategyOpen }: { onCreateStrategyOpen: Function
         title={item.strategyName}
         creationDate={`${createdAtDate.toDateString()} at ${createdAtDate.toTimeString()}`}
         strategyId={item.strategyId}
-        onDelete={onDelete}
+        onDelete={() => deleteStrategy({ variables: { strategyId: item.strategyId } })}
       >
         No Strategy Description ...
       </Description>

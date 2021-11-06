@@ -17,3 +17,9 @@ export const MUTATION_USER_STRATEGY = gql`
         }
     }
 `;
+
+export const MUTATION_DELETE_USER_STRATEGY = gql`
+    mutation DELETE_STRATEGY($strategyId: ID!){
+        deleteStrategy(strategyId: $strategyId)
+    }
+`;
