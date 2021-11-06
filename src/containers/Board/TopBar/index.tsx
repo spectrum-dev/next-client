@@ -1,21 +1,40 @@
 import { useContext } from 'react';
+import { useQuery, ApolloError } from '@apollo/client';
+
 import {
-  Heading, Flex, Tag, Spacer, Button,
+  Heading, Flex, Tag, Spacer, Button, useToast,
 } from '@chakra-ui/react';
 import { useHistory } from 'react-router';
+import { useParams } from 'react-router-dom';
 import { IoIosArrowBack } from 'react-icons/io';
+
+import { QUERY_USER_STRATEGY } from './gql';
 
 // Contexts
 import BoardContext from 'app/contexts/board';
 
-import useGetStrategyInformation from './useGetStrategyInformation';
+// Types
+import { URLParams } from '../Canvas/index.types';
+
 
 const TopBar = ({ onShareOpen }: { onShareOpen: any }) => {
   const { strategyType } = useContext(BoardContext);
   
   const history = useHistory();
+  const toast = useToast();
+  const { strategyId } = useParams<URLParams>();
+  
+  const onStrategyInformationError = ({ graphQLErrors }: ApolloError) => {
+    toast({
+      title: graphQLErrors?.[0].message,
+      status: 'error',
+      duration: 3000,
+      isClosable: true,
+      position: 'top',
+    });
+  };
 
-  const { strategyInformation } = useGetStrategyInformation();
+  const { data } = useQuery(QUERY_USER_STRATEGY, { variables: { strategyId }, onError: onStrategyInformationError });
 
   return (
     <Flex w="full" justifyContent="space-evenly">
@@ -33,7 +52,7 @@ const TopBar = ({ onShareOpen }: { onShareOpen: any }) => {
 
       <Flex>
         <Heading fontSize="18">
-          {strategyInformation && strategyInformation.strategy_name}
+          {data?.userStrategy && data?.userStrategy?.strategyName}
         </Heading>
       </Flex>
 
