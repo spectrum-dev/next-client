@@ -27,3 +27,9 @@ export const QUERY_INPUT_DEPENDENCY_GRAPH = gql`
         inputDependencyGraph(nodeList: $nodeList, edgeList: $edgeList)
     }
 `;
+
+export const MUTATION_SAVE_STRATEGY = gql`
+    mutation strategy($strategyId: ID!, $commitId: ID, $metadata: JSON!, $inputs: JSON!, $outputs: JSON!) {
+        strategy(strategyId: $strategyId, commitId: $commitId, metadata: $metadata, inputs: $inputs, outputs: $outputs)
+    }
+`;
