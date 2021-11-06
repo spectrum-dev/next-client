@@ -1,11 +1,15 @@
 import { useRef, useState } from 'react';
 
+import { useMutation, ApolloError } from '@apollo/client';
 import {
   Button, Modal, ModalOverlay, ModalContent, ModalHeader,
   ModalCloseButton, ModalBody, FormControl, FormLabel, Input, ModalFooter,
 } from '@chakra-ui/react';
+import { useToast } from '@chakra-ui/react';
 
-import useCreateStrategy from './useCreateStrategy';
+import { useHistory } from 'react-router';
+
+import { MUTATION_USER_STRATEGY, QUERY_USER_STRATEGIES } from '../gql';
 
 const CreateStrategyModal = (
   { isOpen, onClose }: { isOpen: boolean; onClose: () => void },
@@ -13,9 +17,32 @@ const CreateStrategyModal = (
   const initialRef = useRef(null);
   const finalRef = useRef(null);
 
+  const toast = useToast();
+  const history = useHistory();
+
   const [strategyName, setStrategyName] = useState('');
 
-  const { onCreate } = useCreateStrategy({ strategyName });
+  const onCompleted = (data: any) => {
+    history.push(`/board/${data.userStrategy.strategyId}`);
+  };
+
+  const onError = ({ graphQLErrors }: ApolloError) => {
+    toast({
+      title: graphQLErrors?.[0].message,
+      status: 'error',
+      duration: 3000,
+      isClosable: true,
+    });
+  };
+
+  const [createStrategy] = useMutation(MUTATION_USER_STRATEGY, {
+    onCompleted,
+    onError,
+    errorPolicy: 'all',
+    refetchQueries: [
+      QUERY_USER_STRATEGIES,
+    ],
+  });
 
   return (
     <>
@@ -42,7 +69,7 @@ const CreateStrategyModal = (
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={() => onCreate()} disabled={strategyName === ''}>
+            <Button colorScheme="blue" mr={3} onClick={() => createStrategy({ variables: { strategyName } })} disabled={strategyName === ''}>
               Create
             </Button>
             <Button onClick={onClose}>Cancel</Button>

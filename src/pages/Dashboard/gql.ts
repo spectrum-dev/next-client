@@ -9,3 +9,11 @@ export const QUERY_USER_STRATEGIES = gql`
         }
     }
 `;
+
+export const MUTATION_USER_STRATEGY = gql`
+    mutation USER_STRATEGY($strategyName: String!) {
+        userStrategy(strategyName: $strategyName) {
+            strategyId
+        }
+    }
+`;
