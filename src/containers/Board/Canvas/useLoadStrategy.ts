@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -39,13 +41,14 @@ export default function useLoadStrategy() {
   const { strategyId } = useParams<URLParams>();
 
   const onCompleted = (data: GetStrategyResponse) => {
-    console.log(data);
-    setElements(data.strategy.flowMetadata);
+    // Apollo does not allow you to mutate variable data so lodash copies the stored data
+    const writeableData = _.cloneDeep(data);
+    setElements(writeableData.strategy.flowMetadata);
     setState({
       hasAccess: true,
       isLoaded: true,
-      inputs: data.strategy.input,
-      outputs: data.strategy.output,
+      inputs: writeableData.strategy.input,
+      outputs: writeableData.strategy.output,
     });
   };
 
