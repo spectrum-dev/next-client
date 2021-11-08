@@ -1,13 +1,17 @@
-import { useCallback, useEffect, useState } from 'react';
+import _ from 'lodash';
+
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import fetcher from 'app/fetcher';
+import { useQuery, ApolloError } from '@apollo/client';
+
+import { useToast } from '@chakra-ui/react';
 
 import {
   URLParams, Inputs, Outputs, Elements,
 } from './index.types';
 
-const POST_LOAD_STRATEGY_500 = 'There was an error loading your strategy. Please refresh the page.';
+import { QUERY_STRATEGY } from './gql';
 
 // Types
 interface State {
@@ -18,9 +22,11 @@ interface State {
 }
 
 interface GetStrategyResponse {
-  elements: Elements;
-  inputs: Inputs;
-  outputs: Outputs;
+  strategy: {
+    flowMetadata: Elements;
+    input: Inputs;
+    output: Outputs;
+  }
 }
 
 export default function useLoadStrategy() {
@@ -31,50 +37,40 @@ export default function useLoadStrategy() {
     inputs: {},
     outputs: {},
   });
+  const toast = useToast();
   const { strategyId } = useParams<URLParams>();
 
-  const fetchData = useCallback(async () => {
-    try {
-      const getStrategyResponse = await fetcher.get(`/strategy/${strategyId}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-        },
-      });
+  const onCompleted = (data: GetStrategyResponse) => {
+    // Apollo does not allow you to mutate variable data so lodash copies the stored data
+    const writeableData = _.cloneDeep(data);
+    setElements(writeableData.strategy.flowMetadata);
+    setState({
+      hasAccess: true,
+      isLoaded: true,
+      inputs: writeableData.strategy.input,
+      outputs: writeableData.strategy.output,
+    });
+  };
 
-      if (getStrategyResponse.status === 200) {
-        const response: GetStrategyResponse = getStrategyResponse.data;
-        setState(() => {
-          setElements(response.elements);
+  const onError = ({ graphQLErrors }: ApolloError) => {
+    setElements([]);
+    setState({
+      hasAccess: false,
+      isLoaded: true,
+      inputs: {},
+      outputs: {},
+    });
 
-          return {
-            hasAccess: true,
-            isLoaded: true,
-            inputs: response.inputs,
-            outputs: response.outputs,
-          };
-        });
-      } else {
-        throw new Error(POST_LOAD_STRATEGY_500);
-      }
-    } catch (e) {
-      setState(() => {
-        setElements([]);
+    toast({
+      title: graphQLErrors[0].message,
+      status: 'error',
+      duration: 3000,
+      isClosable: true,
+      position: 'top',
+    });
+  };
 
-        return {
-          hasAccess: false,
-          isLoaded: true,
-          inputs: {},
-          outputs: {},
-        };
-      });
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [strategyId]);
-
-  useEffect(() => {
-    fetchData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [strategyId]);
+  useQuery(QUERY_STRATEGY, { variables: { strategyId }, onCompleted, onError });
 
   return {
     ...state,

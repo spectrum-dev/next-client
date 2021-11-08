@@ -33,3 +33,18 @@ export const MUTATION_SAVE_STRATEGY = gql`
         strategy(strategyId: $strategyId, commitId: $commitId, metadata: $metadata, inputs: $inputs, outputs: $outputs)
     }
 `;
+
+export const QUERY_STRATEGY = gql`
+    query STRATEGY($strategyId: ID!) {
+        strategy(strategyId: $strategyId) {
+            strategy {
+                strategyId
+                strategyName
+            }
+            commitId
+            flowMetadata
+            input
+            output
+        }
+    }
+`;
