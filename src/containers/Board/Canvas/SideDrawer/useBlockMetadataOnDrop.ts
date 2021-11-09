@@ -1,19 +1,21 @@
 import { useEffect, useState } from 'react';
+import { useApolloClient } from '@apollo/client';
 import { useToast } from '@chakra-ui/react';
 
 import { OnLoadParams } from 'react-flow-renderer';
 
-import fetcher from 'app/fetcher';
-
 import { SetElements, FormNode } from 'containers/Board/Canvas/index.types';
+
+import { QUERY_GET_BLOCK_METADATA } from './gql';
 
 const GET_BLOCK_METADATA_RESPONSE_500 = "There was an error retrieving the block's metadata. Please try again";
 
 export default function useBlockMetadataOnDrop({ startId }: { startId: number }) {
   const [id, setId] = useState<number>(1);
 
+  const client = useApolloClient();
   const toast = useToast();
-
+  
   useEffect(() => {
     if (startId) {
       setId(startId + 1);
@@ -37,7 +39,7 @@ export default function useBlockMetadataOnDrop({ startId }: { startId: number })
 
       // Extracts data from headers
       const blockType = event.dataTransfer.getData('application/reactflow');
-      const blockId = event.dataTransfer.getData('application/reactflow-id');
+      const blockId = parseInt(event.dataTransfer.getData('application/reactflow-id'));
       const flowBlockType = event.dataTransfer.getData('application/reactflow-flow-block-type');
 
       if (flowBlockType === 'resultBlock' || flowBlockType === 'resultGraphBlock' || flowBlockType === 'resultTableBlock') {
@@ -46,20 +48,20 @@ export default function useBlockMetadataOnDrop({ startId }: { startId: number })
 
       const position = reactFlowInstance.project({ x: event.clientX, y: event.clientY - 40 });
 
-      const metadataResponse = await fetcher(`/orchestration/${blockType}/${blockId}/metadata`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-        },
-      });
+      const { data: { blockMetadata }, error } = await client.query({ query: QUERY_GET_BLOCK_METADATA, variables: { blockType, blockId } });
+      
+      if (error) {
+        throw new Error(GET_BLOCK_METADATA_RESPONSE_500);
+      }
 
-      if (metadataResponse.status === 200) {
+      if (blockMetadata) {
         const newNode: FormNode = {
           id: generateID(),
           type: 'block',
           position,
           data: {
             metadata: {
-              ...metadataResponse?.data,
+              ...blockMetadata,
               isMenuVisible: true,
             },
           },
