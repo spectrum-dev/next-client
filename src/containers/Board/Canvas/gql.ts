@@ -48,3 +48,12 @@ export const QUERY_STRATEGY = gql`
         }
     }
 `;
+
+export const QUERY_VALIDATE_STRATEGY = gql`
+    query VALIDATE_STRATEGY($nodeList: JSON!, $edgeList: JSON!) {
+        validateStrategy(nodeList: $nodeList, edgeList: $edgeList) {
+            valid
+            edges
+        }
+    }
+`;
