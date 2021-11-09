@@ -49,9 +49,9 @@ export const QUERY_STRATEGY = gql`
     }
 `;
 
-export const QUERY_VALIDATE_STRATEGY = gql`
-    query VALIDATE_STRATEGY($nodeList: JSON!, $edgeList: JSON!) {
-        validateStrategy(nodeList: $nodeList, edgeList: $edgeList) {
+export const QUERY_VALIDATE_FLOW = gql`
+    query VALIDATE_FLOW($nodeList: JSON!, $edgeList: [JSON!]) {
+        validateFlow(nodeList: $nodeList, edgeList: $edgeList) {
             valid
             edges
         }

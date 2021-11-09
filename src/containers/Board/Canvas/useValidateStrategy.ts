@@ -1,10 +1,9 @@
 import { useContext, useCallback, useEffect, useState } from 'react';
+import { useApolloClient } from '@apollo/client';
 import { useToast } from '@chakra-ui/react';
 import {
   isNode, isEdge,
 } from 'react-flow-renderer';
-
-import fetcher from 'app/fetcher';
 
 // Contexts
 import BoardContext from 'app/contexts/board';
@@ -13,6 +12,8 @@ import BoardContext from 'app/contexts/board';
 import {
   Inputs, Elements, Edge, FormBlockValues,
 } from './index.types';
+
+import { QUERY_VALIDATE_FLOW } from './gql';
 
 const NON_NODE_OR_EDGE_VALUE = 'There was an error validating this strategy. Please try again.';
 const POST_RUN_STRATEGY_500 = 'There was an error validating this strategy. Please try again.';
@@ -30,11 +31,6 @@ interface State {
   edgeValidation: EdgeValidation;
 }
 
-interface ValidateResponse {
-  valid: boolean;
-  edges: EdgeValidation;
-}
-
 export default function useValidateStrategy(
   { inputs, elements }: { inputs: Inputs, elements: Elements },
 ) {
@@ -44,6 +40,7 @@ export default function useValidateStrategy(
   });
   const { setStrategyType } = useContext(BoardContext);
 
+  const client = useApolloClient();
   const toast = useToast();
 
   const checkInputsValid = (blockInputs: FormBlockValues) => {
@@ -93,24 +90,20 @@ export default function useValidateStrategy(
       } else {
         setStrategyType('BACKTEST');
       }
+      
+      const { data: { validateFlow }, error } = await client.query({ query: QUERY_VALIDATE_FLOW, variables: { nodeList, edgeList } });
 
-      const requestBody = {
-        nodeList,
-        edgeList,
-      };
+      if (error) {
+        console.log('Error');
+        console.log(error);
+        throw new Error(POST_RUN_STRATEGY_500);
+      }
 
-      const validateResponse = await fetcher.post('/orchestration/validate', requestBody, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-        },
-      });
-
-      if (validateResponse.status === 200) {
-        const response: ValidateResponse = validateResponse.data;
+      if (validateFlow) {
         setState((elems) => ({
           ...elems,
-          isValid: response.valid,
-          edgeValidation: response.edges,
+          isValid: validateFlow?.valid,
+          edgeValidation: validateFlow?.edges,
         }));
       } else {
         throw new Error(POST_RUN_STRATEGY_500);
