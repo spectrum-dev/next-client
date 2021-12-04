@@ -1,12 +1,14 @@
 import { useState } from 'react';
 
 import {
-  Box, Flex, Stack, useColorModeValue as mode, useDisclosure,
+  Box,
+  Flex,
+  Stack,
+  useColorModeValue as mode,
+  useDisclosure,
 } from '@chakra-ui/react';
 
-import {
-  BsViewList,
-} from 'react-icons/bs';
+import { BsViewList } from 'react-icons/bs';
 
 // Navbar
 import { AccountSwitcher } from './Navbar/AccountSwitcher';
@@ -50,7 +52,12 @@ const Dashboard = () => {
           <Flex h="full" direction="column" px="4" py="4">
             <AccountSwitcher />
             <Stack spacing="8" flex="1" overflow="auto" pt="8">
-              <NavItem active={pageState === PageState.Strategies} icon={<BsViewList />} label="Strategies" onClick={() => setPageState(PageState.Strategies)} />
+              <NavItem
+                active={pageState === PageState.Strategies}
+                icon={<BsViewList />}
+                label="Strategies"
+                onClick={() => setPageState(PageState.Strategies)}
+              />
             </Stack>
           </Flex>
         </Box>
@@ -59,7 +66,7 @@ const Dashboard = () => {
             isOpen={isCreateStrategyOpen}
             onClose={onCreateStrategyClose}
           />
-          { renderPage() }
+          {renderPage()}
         </Box>
       </Flex>
     </Box>

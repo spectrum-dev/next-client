@@ -1,10 +1,13 @@
 import {
-  Box, BoxProps, Heading, LightMode, Stack, Text, useColorModeValue,
+  Box, BoxProps, Text, useColorModeValue,
 } from '@chakra-ui/react';
 
 import { ButtonProps } from '@chakra-ui/button';
 import { Button } from '@chakra-ui/react';
 import { FaGoogle } from 'react-icons/fa';
+
+
+import { ReactComponent as Logo } from './logo.svg';
 import useAuth from './useLogin';
 
 /**
@@ -12,13 +15,14 @@ import useAuth from './useLogin';
  */
 const GoogleLoginButton = (props: ButtonProps) => (
   <Button
+    marginTop="1.5rem"
     fontSize="sm"
     fontWeight="bold"
     size="lg"
     leftIcon={<FaGoogle fontSize="18px" />}
     iconSpacing="3"
     colorScheme="red"
-    width="full"
+    width="20rem"
     {...props}
   >
     Continue with Google
@@ -37,39 +41,13 @@ const Login = () => {
   const { signIn } = useAuth();
 
   return (
-    <Box minH="100vh" as="section" bgGradient={{ md: 'linear(to-r, red.600, purple.600)' }} py="20">
-      <LoginCard maxW="2xl" mx="auto" textAlign="center">
-        <Stack maxW="xs" mx="auto" spacing="8">
-          <Stack spacing="3">
-            <Heading as="h1" letterSpacing="tight">
-              Log In
-            </Heading>
-            <Text fontWeight="medium" color={useColorModeValue('gray.600', 'gray.400')}>
-              Currently open to registered beta users
-            </Text>
-          </Stack>
+    <Box height="100vh" overflow="hidden" position="relative" bg="#323232">
+      <Box align="center" marginTop="12%">
+        <Logo style={{ width: '16rem', height: '6rem' }}/>
 
-          <LightMode>
-            <GoogleLoginButton onClick={async () => { await signIn(); }} />
-          </LightMode>
-
-          <Box fontSize="sm">
-            <Text fontWeight="medium" color={useColorModeValue('gray.600', 'gray.400')}>
-              Alpha v0.0.1
-            </Text>
-          </Box>
-        </Stack>
-        <Text
-          mt="16"
-          fontSize="xs"
-          mx="auto"
-          maxW="md"
-          color={useColorModeValue('gray.600', 'gray.400')}
-        >
-          By continuing, you acknowledge that you have read, understood, and agree to our terms and
-          condition
-        </Text>
-      </LoginCard>
+        <Text color="white" fontSize="2xl" marginTop="1rem" fontWeight="500"> Log in </Text>
+        <GoogleLoginButton onClick={async () => { await signIn(); }}/>
+      </Box>
     </Box>
   );
 };
