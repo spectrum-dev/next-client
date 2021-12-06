@@ -1,15 +1,22 @@
 import { Box, Flex } from '@chakra-ui/react';
 
 import { Dashboard as DashboardPane } from './Dashboard';
+import Strategies from './Strategies';
+import Settings from './Settings';
+
 import Sidebar from './Sidebar';
 
-type DashboardType = 'DASHBOARD';
+type DashboardType = 'DASHBOARD' | 'STRATEGIES' | 'SETTINGS';
 
 const Dashboard = ({ pane }: { pane: DashboardType }) => {
   const renderDashboardPane = () => {
     switch (pane) {
       case 'DASHBOARD':
         return <DashboardPane />;
+      case 'STRATEGIES':
+        return <Strategies />;
+      case 'SETTINGS':
+        return <Settings />;
       default:
         return <></>;
     }

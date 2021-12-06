@@ -58,7 +58,7 @@ const Sidebar = () => {
                 
                 <Divider />
     
-                <SidebarElement label="Settings" route="/documentation">
+                <SidebarElement label="Settings" route="/settings">
                     <RiSettings2Line size={28} color="#9D9DBF" />
                 </SidebarElement>
     
