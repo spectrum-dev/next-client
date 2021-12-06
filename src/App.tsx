@@ -44,7 +44,9 @@ export const App = () => (
             <Switch>
               <Route path="/login" component={Login} />
               <AuthenticatedRoute path="/dashboard" component={Dashboard} />
-              <AuthenticatedRoute path="/newDashboard" component={NewDashboard} />
+              <AuthenticatedRoute path="/newDashboard" children={<NewDashboard pane="DASHBOARD" />} />
+              <AuthenticatedRoute path="/strategies" children={<NewDashboard pane="STRATEGIES" />} />
+              <AuthenticatedRoute path="/settings" children={<NewDashboard pane="SETTINGS" />} />
               <AuthenticatedRoute path="/board/:strategyId" component={Board} />
               <Redirect from="/" to="/login" />
             </Switch>
