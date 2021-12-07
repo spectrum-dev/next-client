@@ -42,7 +42,7 @@ const Sidebar = () => {
             </Flex>
     
             <Flex justifyContent="center" alignItems="center" flexDirection="column" justify="space-between" marginTop="1.5rem">
-                <SidebarElement label="Dashboard" route="/newDashboard">
+                <SidebarElement label="Dashboard" route="/dashboard">
                     <RiDashboard2Line size={28} color="#9D9DBF" />
                 </SidebarElement>
                 

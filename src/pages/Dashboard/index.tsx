@@ -1,75 +1,48 @@
-import { useState } from 'react';
+import { Box, Flex, useDisclosure } from '@chakra-ui/react';
 
-import {
-  Box,
-  Flex,
-  Stack,
-  useColorModeValue as mode,
-  useDisclosure,
-} from '@chakra-ui/react';
+import { Dashboard as DashboardPane } from './Dashboard';
+import Strategies from './Strategies';
+import Settings from './Settings';
 
-import { BsViewList } from 'react-icons/bs';
+import Sidebar from './Sidebar';
 
-// Navbar
-import { AccountSwitcher } from './Navbar/AccountSwitcher';
-import { NavItem } from './Navbar/NavItem';
+import CreateStrategyModal from './CreateStrategyModal';
 
-// Create Strategy
-import { CreateStrategyModal } from './CreateStrategyModal/CreateStrategyModal';
+import DashboardContext from 'app/contexts/dashboard';
 
-// Strategy List
-import { StrategyList } from './StrategyList';
+type DashboardType = 'DASHBOARD' | 'STRATEGIES' | 'SETTINGS';
 
-enum PageState {
-  Strategies = 'STRATEGIES',
-}
-
-const Dashboard = () => {
-  const [pageState, setPageState] = useState<PageState>(PageState.Strategies);
-
+const Dashboard = ({ pane }: { pane: DashboardType }) => {
   const {
     isOpen: isCreateStrategyOpen,
     onOpen: onCreateStrategyOpen,
     onClose: onCreateStrategyClose,
   } = useDisclosure();
 
-  /**
-   * @returns Corresponding Page State
-   */
-  const renderPage = () => {
-    switch (pageState) {
-      case PageState.Strategies:
-        return <StrategyList onCreateStrategyOpen={onCreateStrategyOpen} />;
+  const renderDashboardPane = () => {
+    switch (pane) {
+      case 'DASHBOARD':
+        return <DashboardPane />;
+      case 'STRATEGIES':
+        return <Strategies />;
+      case 'SETTINGS':
+        return <Settings />;
       default:
         return <></>;
     }
   };
 
   return (
-    <Box height="100vh" overflow="hidden" position="relative">
-      <Flex h="full" id="app-container">
-        <Box w="64" bg="gray.900" color="white" fontSize="sm">
-          <Flex h="full" direction="column" px="4" py="4">
-            <AccountSwitcher />
-            <Stack spacing="8" flex="1" overflow="auto" pt="8">
-              <NavItem
-                active={pageState === PageState.Strategies}
-                icon={<BsViewList />}
-                label="Strategies"
-                onClick={() => setPageState(PageState.Strategies)}
-              />
-            </Stack>
-          </Flex>
-        </Box>
-        <Box bg={mode('gray.100', 'gray.800')} flex="1" p="6" overflow="scroll">
-          <CreateStrategyModal
-            isOpen={isCreateStrategyOpen}
-            onClose={onCreateStrategyClose}
-          />
-          {renderPage()}
-        </Box>
-      </Flex>
-    </Box>
+    <DashboardContext.Provider value={{ onCreateStrategyOpen }}>
+        <Sidebar />
+        <Flex width="calc(100vw - 85px)" minWidth="calc(100vw - 85px)" marginLeft="85px" overflow="hidden" height="100vh" minHeight="100vh" backgroundColor="#FCFDFF">
+            <Box minWidth="100%" width="100%">
+                {renderDashboardPane()}
+            </Box>
+
+            <CreateStrategyModal isOpen={isCreateStrategyOpen} onClose={onCreateStrategyClose} />
+        </Flex>
+    </DashboardContext.Provider>
   );
 };
 
