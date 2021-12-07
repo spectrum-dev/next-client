@@ -27,12 +27,10 @@ const NoActiveStrategies = () => {
   );
 };
 
-const Dashboard = () => {
-  return (
-        <InfoPane title="Active Strategies" description="List of your running bots with real or virtual money">
-            <NoActiveStrategies />
-        </InfoPane>
-  );
-};
+const Dashboard = () =>  (
+    <InfoPane title="Active Strategies" description="List of your running bots with real or virtual money">
+        <NoActiveStrategies />
+    </InfoPane>
+);
 
 export { Dashboard };
