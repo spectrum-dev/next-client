@@ -6,7 +6,7 @@ import Settings from './Settings';
 
 import Sidebar from './Sidebar';
 
-import CreateStrategyModal from '../../sharedComponents/CreateStrategyModal';
+import CreateStrategyModal from 'sharedComponents/CreateStrategyModal';
 
 import DashboardContext from 'app/contexts/dashboard';
 
