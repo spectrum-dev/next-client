@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { Box, Flex, Text, Button } from '@chakra-ui/react';
 import { RiPlug2Line } from 'react-icons/ri';
 
-import InfoPane from 'components/InfoPane';
+import InfoPane from 'sharedComponents/InfoPane';
 
 import DashboardContext from 'app/contexts/dashboard';
 

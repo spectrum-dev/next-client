@@ -1,4 +1,4 @@
-import InfoPane from 'components/InfoPane';
+import InfoPane from 'sharedComponents/InfoPane';
 
 const Settings = () => {
   return (

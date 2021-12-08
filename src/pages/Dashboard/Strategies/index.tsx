@@ -2,7 +2,7 @@ import { useContext } from 'react';
 
 import { Button } from '@chakra-ui/react';
 
-import InfoPane from 'components/InfoPane';
+import InfoPane from 'sharedComponents/InfoPane';
 import DashboardContext from 'app/contexts/dashboard';
 
 import { DataTable } from './DataTable';
