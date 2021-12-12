@@ -2,7 +2,7 @@ import { Box, Button } from '@chakra-ui/react';
 
 import { RiQuestionLine } from 'react-icons/ri';
 
-import { OptionsBox } from '../OptionsBox';
+import { OptionsBox } from '../../OptionsBox';
 
 const Share = ({ top }: { top: string }) => (
     <OptionsBox

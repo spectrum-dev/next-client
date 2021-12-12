@@ -1,6 +1,6 @@
 import { Box, Text } from '@chakra-ui/react';
 
-import { OptionsBox } from '../OptionsBox';
+import { OptionsBox } from '../../OptionsBox';
 import { ReactComponent as Logo } from './black-logo.svg';
 
 const VerticalDivider = () => (

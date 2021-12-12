@@ -1,7 +1,5 @@
-// import { Flex } from '@chakra-ui/react';
-
-import Brand from './Brand';
-import Share from './Share';
+import Brand from './Top/Brand';
+import Share from './Top/Share';
 
 const TOP_DIMENSION = '0.75rem';
 
