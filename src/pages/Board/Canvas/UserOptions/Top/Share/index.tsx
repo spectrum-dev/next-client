@@ -7,7 +7,7 @@ import { OptionsBox } from '../../OptionsBox';
 const Share = ({ top }: { top: string }) => (
     <OptionsBox
         top={top}
-        right="0.75rem"
+        right="4.25rem"
         width="8rem"
         height="3rem"
     >
