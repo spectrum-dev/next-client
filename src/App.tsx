@@ -22,6 +22,7 @@ import { client } from 'app/apolloClient';
 import Login from 'pages/Login';
 import Dashboard from 'pages/Dashboard';
 import Board from 'containers/Board';
+import NewBoard from 'pages/Board';
 
 const LocationDisplay = () => {
   const location = useLocation();
@@ -46,6 +47,7 @@ export const App = () => (
               <AuthenticatedRoute path="/strategies" children={<Dashboard pane="STRATEGIES" />} />
               <AuthenticatedRoute path="/settings" children={<Dashboard pane="SETTINGS" />} />
               <AuthenticatedRoute path="/board/:strategyId" component={Board} />
+              <AuthenticatedRoute path="/v2/board/:strategyId" component={NewBoard} />
               <Redirect from="/" to="/login" />
             </Switch>
 
