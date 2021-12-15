@@ -105,7 +105,8 @@
       "react/jsx-props-no-spreading": "off",
       "react/no-unused-prop-types": "off",
       "react/require-default-props": "off",
-      "no-restricted-syntax": "off"
+      "no-restricted-syntax": "off",
+      "@typescript-eslint/no-use-before-define": "off"
     }
   },
   "jest": {
