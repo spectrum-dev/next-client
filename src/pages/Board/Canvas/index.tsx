@@ -6,6 +6,9 @@ import ReactFlow, {
   Connection, OnLoadParams, BackgroundVariant,
 } from 'react-flow-renderer';
 
+import SplitPane from 'react-splitter-layout';
+import 'react-splitter-layout/lib/index.css';
+
 // Contexts
 import CanvasContext from 'app/contexts/canvas';
 import BoardContext from 'app/contexts/board';
@@ -15,6 +18,7 @@ import Controls from '../../../containers/Board/Canvas/Controls';
 import SideDrawer from '../../../containers/Board/Canvas/SideDrawer';
 import ResultsDrawer from '../../../containers/Board/Canvas/ResultsDrawer';
 import UserOptions from './UserOptions';
+import Sidebar from './Sidebar';
 
 // Blocks
 import Block from '../../../containers/Board/Canvas/blocks/Block';
@@ -148,67 +152,93 @@ const Canvas = () => {
   //   );
   // }
 
+  const { isOpen: isEditOpen, onOpen: onEditOpen, onClose: onEditClose } = useDisclosure();
+  const { isOpen: isRunOpen, onClose: onRunClose, onToggle: onRunToggle } = useDisclosure();
+
   return (
-    <Box minH="100vh" h="100vh" as="section">
-      <ReactFlowProvider>
-        <CanvasContext.Provider value={{
-          inputs,
-          setInputs,
-          setElements,
-          setOutputs,
-          edgeValidation,
-          outputs,
-          inputDependencyGraph,
-        }}
-        >
-          <ReactFlow
-            elements={elements}
-            // Element Types
-            nodeTypes={nodeTypes}
-            edgeTypes={edgeTypes}
-            // Drag Functions
-            onDrop={(event: React.DragEvent<HTMLDivElement>) => {
-              onBlockDrop(event, reactFlowInstance, setElements);
-              onResultsDrop(event, reactFlowInstance, setElements);
+    <>
+      <SplitPane
+        percentage={false}
+        secondaryInitialSize={300}
+      >
+        {
+          isEditOpen && (
+            <SplitPane>
+              <div> Pane 1 </div>
+            </SplitPane>
+          )
+        }
+        <Box minH="100vh" h="100vh" as="section">
+          <ReactFlowProvider>
+            <CanvasContext.Provider value={{
+              inputs,
+              setInputs,
+              setElements,
+              setOutputs,
+              edgeValidation,
+              outputs,
+              inputDependencyGraph,
+              isRunOpen,
+              onRunToggle,
             }}
-            onDragOver={onDragOver}
-            // Connection Functions
-            // @ts-ignore
-            connectionLineComponent={FlowEdge}
-            onConnect={onConnect}
-            // Loading and Node Updating Functions
-            onLoad={onLoad}
-            onNodeDragStop={onNodeDragStop}
-            // Context Menu
-            onNodeContextMenu={onNodeContextMenu}
-            // Canvas Formating
-            maxZoom={0.5}
-            zoomOnScroll={false}
-            defaultZoom={0.5}
-            snapToGrid
-            snapGrid={[1, 1]}
-          >
-            <Background
-              variant={BackgroundVariant.Lines}
-              color="#E5E5E5"
-              gap={130}
-              style={{ backgroundColor: '#F2F2F2' }}
-            />
-          </ReactFlow>
-          <UserOptions />
-          {/*
-          <SideDrawer
-            isOpen={isSideDrawerOpen}
-            onClose={onSideDrawerClose}
-          />
-          <ResultsDrawer
-            isOpen={isResultsDrawerOpen}
-            onClose={onResultsDrawerClose}
-            outputs={outputs}
-          /> */}
-        </CanvasContext.Provider>
-      </ReactFlowProvider>
-    </Box>
+            >
+              <ReactFlow
+                elements={elements}
+                // Element Types
+                nodeTypes={nodeTypes}
+                edgeTypes={edgeTypes}
+                // Drag Functions
+                onDrop={(event: React.DragEvent<HTMLDivElement>) => {
+                  onBlockDrop(event, reactFlowInstance, setElements);
+                  onResultsDrop(event, reactFlowInstance, setElements);
+                }}
+                onDragOver={onDragOver}
+                // Connection Functions
+                // @ts-ignore
+                connectionLineComponent={FlowEdge}
+                onConnect={onConnect}
+                // Loading and Node Updating Functions
+                onLoad={onLoad}
+                onNodeDragStop={onNodeDragStop}
+                // Context Menu
+                onNodeContextMenu={onNodeContextMenu}
+                // Canvas Formating
+                maxZoom={0.5}
+                zoomOnScroll={false}
+                defaultZoom={0.5}
+                snapToGrid
+                snapGrid={[1, 1]}
+              >
+                <Background
+                  variant={BackgroundVariant.Lines}
+                  color="#E5E5E5"
+                  gap={130}
+                  style={{ backgroundColor: '#F2F2F2' }}
+                />
+              </ReactFlow>
+              <UserOptions />
+              {/*
+              <SideDrawer
+                isOpen={isSideDrawerOpen}
+                onClose={onSideDrawerClose}
+              />
+              <ResultsDrawer
+                isOpen={isResultsDrawerOpen}
+                onClose={onResultsDrawerClose}
+                outputs={outputs}
+              /> */}
+            </CanvasContext.Provider>
+          </ReactFlowProvider>
+        </Box>
+        {
+          isRunOpen && (
+            <SplitPane>
+              <Sidebar onRunClose={onRunClose} />
+            </SplitPane>
+          )
+        }
+      </SplitPane>
+    </>
   );
 };
 

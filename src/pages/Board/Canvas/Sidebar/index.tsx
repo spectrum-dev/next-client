@@ -1,13 +1,8 @@
-import { useContext } from 'react';
 import { Box, Flex, Text } from '@chakra-ui/react';
 
 import { RiCloseLine } from 'react-icons/ri';
 
-import BoardContext from 'app/contexts/board';
-
-const Sidebar = () => {
-  const { onRunClose } = useContext(BoardContext);
-    
+const Sidebar = ({ onRunClose }: { onRunClose: () => void }) => {    
   return (
     <Flex
         margin="1rem 2rem"

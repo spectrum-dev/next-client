@@ -1,11 +1,11 @@
 import { useContext } from 'react';
 import { RiTestTubeLine } from 'react-icons/ri';
 
-import BoardContext from 'app/contexts/board';
+import CanvasContext from 'app/contexts/canvas';
 import { OptionsBox } from '../../OptionsBox';
 
 const Run = ({ top }: { top: string }) => {
-  const { isRunOpen, onRunToggle } = useContext(BoardContext);
+  const { isRunOpen, onRunToggle } = useContext(CanvasContext);
 
   return (
         <OptionsBox
