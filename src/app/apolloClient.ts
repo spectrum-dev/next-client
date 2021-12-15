@@ -5,7 +5,8 @@ import {
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 
-const REACT_APP_GRAPHQL_API_URL = process.env.REACT_APP_GRAPHQL_API_URL || 'http://localhost:8080/graphql/';
+const REACT_APP_GRAPHQL_API_URL = 'https://api.imbue.dev/graphql/';
+// process.env.REACT_APP_GRAPHQL_API_URL || 'http://localhost:8080/graphql/';
 
 const httpLink = createHttpLink({ uri: REACT_APP_GRAPHQL_API_URL });
 

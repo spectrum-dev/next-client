@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Flex, useDisclosure } from '@chakra-ui/react';
 
-import SplitterLayout from 'react-splitter-layout';
+import SplitPane from 'react-splitter-layout';
 import 'react-splitter-layout/lib/index.css';
 
 // Contexts
@@ -11,12 +11,13 @@ import BoardContext from 'app/contexts/board';
 import { StrategyType } from '../../containers/Board/Canvas/index.types';
 
 import Canvas from './Canvas';
+import Sidebar from './Sidebar';
 // import SharingModal from 'containers/Board/SharingModal';
 
 const Board = () => {
   const [strategyType, setStrategyType] = useState<StrategyType>('PENDING');
   const { isOpen: isEditOpen, onOpen: onEditOpen, onClose: onEditClose } = useDisclosure();
-  const { isOpen: isRunOpen, onToggle: onRunToggle } = useDisclosure();
+  const { isOpen: isRunOpen, onClose: onRunClose, onToggle: onRunToggle } = useDisclosure();
 
   return (
     <BoardContext.Provider value={{
@@ -24,23 +25,31 @@ const Board = () => {
       setStrategyType,
       isRunOpen,
       onRunToggle,
+      onRunClose,
       onEditOpen,
       onEditClose,
     }}>
       <Flex direction="column" height="100vh">
-        <SplitterLayout>
+        <SplitPane
+          percentage={false}
+          secondaryInitialSize={300}
+        >
           {
             isEditOpen && (
-              <div> Pane 1 </div> 
+              <SplitPane>
+                <div> Pane 1 </div>
+              </SplitPane>
             )
           }
           <Canvas />
           {
             isRunOpen && (
-              <div> Pane 2 </div>
+              <SplitPane>
+                <Sidebar />
+              </SplitPane>
             )
           }
-        </SplitterLayout>
+        </SplitPane>
       </Flex>
     </BoardContext.Provider>
   );

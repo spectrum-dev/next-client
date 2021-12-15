@@ -7,6 +7,7 @@ type BoardContextProps = {
   setStrategyType: React.Dispatch<React.SetStateAction<StrategyType>>;
   onRunToggle?: () => void;
   isRunOpen?: boolean,
+  onRunClose?: () => void;
   onEditOpen?: () => void;
   onEditClose?: () => void;
 };
@@ -16,6 +17,7 @@ const BoardContext = createContext<BoardContextProps>({
   setStrategyType: () => undefined,
   isRunOpen: false,
   onRunToggle: () => undefined,
+  onRunClose: () => undefined,
   onEditOpen: () => undefined,
   onEditClose: () => undefined,
 });
