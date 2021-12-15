@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { Flex } from '@chakra-ui/react';
 
-import 'react-splitter-layout/lib/index.css';
-
 // Contexts
 import BoardContext from 'app/contexts/board';
 

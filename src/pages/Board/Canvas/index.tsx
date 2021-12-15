@@ -6,8 +6,7 @@ import ReactFlow, {
   Connection, OnLoadParams, BackgroundVariant,
 } from 'react-flow-renderer';
 
-import SplitPane from 'react-splitter-layout';
-import 'react-splitter-layout/lib/index.css';
+import SplitPane from 'components/SplitterPane/SplitterLayout';
 
 // Contexts
 import CanvasContext from 'app/contexts/canvas';
