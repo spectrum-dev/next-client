@@ -11,10 +11,10 @@ const BlockSelection = () => (
         width="3.5rem"
         flexDirection="column"
     >
-        <Box margin="1.0rem 0rem 0rem 0rem">
+        <Box margin="1.0rem 0rem 0rem 0rem" _hover={{ color: '#4262FF' }}>
             <FaMousePointer fontSize={20} />
         </Box>
-        <Box margin="1.5rem 0rem 1.0rem 0rem">
+        <Box margin="1.5rem 0rem 1.0rem 0rem" _hover={{ color: '#4262FF' }}>
             <CgBox fontSize={22} />
         </Box>
     </OptionsBox>
