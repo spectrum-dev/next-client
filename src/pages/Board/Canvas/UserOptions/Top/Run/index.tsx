@@ -1,6 +1,6 @@
 import { OptionsBox } from '../../OptionsBox';
 
-import { RiQuestionLine } from 'react-icons/ri';
+import { RiTestTubeLine } from 'react-icons/ri';
 
 const Run = ({ top }: { top: string }) => (
     <OptionsBox
@@ -10,7 +10,7 @@ const Run = ({ top }: { top: string }) => (
         height="3rem"
     >
         {/* TODO: Swap this out with a "run strategy" icon */}
-        <RiQuestionLine fontSize={28} />
+        <RiTestTubeLine fontSize={28} />
     </OptionsBox>
 );
 
