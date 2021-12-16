@@ -12,12 +12,20 @@ const Share = ({ top }: { top: string }) => (
         height="3rem"
     >
         <Box>
-            <Button backgroundColor="#4262FF" textColor="white" height="2rem" fontSize="0.8rem" borderRadius="3px"> Share </Button>
-        </Box>
+             <Button
+                 backgroundColor="#4262FF"
+                 textColor="white"
+                 height="2rem"
+                 fontSize="0.8rem"
+                 borderRadius="3px"
+             >
+                 Share
+             </Button>
+         </Box>
 
-        <Box marginLeft="1rem">
-            <RiQuestionLine fontSize={28} />
-        </Box>
+         <Box marginLeft="1rem" _hover={{ color: '#4262FF' }}>
+             <RiQuestionLine fontSize={28} />
+         </Box>
     </OptionsBox>
 );
 
