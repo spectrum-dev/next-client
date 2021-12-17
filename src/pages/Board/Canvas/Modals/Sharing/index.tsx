@@ -20,7 +20,7 @@ import {
 
 import { QUERY_SHARED_USERS, MUTATION_SHARE_STRATEGY } from './gql';
 
-import { URLParams } from '../../../pages/Board/Canvas/index.types';
+import { URLParams } from '../../index.types';
 
 type SharedUser = { email: string; permissions: string; };
 
