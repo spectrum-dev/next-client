@@ -33,8 +33,8 @@ import ResultsGraphBlock from '../../../containers/Board/Canvas/blocks/ResultsGr
 import ResultTableBlock from '../../../containers/Board/Canvas/blocks/ResultsTableBlock';
 
 // Edges
-import FlowEdge from '../../../containers/Board/Canvas/Edge/FlowEdge';
-import VisualizationEdge from '../../../containers/Board/Canvas/Edge/VisualizationEdge';
+import FlowEdge from './Edge/FlowEdge';
+import VisualizationEdge from './Edge/VisualizationEdge';
 
 // Hooks
 import useBlockMetadataOnDrop from '../../../containers/Board/Canvas/SideDrawer/useBlockMetadataOnDrop';
