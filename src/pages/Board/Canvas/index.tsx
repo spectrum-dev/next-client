@@ -1,6 +1,6 @@
 /* eslint-disable */ 
 import { useState, useContext } from 'react';
-import { Flex, Text, Box, Center, useDisclosure } from '@chakra-ui/react';
+import { Box, useDisclosure } from '@chakra-ui/react';
 import ReactFlow, {
   ReactFlowProvider, Background, addEdge,
   Connection, OnLoadParams, BackgroundVariant,
@@ -18,8 +18,6 @@ import CanvasContext from 'app/contexts/canvas';
 import BoardContext from 'app/contexts/board';
 
 // Canvas Components
-import Controls from '../../../containers/Board/Canvas/Controls';
-import SideDrawer from '../../../containers/Board/Canvas/SideDrawer';
 import ResultsDrawer from '../../../containers/Board/Canvas/ResultsDrawer';
 import UserOptions from './UserOptions';
 import Backtest from './Sidebars/Backtest';
