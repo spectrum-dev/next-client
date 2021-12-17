@@ -12,7 +12,6 @@ import Canvas from './Canvas';
 
 const Board = () => {
   const [strategyType, setStrategyType] = useState<StrategyType>('PENDING');
-  // const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <BoardContext.Provider value={{

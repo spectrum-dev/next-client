@@ -7,6 +7,7 @@ import {
 } from 'containers/Board/Canvas/index.types';
 
 type CanvasContextProps = {
+  strategyName?: string;
   inputs: Inputs;
   setInputs: React.Dispatch<React.SetStateAction<Inputs>>;
   setElements: React.Dispatch<React.SetStateAction<Elements>>;
@@ -20,6 +21,7 @@ type CanvasContextProps = {
 };
 
 const CanvasContext = createContext<CanvasContextProps>({
+  strategyName: '',
   inputs: {},
   setInputs: () => undefined,
   setElements: () => undefined,
