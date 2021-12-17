@@ -24,11 +24,11 @@ import Backtest from './Sidebars/Backtest';
 import BlockSelection from './Modals/BlockSelection';
 
 // Blocks
-import Block from '../../../containers/Board/Canvas/blocks/Block';
-import VisualizationBlock from '../../../containers/Board/Canvas/blocks/VisualizationBlock';
-import ResultBlock from '../../../containers/Board/Canvas/blocks/ResultBlock';
-import ResultsGraphBlock from '../../../containers/Board/Canvas/blocks/ResultsGraphBlock';
-import ResultTableBlock from '../../../containers/Board/Canvas/blocks/ResultsTableBlock';
+import Block from './blocks/Block';
+import VisualizationBlock from './blocks/VisualizationBlock';
+import ResultBlock from './blocks/ResultBlock';
+import ResultsGraphBlock from './blocks/ResultsGraphBlock';
+import ResultTableBlock from './blocks/ResultsTableBlock';
 
 // Edges
 import FlowEdge from './Edge/FlowEdge';
