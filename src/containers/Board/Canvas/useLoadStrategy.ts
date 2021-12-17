@@ -19,6 +19,7 @@ interface State {
   isLoaded: boolean;
   inputs: Inputs;
   outputs: Outputs;
+  strategyName: string;
 }
 
 interface GetStrategyResponse {
@@ -26,6 +27,9 @@ interface GetStrategyResponse {
     flowMetadata: Elements;
     input: Inputs;
     output: Outputs;
+    strategy: {
+      strategyName: string;
+    }
   }
 }
 
@@ -36,6 +40,7 @@ export default function useLoadStrategy() {
     isLoaded: false,
     inputs: {},
     outputs: {},
+    strategyName: '',
   });
   const toast = useToast();
   const { strategyId } = useParams<URLParams>();
@@ -49,6 +54,7 @@ export default function useLoadStrategy() {
       isLoaded: true,
       inputs: writeableData.strategy.input,
       outputs: writeableData.strategy.output,
+      strategyName: writeableData.strategy.strategy.strategyName,
     });
   };
 
@@ -59,6 +65,7 @@ export default function useLoadStrategy() {
       isLoaded: true,
       inputs: {},
       outputs: {},
+      strategyName: '',
     });
 
     toast({

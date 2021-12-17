@@ -61,6 +61,7 @@ const Canvas = () => {
     inputs: loadedInputs,
     outputs: loadedOutputs,
     isLoaded: isStrategyLoaded,
+    strategyName,
   } = useLoadStrategy();
 
   const [reactFlowInstance, setReactFlowInstance] = useState<OnLoadParams>();
@@ -178,6 +179,7 @@ const Canvas = () => {
   return (
     <ReactFlowProvider>
       <CanvasContext.Provider value={{
+        strategyName,
         inputs,
         setInputs,
         setElements,
@@ -264,7 +266,6 @@ const Canvas = () => {
               </ReflexElement>
             )
           }
-        <ReflexSplitter/>
       </ReflexContainer>
       <BlockSelection isOpen={isBlockSelectionOpen} onClose={onBlockSelectionClose} />
     </CanvasContext.Provider>
