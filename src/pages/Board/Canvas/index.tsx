@@ -20,7 +20,7 @@ import BoardContext from 'app/contexts/board';
 // Canvas Components
 import ResultsDrawer from '../../../containers/Board/Canvas/ResultsDrawer';
 import UserOptions from './UserOptions';
-import Backtest from './Sidebars/Backtest';
+import GenericSidebar from './Sidebars/GenericSidebar';
 import BlockSelection from './Modals/BlockSelection';
 
 // Blocks
@@ -200,7 +200,9 @@ const Canvas = () => {
               }}
               minSize={300}
               >
-              <Backtest onClose={onBacktestClose}/>
+              <GenericSidebar title="Form Data" onClose={onBacktestClose}>
+                <div> Placeholder </div>
+              </GenericSidebar>
             </ReflexElement>
           )
         }
@@ -260,7 +262,9 @@ const Canvas = () => {
                 }}
                 minSize={300}
                 >
-                <Backtest onClose={onBacktestClose}/>
+                <GenericSidebar title="Form Data"  onClose={onBacktestClose}>
+                  <div> Placeholder </div>
+                </GenericSidebar>
               </ReflexElement>
             )
           }
