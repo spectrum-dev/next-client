@@ -23,6 +23,7 @@ import SideDrawer from '../../../containers/Board/Canvas/SideDrawer';
 import ResultsDrawer from '../../../containers/Board/Canvas/ResultsDrawer';
 import UserOptions from './UserOptions';
 import Backtest from './Sidebars/Backtest';
+import BlockSelection from './Modals/BlockSelection';
 
 // Blocks
 import Block from '../../../containers/Board/Canvas/blocks/Block';
@@ -117,6 +118,12 @@ const Canvas = () => {
   //   onOpen: onResultsDrawerOpen,
   //   onClose: onResultsDrawerClose,
   // } = useDisclosure();
+  
+  const {
+    isOpen: isBlockSelectionOpen,
+    onClose: onBlockSelectionClose,
+    onOpen: onBlockSelectionOpen,
+  } = useDisclosure();
 
   const {
     isOpen: isSideDrawerOpen,
@@ -180,8 +187,26 @@ const Canvas = () => {
         inputDependencyGraph,
         isBacktestOpen,
         onBacktestToggle,
+        onBlockSelectionOpen,
       }}
-      >
+      >          
+        {
+          isSideDrawerOpen && (
+            <ReflexElement
+              className="left-pane"
+              style={{
+                display: isSideDrawerOpen ? 'block' : 'none',
+                visibility: isSideDrawerOpen ? 'visible' : 'hidden'
+              }}
+              minSize={300}
+              >
+              <Backtest onClose={onBacktestClose}/>
+            </ReflexElement>
+          )
+        }
+        
+        <ReflexSplitter style={{ display: isSideDrawerOpen ? 'block' : 'none' }} />
+
         <ReflexContainer orientation="vertical">
           <ReflexElement className="middle-pane" minSize={1000}>
             <Box minH="100vh" h="100vh" as="section">
@@ -241,6 +266,7 @@ const Canvas = () => {
           }
         <ReflexSplitter/>
       </ReflexContainer>
+      <BlockSelection isOpen={isBlockSelectionOpen} onClose={onBlockSelectionClose} />
     </CanvasContext.Provider>
   </ReactFlowProvider>
   );

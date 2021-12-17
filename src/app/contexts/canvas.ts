@@ -16,6 +16,7 @@ type CanvasContextProps = {
   inputDependencyGraph: InputDependencyGraph;
   isBacktestOpen?: boolean;
   onBacktestToggle?: () => void;
+  onBlockSelectionOpen?: () => void;
 };
 
 const CanvasContext = createContext<CanvasContextProps>({
@@ -28,6 +29,7 @@ const CanvasContext = createContext<CanvasContextProps>({
   inputDependencyGraph: {},
   isBacktestOpen: false,
   onBacktestToggle: () => undefined,
+  onBlockSelectionOpen: () => undefined,
 });
 
 export default CanvasContext;
