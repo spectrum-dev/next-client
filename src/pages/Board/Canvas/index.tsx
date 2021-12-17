@@ -264,7 +264,6 @@ const Canvas = () => {
               </ReflexElement>
             )
           }
-        <ReflexSplitter/>
       </ReflexContainer>
       <BlockSelection isOpen={isBlockSelectionOpen} onClose={onBlockSelectionClose} />
     </CanvasContext.Provider>
