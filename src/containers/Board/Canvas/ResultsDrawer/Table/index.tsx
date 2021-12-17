@@ -5,7 +5,7 @@ import {
 import DataTable from 'components/Tables/Table';
 
 // Types
-import { ResultsTableDataRecord } from 'containers/Board/Canvas/index.types';
+import { ResultsTableDataRecord } from 'pages/Board/Canvas/index.types';
 
 const Table = ({ data, onClose }: { data: ResultsTableDataRecord, onClose: () => void }) => {
   const onDrag = (

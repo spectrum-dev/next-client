@@ -5,7 +5,7 @@ import { Flex } from '@chakra-ui/react';
 import BoardContext from 'app/contexts/board';
 
 // Types
-import { StrategyType } from '../../containers/Board/Canvas/index.types';
+import { StrategyType } from './Canvas/index.types';
 
 import Canvas from './Canvas';
 // import SharingModal from 'containers/Board/SharingModal';

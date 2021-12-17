@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 
-import { BlockType } from 'containers/Board/Canvas/index.types';
+import { BlockType } from 'pages/Board/Canvas/index.types';
 
 interface State {
   inputHandle: boolean;

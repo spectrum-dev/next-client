@@ -11,9 +11,9 @@ import BoardContext from 'app/contexts/board';
 // Types
 import {
   Inputs, Elements, Edge, FormBlockValues,
-} from './index.types';
+} from '../index.types';
 
-import { QUERY_VALIDATE_FLOW } from './gql';
+import { QUERY_VALIDATE_FLOW } from '../gql';
 
 const NON_NODE_OR_EDGE_VALUE = 'There was an error validating this strategy. Please try again.';
 const POST_RUN_STRATEGY_500 = 'There was an error validating this strategy. Please try again.';

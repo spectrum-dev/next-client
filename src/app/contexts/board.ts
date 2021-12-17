@@ -1,6 +1,6 @@
 import { createContext } from 'react';
 
-import { StrategyType } from '../../containers/Board/Canvas/index.types';
+import { StrategyType } from '../../pages/Board/Canvas/index.types';
 
 type BoardContextProps = {
   strategyType: StrategyType;

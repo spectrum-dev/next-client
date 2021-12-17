@@ -9,9 +9,9 @@ import { useToast } from '@chakra-ui/react';
 
 import {
   URLParams, Inputs, Outputs, Elements,
-} from './index.types';
+} from '../index.types';
 
-import { QUERY_STRATEGY } from './gql';
+import { QUERY_STRATEGY } from '../gql';
 
 // Types
 interface State {

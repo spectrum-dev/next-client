@@ -4,7 +4,7 @@ import {
 } from '@chakra-ui/react';
 
 // Types
-import { ResultsGraphDataRecord } from 'containers/Board/Canvas/index.types';
+import { ResultsGraphDataRecord } from 'pages/Board/Canvas/index.types';
 
 import LineGraph from 'components/Graphs/LineGraph';
 

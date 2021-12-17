@@ -10,13 +10,13 @@ import {
 
 import {
   Outputs, Inputs, Elements, Edge, StrategyType,
-} from './index.types';
+} from '../index.types';
 
 // Queries & Mutations
 import {
   DISPATCH_RUN_STRATEGY,
   QUERY_TASK_RESULT,
-} from './gql';
+} from '../gql';
 
 const NON_NODE_OR_EDGE_VALUE = 'There was an error running your strategy. Please try again.';
 const STRATEGY_LOADING = 'Processing your strategy';

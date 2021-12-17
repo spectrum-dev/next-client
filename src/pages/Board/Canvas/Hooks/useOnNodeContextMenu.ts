@@ -1,4 +1,4 @@
-import { Node, SetElements } from './index.types';
+import { Node, SetElements } from '../index.types';
 
 export default function useOnNodeContextMenu({ setElements }: { setElements: SetElements }) {
   const onNodeContextMenu = (event: React.MouseEvent<Element, MouseEvent>, node: Node) => {

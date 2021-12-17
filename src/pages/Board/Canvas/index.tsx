@@ -39,19 +39,19 @@ import VisualizationEdge from '../../../containers/Board/Canvas/Edge/Visualizati
 // Hooks
 import useBlockMetadataOnDrop from '../../../containers/Board/Canvas/SideDrawer/useBlockMetadataOnDrop';
 import useResultsOnDrop from '../../../containers/Board/Canvas/ResultsDrawer/useResultsOnDrop';
-import useLoadStrategy from '../../../containers/Board/Canvas/useLoadStrategy';
-import useOnNodeContextMenu from '../../../containers/Board/Canvas/useOnNodeContextMenu';
-import useInputManager from '../../../containers/Board/Canvas/useInputManager';
-import useSaveStrategy from '../../../containers/Board/Canvas/useSaveStrategy';
-import useValidateStrategy from '../../../containers/Board/Canvas/useValidateStrategy';
-import useRunStrategy from '../../../containers/Board/Canvas/useRunStrategy';
-import useVisualizationEngine from '../../../containers/Board/Canvas/useVisualizationEngine';
-import useGenerateInputDependencyGraph from '../../../containers/Board/Canvas/useGenerateInputDependencyGraph';
+import useLoadStrategy from './Hooks/useLoadStrategy';
+import useOnNodeContextMenu from './Hooks/useOnNodeContextMenu';
+import useInputManager from './Hooks/useInputManager';
+import useSaveStrategy from './Hooks/useSaveStrategy';
+import useValidateStrategy from './Hooks/useValidateStrategy';
+import useRunStrategy from './Hooks/useRunStrategy';
+import useVisualizationEngine from './Hooks/useVisualizationEngine';
+import useGenerateInputDependencyGraph from './Hooks/useGenerateInputDependencyGraph';
 
 // Types
 import {
   Edge, Node,
-} from '../../../containers/Board/Canvas/index.types';
+} from './index.types';
 
 
 const Canvas = () => {

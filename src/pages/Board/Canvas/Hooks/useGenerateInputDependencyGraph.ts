@@ -3,12 +3,12 @@ import { useToast } from '@chakra-ui/react';
 import { useLazyQuery } from '@apollo/client';
 import { isNode, isEdge } from 'react-flow-renderer';
 
-import { QUERY_INPUT_DEPENDENCY_GRAPH } from './gql';
+import { QUERY_INPUT_DEPENDENCY_GRAPH } from '../gql';
 
 // Types
 import {
   Inputs, Elements, Edge,
-} from './index.types';
+} from '../index.types';
 
 const NON_NODE_OR_EDGE_VALUE = 'There was an element in the list that is neither a node or edge';
 const UNHANDLED_ERROR = 'There was an error generating the dependncy graph. Please try again.';

@@ -5,9 +5,9 @@ import { Flex, useDisclosure } from '@chakra-ui/react';
 import BoardContext from 'app/contexts/board';
 
 // Types
-import { StrategyType } from './Canvas/index.types';
+import { StrategyType } from '../../pages/Board/Canvas/index.types';
 
-import Canvas from './Canvas';
+// import Canvas from './Canvas';
 import TopBar from './TopBar';
 import SharingModal from './SharingModal';
 
@@ -24,7 +24,7 @@ const Board = () => {
         <Flex align="center" bg="#212B3B" color="white" px="6" minH="12" textAlign="center">
           <TopBar onShareOpen={onOpen} />
         </Flex>
-        <Canvas />
+        {/* <Canvas /> */}
         <SharingModal isOpen={isOpen} onClose={onClose}/>
       </Flex>
     </BoardContext.Provider>

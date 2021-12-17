@@ -5,9 +5,9 @@ import { useParams } from 'react-router-dom';
 
 import {
   URLParams, Inputs, Outputs, Elements,
-} from './index.types';
+} from '../index.types';
 
-import { MUTATION_SAVE_STRATEGY } from './gql';
+import { MUTATION_SAVE_STRATEGY } from '../gql';
 
 const STRATEGY_SAVE_SUCCESS = 'Your strategy has been saved successfully';
 

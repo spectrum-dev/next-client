@@ -1,6 +1,6 @@
 import { OnLoadParams } from 'react-flow-renderer';
 
-import { SetElements, ResultsNode, isResultsNode } from 'containers/Board/Canvas/index.types';
+import { SetElements, ResultsNode, isResultsNode } from 'pages/Board/Canvas/index.types';
 
 export default function useResultsOnDrop() {
   const onDrop = async (

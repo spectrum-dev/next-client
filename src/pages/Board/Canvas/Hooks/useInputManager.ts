@@ -9,7 +9,7 @@ import fetcher from 'app/fetcher';
 import {
   Inputs, BlockType, Elements, NodeMetadataInputs,
   isFormNode,
-} from './index.types';
+} from '../index.types';
 
 interface FieldDataResponse {
   response: Array<string>;

@@ -9,7 +9,7 @@ import {
   SimpleGrid,
 } from '@chakra-ui/react';
 
-import { Outputs } from 'containers/Board/Canvas/index.types';
+import { Outputs } from 'pages/Board/Canvas/index.types';
 
 import StatCard from './Stats/StatCard';
 import Graph from './Graph';

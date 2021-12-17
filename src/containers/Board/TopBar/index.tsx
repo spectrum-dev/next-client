@@ -14,7 +14,7 @@ import { QUERY_USER_STRATEGY } from './gql';
 import BoardContext from 'app/contexts/board';
 
 // Types
-import { URLParams } from '../Canvas/index.types';
+import { URLParams } from '../../../pages/Board/Canvas/index.types';
 
 
 const TopBar = ({ onShareOpen }: { onShareOpen: any }) => {
