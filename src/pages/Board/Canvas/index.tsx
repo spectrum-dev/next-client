@@ -1,6 +1,6 @@
 /* eslint-disable */ 
 import { useState, useContext } from 'react';
-import { Flex, Text, Box, Center, useDisclosure } from '@chakra-ui/react';
+import { Box, useDisclosure } from '@chakra-ui/react';
 import ReactFlow, {
   ReactFlowProvider, Background, addEdge,
   Connection, OnLoadParams, BackgroundVariant,
@@ -18,40 +18,38 @@ import CanvasContext from 'app/contexts/canvas';
 import BoardContext from 'app/contexts/board';
 
 // Canvas Components
-import Controls from '../../../containers/Board/Canvas/Controls';
-import SideDrawer from '../../../containers/Board/Canvas/SideDrawer';
 import ResultsDrawer from '../../../containers/Board/Canvas/ResultsDrawer';
 import UserOptions from './UserOptions';
 import Backtest from './Sidebars/Backtest';
 import BlockSelection from './Modals/BlockSelection';
 
 // Blocks
-import Block from '../../../containers/Board/Canvas/blocks/Block';
-import VisualizationBlock from '../../../containers/Board/Canvas/blocks/VisualizationBlock';
-import ResultBlock from '../../../containers/Board/Canvas/blocks/ResultBlock';
-import ResultsGraphBlock from '../../../containers/Board/Canvas/blocks/ResultsGraphBlock';
-import ResultTableBlock from '../../../containers/Board/Canvas/blocks/ResultsTableBlock';
+import Block from './blocks/Block';
+import VisualizationBlock from './blocks/VisualizationBlock';
+import ResultBlock from './blocks/ResultBlock';
+import ResultsGraphBlock from './blocks/ResultsGraphBlock';
+import ResultTableBlock from './blocks/ResultsTableBlock';
 
 // Edges
-import FlowEdge from '../../../containers/Board/Canvas/Edge/FlowEdge';
-import VisualizationEdge from '../../../containers/Board/Canvas/Edge/VisualizationEdge';
+import FlowEdge from './Edge/FlowEdge';
+import VisualizationEdge from './Edge/VisualizationEdge';
 
 // Hooks
-import useBlockMetadataOnDrop from '../../../containers/Board/Canvas/SideDrawer/useBlockMetadataOnDrop';
+import useBlockMetadataOnDrop from './Modals/BlockSelection/useBlockMetadataOnDrop';
 import useResultsOnDrop from '../../../containers/Board/Canvas/ResultsDrawer/useResultsOnDrop';
-import useLoadStrategy from '../../../containers/Board/Canvas/useLoadStrategy';
-import useOnNodeContextMenu from '../../../containers/Board/Canvas/useOnNodeContextMenu';
-import useInputManager from '../../../containers/Board/Canvas/useInputManager';
-import useSaveStrategy from '../../../containers/Board/Canvas/useSaveStrategy';
-import useValidateStrategy from '../../../containers/Board/Canvas/useValidateStrategy';
-import useRunStrategy from '../../../containers/Board/Canvas/useRunStrategy';
-import useVisualizationEngine from '../../../containers/Board/Canvas/useVisualizationEngine';
-import useGenerateInputDependencyGraph from '../../../containers/Board/Canvas/useGenerateInputDependencyGraph';
+import useLoadStrategy from './Hooks/useLoadStrategy';
+import useOnNodeContextMenu from './Hooks/useOnNodeContextMenu';
+import useInputManager from './Hooks/useInputManager';
+import useSaveStrategy from './Hooks/useSaveStrategy';
+import useValidateStrategy from './Hooks/useValidateStrategy';
+import useRunStrategy from './Hooks/useRunStrategy';
+import useVisualizationEngine from './Hooks/useVisualizationEngine';
+import useGenerateInputDependencyGraph from './Hooks/useGenerateInputDependencyGraph';
 
 // Types
 import {
   Edge, Node,
-} from '../../../containers/Board/Canvas/index.types';
+} from './index.types';
 
 
 const Canvas = () => {

@@ -7,7 +7,7 @@ import {
   SetElements, Outputs,
   Edge, VisualizationNode,
   isVisualizationNode,
-} from './index.types';
+} from '../index.types';
 
 export default function useVisualizationEngine({
   outputs, setElements, reactFlowInstance,

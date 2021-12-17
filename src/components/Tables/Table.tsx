@@ -5,7 +5,7 @@ import { timeFormat } from 'd3-time-format';
 import DataTable, { defaultThemes } from 'react-data-table-component';
 
 // Types
-import { TableData } from 'containers/Board/Canvas/index.types';
+import { TableData } from 'pages/Board/Canvas/index.types';
 
 interface TableColumns {
   name: string;

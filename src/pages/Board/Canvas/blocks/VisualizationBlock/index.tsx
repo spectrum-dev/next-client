@@ -30,7 +30,7 @@ import CandlestickGraph from 'components/Graphs/CandlestickGraph';
 import Table from 'components/Tables/Table';
 
 // Types
-import { VisualizationType } from 'containers/Board/Canvas/index.types';
+import { VisualizationType } from 'pages/Board/Canvas/index.types';
 
 // Hooks
 import useVisualizationData from './visualizations/useVisualizationData';

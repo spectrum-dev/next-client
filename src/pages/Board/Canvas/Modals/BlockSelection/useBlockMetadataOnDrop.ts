@@ -4,7 +4,7 @@ import { useToast } from '@chakra-ui/react';
 
 import { OnLoadParams } from 'react-flow-renderer';
 
-import { SetElements, FormNode } from 'containers/Board/Canvas/index.types';
+import { SetElements, FormNode } from 'pages/Board/Canvas/index.types';
 
 import { QUERY_GET_BLOCK_METADATA } from './gql';
 

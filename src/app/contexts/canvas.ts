@@ -1,10 +1,10 @@
 import { createContext } from 'react';
 
 // Types
-import { EdgeValidation } from 'containers/Board/Canvas/useValidateStrategy';
+import { EdgeValidation } from 'pages/Board/Canvas/Hooks/useValidateStrategy';
 import {
   Inputs, Outputs, Elements, InputDependencyGraph,
-} from 'containers/Board/Canvas/index.types';
+} from 'pages/Board/Canvas/index.types';
 
 type CanvasContextProps = {
   strategyName?: string;

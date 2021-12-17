@@ -18,7 +18,7 @@ import CanvasContext from 'app/contexts/canvas';
 // Custom UI
 import Dropdown from 'components/Dropdown';
 
-import { VisualizationType } from 'containers/Board/Canvas/index.types';
+import { VisualizationType } from 'pages/Board/Canvas/index.types';
 
 const SideDrawer = (
   {
