@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Center, Modal, ModalBody, ModalContent, ModalCloseButton, Text, ModalOverlay, ModalHeader, Box, Flex, Button } from '@chakra-ui/react';
+import { Modal, ModalBody, ModalContent, ModalCloseButton, Text, ModalOverlay, ModalHeader, Box, Flex, Button } from '@chakra-ui/react';
 
 // Utils
 import { formatBlockTypeHeader } from 'app/utils';
@@ -10,9 +10,9 @@ import { ReactNode } from 'react';
 
 const BlockInformation = ({ blockName, children }: { blockName: string, children: ReactNode }) => (
     <Box>
-        <Box borderRadius="12px" width="18rem" height="12rem" backgroundColor="#F3F4F8">
+        <Flex borderRadius="12px" width="18rem" height="12rem" backgroundColor="#F3F4F8" alignItems="center" justifyContent="center">
             {children}
-        </Box>
+        </Flex>
         <Text marginTop="0.5rem" fontWeight={550} fontSize="md"> {blockName} </Text>
     </Box>
 );
@@ -71,17 +71,15 @@ const BlockSelection = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => v
         if (selectedBlockType === blockType) {
           blockList.push(
                 <BlockInformation blockName={blockData.blockName}>
-                  <Center key={`${blockType}-${blockId}`}>
-                      <GenericBlock
-                      key={`${blockType}-${blockId}`}
-                      blockName={blockData.blockName}
-                      blockType={formatBlockTypeHeader(blockType)}
-                      onDrag={(event) => {
-                        onClose();
-                        onDrag(event, blockType, blockId, blockData.blockMetadata);
-                      }}
-                      />
-                  </Center>
+                    <GenericBlock
+                        key={`${blockType}-${blockId}`}
+                        blockName={blockData.blockName}
+                        blockType={formatBlockTypeHeader(blockType)}
+                        onDrag={(event) => {
+                          onClose();
+                          onDrag(event, blockType, blockId, blockData.blockMetadata);
+                        }}
+                    />
                 </BlockInformation>,
           );
         }
@@ -109,7 +107,7 @@ const BlockSelection = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => v
                             </Flex>
                         </Box>
                         <Box>
-                            <Text fontSize="2xl"> Blocks </Text>
+                            <Text fontSize="2xl"> {selectedBlockType ? formatBlockTypeHeader(selectedBlockType) : 'Select a block'} </Text>
                             <Text fontSize="md"> Select from a list of available blocks below </Text>
 
                             <Flex flexDirection="row" marginTop="1rem" rowGap="2rem" columnGap="2rem" flexWrap="wrap">
