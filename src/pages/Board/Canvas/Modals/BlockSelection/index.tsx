@@ -5,7 +5,7 @@ import { Modal, ModalBody, ModalContent, ModalCloseButton, Text, ModalOverlay, M
 import { formatBlockTypeHeader } from 'app/utils';
 
 import GenericBlock from './GenericBlock';
-import useBlockMetadataRetriever from 'containers/Board/Canvas/SideDrawer/useBlockMetadataRetriever';
+import useBlockMetadataRetriever from './useBlockMetadataRetriever';
 import { ReactNode } from 'react';
 
 const BlockInformation = ({ blockName, children }: { blockName: string, children: ReactNode }) => (
