@@ -14,6 +14,8 @@ type CanvasContextProps = {
   edgeValidation: EdgeValidation;
   outputs: Outputs,
   inputDependencyGraph: InputDependencyGraph;
+  isBacktestOpen?: boolean;
+  onBacktestToggle?: () => void;
 };
 
 const CanvasContext = createContext<CanvasContextProps>({
@@ -24,6 +26,8 @@ const CanvasContext = createContext<CanvasContextProps>({
   edgeValidation: {},
   outputs: {},
   inputDependencyGraph: {},
+  isBacktestOpen: false,
+  onBacktestToggle: () => undefined,
 });
 
 export default CanvasContext;

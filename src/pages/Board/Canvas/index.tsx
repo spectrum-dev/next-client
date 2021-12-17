@@ -5,6 +5,13 @@ import ReactFlow, {
   ReactFlowProvider, Background, addEdge,
   Connection, OnLoadParams, BackgroundVariant,
 } from 'react-flow-renderer';
+import {
+  ReflexContainer,
+  ReflexSplitter,
+  ReflexElement
+} from 'react-reflex';
+
+import 'react-reflex/styles.css';
 
 // Contexts
 import CanvasContext from 'app/contexts/canvas';
@@ -15,6 +22,7 @@ import Controls from '../../../containers/Board/Canvas/Controls';
 import SideDrawer from '../../../containers/Board/Canvas/SideDrawer';
 import ResultsDrawer from '../../../containers/Board/Canvas/ResultsDrawer';
 import UserOptions from './UserOptions';
+import Backtest from './Sidebars/Backtest';
 
 // Blocks
 import Block from '../../../containers/Board/Canvas/blocks/Block';
@@ -43,6 +51,7 @@ import useGenerateInputDependencyGraph from '../../../containers/Board/Canvas/us
 import {
   Edge, Node,
 } from '../../../containers/Board/Canvas/index.types';
+
 
 const Canvas = () => {
   const {
@@ -97,16 +106,27 @@ const Canvas = () => {
 
   const { onNodeContextMenu } = useOnNodeContextMenu({ setElements });
 
+  // const {
+  //   isOpen: isSideDrawerOpen,
+  //   onOpen: onSideDrawerOpen,
+  //   onClose: onSideDrawerClose,
+  // } = useDisclosure();
+
+  // const {
+  //   isOpen: isResultsDrawerOpen,
+  //   onOpen: onResultsDrawerOpen,
+  //   onClose: onResultsDrawerClose,
+  // } = useDisclosure();
+
   const {
     isOpen: isSideDrawerOpen,
-    onOpen: onSideDrawerOpen,
-    onClose: onSideDrawerClose,
+    onToggle: onSideDrawerToggle,
   } = useDisclosure();
 
   const {
-    isOpen: isResultsDrawerOpen,
-    onOpen: onResultsDrawerOpen,
-    onClose: onResultsDrawerClose,
+    isOpen: isBacktestOpen,
+    onClose: onBacktestClose,
+    onToggle: onBacktestToggle,
   } = useDisclosure();
 
   // Boilerplate
@@ -149,66 +169,80 @@ const Canvas = () => {
   // }
 
   return (
-    <Box minH="100vh" h="100vh" as="section">
-      <ReactFlowProvider>
-        <CanvasContext.Provider value={{
-          inputs,
-          setInputs,
-          setElements,
-          setOutputs,
-          edgeValidation,
-          outputs,
-          inputDependencyGraph,
-        }}
-        >
-          <ReactFlow
-            elements={elements}
-            // Element Types
-            nodeTypes={nodeTypes}
-            edgeTypes={edgeTypes}
-            // Drag Functions
-            onDrop={(event: React.DragEvent<HTMLDivElement>) => {
-              onBlockDrop(event, reactFlowInstance, setElements);
-              onResultsDrop(event, reactFlowInstance, setElements);
-            }}
-            onDragOver={onDragOver}
-            // Connection Functions
-            // @ts-ignore
-            connectionLineComponent={FlowEdge}
-            onConnect={onConnect}
-            // Loading and Node Updating Functions
-            onLoad={onLoad}
-            onNodeDragStop={onNodeDragStop}
-            // Context Menu
-            onNodeContextMenu={onNodeContextMenu}
-            // Canvas Formating
-            maxZoom={0.5}
-            zoomOnScroll={false}
-            defaultZoom={0.5}
-            snapToGrid
-            snapGrid={[1, 1]}
-          >
-            <Background
-              variant={BackgroundVariant.Lines}
-              color="#E5E5E5"
-              gap={130}
-              style={{ backgroundColor: '#F2F2F2' }}
-            />
-          </ReactFlow>
-          <UserOptions />
-          {/*
-          <SideDrawer
-            isOpen={isSideDrawerOpen}
-            onClose={onSideDrawerClose}
-          />
-          <ResultsDrawer
-            isOpen={isResultsDrawerOpen}
-            onClose={onResultsDrawerClose}
-            outputs={outputs}
-          /> */}
-        </CanvasContext.Provider>
-      </ReactFlowProvider>
-    </Box>
+    <ReactFlowProvider>
+      <CanvasContext.Provider value={{
+        inputs,
+        setInputs,
+        setElements,
+        setOutputs,
+        edgeValidation,
+        outputs,
+        inputDependencyGraph,
+        isBacktestOpen,
+        onBacktestToggle,
+      }}
+      >
+        <ReflexContainer orientation="vertical">
+          <ReflexElement className="middle-pane" minSize={1000}>
+            <Box minH="100vh" h="100vh" as="section">
+              <ReactFlow
+                elements={elements}
+                // Element Types
+                nodeTypes={nodeTypes}
+                edgeTypes={edgeTypes}
+                // Drag Functions
+                onDrop={(event: React.DragEvent<HTMLDivElement>) => {
+                  onBlockDrop(event, reactFlowInstance, setElements);
+                  onResultsDrop(event, reactFlowInstance, setElements);
+                }}
+                onDragOver={onDragOver}
+                // Connection Functions
+                // @ts-ignore
+                connectionLineComponent={FlowEdge}
+                onConnect={onConnect}
+                // Loading and Node Updating Functions
+                onLoad={onLoad}
+                onNodeDragStop={onNodeDragStop}
+                // Context Menu
+                onNodeContextMenu={onNodeContextMenu}
+                // Canvas Formating
+                maxZoom={0.5}
+                zoomOnScroll={false}
+                defaultZoom={0.5}
+                snapToGrid
+                snapGrid={[1, 1]}
+              >
+                <Background
+                  variant={BackgroundVariant.Lines}
+                  color="#E5E5E5"
+                  gap={130}
+                  style={{ backgroundColor: '#F2F2F2' }}
+                />
+              </ReactFlow>
+              <UserOptions />
+            </Box>
+          </ReflexElement>
+          
+          <ReflexSplitter style={{ display: isBacktestOpen ? 'block' : 'none' }} />
+          
+          {
+            isBacktestOpen && (
+              <ReflexElement
+                className="right-pane"
+                style={{
+                  display: isBacktestOpen ? 'block' : 'none',
+                  visibility: isBacktestOpen ? 'visible' : 'hidden'
+                }}
+                minSize={300}
+                >
+                <Backtest onClose={onBacktestClose}/>
+              </ReflexElement>
+            )
+          }
+        <ReflexSplitter/>
+      </ReflexContainer>
+    </CanvasContext.Provider>
+  </ReactFlowProvider>
   );
 };
 
