@@ -37,7 +37,7 @@ import FlowEdge from './Edge/FlowEdge';
 import VisualizationEdge from './Edge/VisualizationEdge';
 
 // Hooks
-import useBlockMetadataOnDrop from '../../../containers/Board/Canvas/SideDrawer/useBlockMetadataOnDrop';
+import useBlockMetadataOnDrop from './Modals/BlockSelection/useBlockMetadataOnDrop';
 import useResultsOnDrop from '../../../containers/Board/Canvas/ResultsDrawer/useResultsOnDrop';
 import useLoadStrategy from './Hooks/useLoadStrategy';
 import useOnNodeContextMenu from './Hooks/useOnNodeContextMenu';
