@@ -1,3 +1,4 @@
+/* eslint-disable */ 
 import { useEffect, useState, ReactNode } from 'react';
 import _ from 'lodash';
 
@@ -6,12 +7,15 @@ import { Box, FormControl, FormLabel, NumberDecrementStepper, NumberIncrementSte
 
 // Custom Components
 import CustomDropdown from 'react-dropdown';
-import CustomSelect from 'react-select';
+import CustomSelect from 'components/Select';
 import CustomDatePicker from 'components/DateRangePicker';
 
 import { QUERY_GET_BLOCK_METADATA } from '../../Modals/BlockSelection/gql';
 import { BlockType, Inputs, SetInputs } from '../../index.types';
+
+import fetcher from 'app/fetcher';
 import { formatDate } from 'app/utils';
+
 
 /**
  * Free Number Input
@@ -48,7 +52,7 @@ const NumberInput = ({ inputElement, fieldVariableName, setInputs }: { inputElem
 /**
  * Dropdown that handles custom renders
  */
-const Dropdown = ({ inputElement, fieldVariableName, setInputs }: { inputElement: any, fieldVariableName: string, setInputs: SetInputs }) => {
+const Dropdown = ({ id, inputElement, fieldVariableName, setInputs }: { id: string, inputElement: any, fieldVariableName: string, setInputs: SetInputs }) => {
   const onChange = (selectedItem: any) => {
     if (inputElement.hasOwnProperty('onChange')) {
       // TODO: Implement util to handle onChange events
@@ -57,14 +61,16 @@ const Dropdown = ({ inputElement, fieldVariableName, setInputs }: { inputElement
 
     setInputs((inputs: Inputs) => {
       const newData = {
-        [fieldVariableName]: {
-          value: selectedItem.value,
+        [id]: {
+          [fieldVariableName]: {
+            value: selectedItem.value,
+          },
         },
       };
 
       return _.merge(
-        inputs,
         newData,
+        inputs,
       );
     });
   };
@@ -81,22 +87,47 @@ const Dropdown = ({ inputElement, fieldVariableName, setInputs }: { inputElement
 /**
  * Search field
  */
-const Search = ({ inputElement, fieldVariableName, setInputs }: { inputElement: any, fieldVariableName: string, setInputs: SetInputs }) => {
-  const onInputChange = (query: string) => { console.log(query); };
-  
+const Search = ({ id, inputElement, fieldVariableName, blockType, blockId, fieldData, setInputs }: { id: string, inputElement: any, fieldVariableName: string, blockType: BlockType, blockId: number, fieldData: any, setInputs: SetInputs }) => {
+  const onInputChange = (query: string) => {
+    if (query === '') {
+      return
+    }
+    
+    const { base } = fieldData;
+
+    const onSearchResponse = fetcher(`/orchestration/${blockType}/${blockId}${base}${query}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+    });
+
+    onSearchResponse.then((resp) => {
+      setInputs((inp: Inputs) => ({
+        ...inp,
+        [id]: {
+          ...inp?.[id],
+          [fieldVariableName]: {
+            ...inp?.[id]?.[fieldVariableName],
+            options: resp.status === 200 ? resp.data.response : [],
+          },
+        },
+      }));
+    }).catch((err) => {
+      console.error(err);
+    })
+  }
+
   const onChange = (selectedItem: any) => {
-    setInputs((inputs: Inputs) => {
-      const newData = {
+    setInputs((inp: Inputs) => ({
+      ...inp,
+      [id]: {
+        ...inp[id],
         [fieldVariableName]: {
+          ...inp[id][fieldVariableName],
           value: selectedItem.value,
         },
-      };
-
-      return _.merge(
-        newData,
-        inputs,
-      );
-    });
+      },
+    }));
   };
 
   return (
@@ -172,7 +203,7 @@ const useInputFields = (
       return <></>;
     }
         
-    const { fieldType, fieldVariableName, fieldVariableNames } = field;
+    const { fieldType, fieldVariableName, fieldVariableNames, fieldData } = field;
     const value = inputs?.[id]?.[fieldVariableName];
     
     switch (fieldType) {
@@ -187,6 +218,7 @@ const useInputFields = (
       case 'dropdown':
         return (
           <Dropdown
+            id={id}
             inputElement={value}
             fieldVariableName={fieldVariableName}
             setInputs={setInputs}
@@ -195,8 +227,12 @@ const useInputFields = (
       case 'search':
         return (
           <Search
+            id={id}
             inputElement={value}
             fieldVariableName={fieldVariableName}
+            blockType={blockType}
+            blockId={blockId}
+            fieldData={fieldData}
             setInputs={setInputs}
           />
         );

@@ -1,29 +1,5 @@
 import Select from 'react-select';
 
-const customStyles = {
-  option: (provided: any, state: any) => ({
-    ...provided,
-    backgroundColor: state.isSelected ? 'white' : '#848485',
-    color: state.isSelected ? 'black' : 'white',
-  }),
-  control: (provided: any) => ({
-    ...provided,
-    backgroundColor: '#2D3748',
-    borderColor: '#2D3748',
-  }),
-  input: (provided: any) => ({
-    ...provided,
-    color: 'white',
-  }),
-  singleValue: (provided: any) => ({
-    ...provided, color: 'white', borderColor: 'green', paddingLeft: 10,
-  }),
-  menu: (provided: any) => ({
-    ...provided,
-    color: 'white',
-  }),
-};
-
 const CustomSelect = (
   {
     placeholder,
@@ -56,9 +32,9 @@ const CustomSelect = (
     }
     return options;
   };
+  
   return (
     <Select
-      styles={customStyles}
       placeholder={placeholder}
       options={transformOptions()}
       onInputChange={onInputChange}
