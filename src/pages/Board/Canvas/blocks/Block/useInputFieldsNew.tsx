@@ -7,9 +7,11 @@ import { Box, FormControl, FormLabel, NumberDecrementStepper, NumberIncrementSte
 // Custom Components
 import CustomDropdown from 'react-dropdown';
 import CustomSelect from 'react-select';
+import CustomDatePicker from 'components/DateRangePicker';
 
 import { QUERY_GET_BLOCK_METADATA } from '../../Modals/BlockSelection/gql';
 import { BlockType, Inputs, SetInputs } from '../../index.types';
+import { formatDate } from 'app/utils';
 
 /**
  * Free Number Input
@@ -76,6 +78,9 @@ const Dropdown = ({ inputElement, fieldVariableName, setInputs }: { inputElement
   );
 };
 
+/**
+ * Search field
+ */
 const Search = ({ inputElement, fieldVariableName, setInputs }: { inputElement: any, fieldVariableName: string, setInputs: SetInputs }) => {
   const onInputChange = (query: string) => { console.log(query); };
   
@@ -104,6 +109,52 @@ const Search = ({ inputElement, fieldVariableName, setInputs }: { inputElement: 
     />
   );
 };
+
+/**
+ * Date Range Pickers
+ */
+const DateRangePicker = ({ startDate, endDate, fieldVariableNames, setInputs }: { startDate: any, endDate: any, fieldVariableNames: Array<string>, setInputs: SetInputs }) => {
+  const onStartChange = (value: any) => {
+    setInputs((inputs: Inputs) => {
+      const newData = {
+        [fieldVariableNames[0]]: {
+          rawValue: value,
+          value: formatDate(value),
+        },
+      };
+
+      return _.merge(
+        newData,
+        inputs,
+      );
+    });
+  };
+
+  const onEndChange = (value: any) => {
+    setInputs((inputs: Inputs) => {
+      const newData = {
+        [fieldVariableNames[1]]: {
+          rawValue: value,
+          value: formatDate(value),
+        },
+      };
+      
+      return _.merge(
+        newData,
+        inputs,
+      );
+    });
+  };
+
+  return (
+    <CustomDatePicker
+      startDate={startDate}
+      endDate={endDate}
+      onStartChange={onStartChange}
+      onEndChange={onEndChange}
+    />
+  );
+};
   
 /**
  * Provide the block ID that has been selected to be edited
@@ -121,9 +172,9 @@ const useInputFields = (
       return <></>;
     }
         
-    const { fieldType, fieldVariableName } = field;
+    const { fieldType, fieldVariableName, fieldVariableNames } = field;
     const value = inputs?.[id]?.[fieldVariableName];
-
+    
     switch (fieldType) {
       case 'input':
         return (
@@ -150,7 +201,17 @@ const useInputFields = (
           />
         );
       case 'date_range':
-        return <></>;
+        const startDate = inputs?.[id]?.[fieldVariableNames[0]]?.rawValue;
+        const endDate = inputs?.[id]?.[fieldVariableNames[1]]?.rawValue;
+
+        return (
+          <DateRangePicker 
+            startDate={startDate}
+            endDate={endDate}
+            fieldVariableNames={fieldVariableNames}
+            setInputs={setInputs}
+          />
+        );
       default:
         return (
           <div> Not Implemented </div>
