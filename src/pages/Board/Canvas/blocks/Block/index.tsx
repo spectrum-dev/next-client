@@ -5,7 +5,6 @@ import {
 import {
   Box,
   Text,
-  useDisclosure,
 } from '@chakra-ui/react';
 
 import {
@@ -24,7 +23,6 @@ import useOnDeleteBlock from './useOnDeleteBlock';
 
 // UI Component
 import ContextMenu from './ContextMenu';
-import SettingsDrawer from './SettingsDrawer';
 
 const Handle = styled(RawHandle)`
   /* Overrides for .react-flow__handle */
@@ -37,17 +35,23 @@ const Block = memo((
   { id, data }: NodeProps,
 ) => {
   const {
-    blockName, blockType, inputs, validation, isMenuVisible,
+    blockName, blockId, blockType, inputs, validation, isMenuVisible,
   } = data.metadata;
 
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
 
   const updateNodeInternals = useUpdateNodeInternals();
-  const { onOpen, onClose, isOpen } = useDisclosure();
 
-  const { inputs: managedInputs, inputDependencyGraph } = useContext(CanvasContext);
+  const { inputs: managedInputs, inputDependencyGraph, onSideDrawerToggle, setSelectedBlock } = useContext(CanvasContext);
 
-  const [renderedInputFields, setRenderedInputFields] = useState<Array<React.ReactNode>>([]);
+  const isOpen = false;
+  
+  const onOpen = () => {
+    setSelectedBlock({ id, blockId, blockType });
+    onSideDrawerToggle();
+  };
+
+  const [, setRenderedInputFields] = useState<Array<React.ReactNode>>([]);
 
   const { inputHandle, outputHandle } = useHandles({ validationData: validation });
   const { renderInputFields, additionalInputs } = useInputField({ id });
@@ -118,11 +122,6 @@ const Block = memo((
           }
         </Box>
       </ContextMenu>
-      <SettingsDrawer
-        isOpen={isOpen}
-        onClose={onClose}
-        renderedInputFields={renderedInputFields}
-      />
     </>
   );
 });

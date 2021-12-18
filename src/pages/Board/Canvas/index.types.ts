@@ -178,3 +178,9 @@ export enum VisualizationType {
 
 // Strategy Types
 export type StrategyType = 'BACKTEST' | 'SCREENER' | 'PENDING';
+
+export interface SelectedBlock {
+  id: string;
+  blockType: BlockType;
+  blockId: number;
+}

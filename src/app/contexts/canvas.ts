@@ -1,9 +1,9 @@
-import { createContext } from 'react';
+import React, { createContext } from 'react';
 
 // Types
 import { EdgeValidation } from 'pages/Board/Canvas/Hooks/useValidateStrategy';
 import {
-  Inputs, Outputs, Elements, InputDependencyGraph,
+  Inputs, Outputs, Elements, InputDependencyGraph, SelectedBlock,
 } from 'pages/Board/Canvas/index.types';
 
 type CanvasContextProps = {
@@ -15,9 +15,11 @@ type CanvasContextProps = {
   edgeValidation: EdgeValidation;
   outputs: Outputs,
   inputDependencyGraph: InputDependencyGraph;
-  isBacktestOpen?: boolean;
-  onBacktestToggle?: () => void;
-  onBlockSelectionOpen?: () => void;
+  isBacktestOpen: boolean;
+  onBacktestToggle: () => void;
+  onBlockSelectionOpen: () => void;
+  onSideDrawerToggle: () => void;
+  setSelectedBlock: React.Dispatch<React.SetStateAction<SelectedBlock>>
 };
 
 const CanvasContext = createContext<CanvasContextProps>({
@@ -32,6 +34,8 @@ const CanvasContext = createContext<CanvasContextProps>({
   isBacktestOpen: false,
   onBacktestToggle: () => undefined,
   onBlockSelectionOpen: () => undefined,
+  onSideDrawerToggle: () => undefined,
+  setSelectedBlock: () => undefined,
 });
 
 export default CanvasContext;

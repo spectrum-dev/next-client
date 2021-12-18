@@ -45,10 +45,12 @@ import useValidateStrategy from './Hooks/useValidateStrategy';
 import useRunStrategy from './Hooks/useRunStrategy';
 import useVisualizationEngine from './Hooks/useVisualizationEngine';
 import useGenerateInputDependencyGraph from './Hooks/useGenerateInputDependencyGraph';
+import useInputFields from './blocks/Block/useInputFieldsNew';
 
 // Types
 import {
   Edge, Node,
+  SelectedBlock,
 } from './index.types';
 
 
@@ -106,18 +108,10 @@ const Canvas = () => {
 
   const { onNodeContextMenu } = useOnNodeContextMenu({ setElements });
 
-  // const {
-  //   isOpen: isSideDrawerOpen,
-  //   onOpen: onSideDrawerOpen,
-  //   onClose: onSideDrawerClose,
-  // } = useDisclosure();
+  const [selectedBlock, setSelectedBlock] = useState<SelectedBlock>({ id: '1', blockType: 'DATA_BLOCK', blockId: 0 })
 
-  // const {
-  //   isOpen: isResultsDrawerOpen,
-  //   onOpen: onResultsDrawerOpen,
-  //   onClose: onResultsDrawerClose,
-  // } = useDisclosure();
-  
+  const { fields } = useInputFields({ ...selectedBlock, inputs, setInputs });
+    
   const {
     isOpen: isBlockSelectionOpen,
     onClose: onBlockSelectionClose,
@@ -126,6 +120,7 @@ const Canvas = () => {
 
   const {
     isOpen: isSideDrawerOpen,
+    onClose: onSideDrawerClose,
     onToggle: onSideDrawerToggle,
   } = useDisclosure();
 
@@ -188,28 +183,30 @@ const Canvas = () => {
         isBacktestOpen,
         onBacktestToggle,
         onBlockSelectionOpen,
+        onSideDrawerToggle,
+        setSelectedBlock,
       }}
       >          
-        {
-          isSideDrawerOpen && (
-            <ReflexElement
-              className="left-pane"
-              style={{
-                display: isSideDrawerOpen ? 'block' : 'none',
-                visibility: isSideDrawerOpen ? 'visible' : 'hidden'
-              }}
-              minSize={300}
-              >
-              <GenericSidebar title="Form Data" onClose={onBacktestClose}>
-                <div> Placeholder </div>
-              </GenericSidebar>
-            </ReflexElement>
-          )
-        }
-        
-        <ReflexSplitter style={{ display: isSideDrawerOpen ? 'block' : 'none' }} />
-
         <ReflexContainer orientation="vertical">
+          {
+            isSideDrawerOpen && (
+              <ReflexElement
+                className="left-pane"
+                style={{
+                  display: isSideDrawerOpen ? 'block' : 'none',
+                  visibility: isSideDrawerOpen ? 'visible' : 'hidden'
+                }}
+                minSize={400}
+                >
+                <GenericSidebar title="Form Data" onClose={onSideDrawerClose}>
+                  { fields }
+                </GenericSidebar>
+              </ReflexElement>
+            )
+          }
+          
+          <ReflexSplitter style={{ display: isSideDrawerOpen ? 'block' : 'none' }} />
+
           <ReflexElement className="middle-pane" minSize={1000}>
             <Box minH="100vh" h="100vh" as="section">
               <ReactFlow
