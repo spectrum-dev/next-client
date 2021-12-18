@@ -120,6 +120,7 @@ const Canvas = () => {
 
   const {
     isOpen: isSideDrawerOpen,
+    onOpen: onSideDrawerOpen,
     onClose: onSideDrawerClose,
     onToggle: onSideDrawerToggle,
   } = useDisclosure();
@@ -184,6 +185,7 @@ const Canvas = () => {
         onBacktestToggle,
         onBlockSelectionOpen,
         isSideDrawerOpen,
+        onSideDrawerOpen,
         onSideDrawerToggle,
         setSelectedBlock,
       }}

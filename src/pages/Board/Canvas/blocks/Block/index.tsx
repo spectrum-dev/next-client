@@ -41,13 +41,13 @@ const Block = memo((
   const updateNodeInternals = useUpdateNodeInternals();
   const {
     isSideDrawerOpen,
-    onSideDrawerToggle,
+    onSideDrawerOpen,
     setSelectedBlock,
   } = useContext(CanvasContext);
   
   const onOpen = () => {
     setSelectedBlock({ id, blockId, blockType });
-    onSideDrawerToggle();
+    onSideDrawerOpen();
   };
 
   const { inputHandle, outputHandle } = useHandles({ validationData: validation });
