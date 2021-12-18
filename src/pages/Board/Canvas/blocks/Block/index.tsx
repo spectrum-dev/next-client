@@ -18,7 +18,6 @@ import CanvasContext from 'app/contexts/canvas';
 
 // Hooks
 import useHandles from './useHandles';
-import useInputField from './useInputFields';
 import useOnDeleteBlock from './useOnDeleteBlock';
 
 // UI Component
@@ -35,26 +34,23 @@ const Block = memo((
   { id, data }: NodeProps,
 ) => {
   const {
-    blockName, blockId, blockType, inputs, validation, isMenuVisible,
+    blockName, blockId, blockType, validation, isMenuVisible,
   } = data.metadata;
 
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
-
   const updateNodeInternals = useUpdateNodeInternals();
-
-  const { inputs: managedInputs, inputDependencyGraph, onSideDrawerToggle, setSelectedBlock } = useContext(CanvasContext);
-
-  const isOpen = false;
+  const {
+    isSideDrawerOpen,
+    onSideDrawerToggle,
+    setSelectedBlock,
+  } = useContext(CanvasContext);
   
   const onOpen = () => {
     setSelectedBlock({ id, blockId, blockType });
     onSideDrawerToggle();
   };
 
-  const [, setRenderedInputFields] = useState<Array<React.ReactNode>>([]);
-
   const { inputHandle, outputHandle } = useHandles({ validationData: validation });
-  const { renderInputFields, additionalInputs } = useInputField({ id });
   const { onDeleteBlock } = useOnDeleteBlock({ id });
 
   useEffect(() => {
@@ -65,13 +61,6 @@ const Block = memo((
   useEffect(() => {
     setIsContextMenuOpen(isMenuVisible);
   }, [isMenuVisible]);
-
-  useEffect(() => {
-    const normalFields = renderInputFields(inputs);
-    const additionalFields = renderInputFields(additionalInputs);
-    setRenderedInputFields(normalFields.concat(additionalFields));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, managedInputs?.[id], additionalInputs, inputDependencyGraph]);
 
   return (
     <>
@@ -85,7 +74,7 @@ const Block = memo((
           width="350px"
           height="160px"
           borderRadius="25px"
-          border={isOpen ? '3px solid #ed8936;' : '1px solid #1a202c;'}
+          border={isSideDrawerOpen ? '3px solid #ed8936;' : '1px solid #1a202c;'}
           background="linear-gradient(0deg, #151a23 0% 40%, #1a202c 40% 100%)"
           textAlign="center"
         >

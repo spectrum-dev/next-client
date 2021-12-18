@@ -18,6 +18,7 @@ type CanvasContextProps = {
   isBacktestOpen: boolean;
   onBacktestToggle: () => void;
   onBlockSelectionOpen: () => void;
+  isSideDrawerOpen: boolean;
   onSideDrawerToggle: () => void;
   setSelectedBlock: React.Dispatch<React.SetStateAction<SelectedBlock>>
 };
@@ -34,6 +35,7 @@ const CanvasContext = createContext<CanvasContextProps>({
   isBacktestOpen: false,
   onBacktestToggle: () => undefined,
   onBlockSelectionOpen: () => undefined,
+  isSideDrawerOpen: false,
   onSideDrawerToggle: () => undefined,
   setSelectedBlock: () => undefined,
 });

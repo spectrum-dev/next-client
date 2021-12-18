@@ -183,6 +183,7 @@ const Canvas = () => {
         isBacktestOpen,
         onBacktestToggle,
         onBlockSelectionOpen,
+        isSideDrawerOpen,
         onSideDrawerToggle,
         setSelectedBlock,
       }}
