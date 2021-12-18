@@ -31,7 +31,7 @@ const NumberInput = ({ inputElement, fieldVariableName, setInputs }: { inputElem
   return (
     <ChakraNumberInput
         min={0}
-        value={inputElement.value}
+        value={inputElement?.value}
         onChange={onChange}
     >
         <NumberInputField />
@@ -69,8 +69,8 @@ const Dropdown = ({ inputElement, fieldVariableName, setInputs }: { inputElement
 
   return (
     <CustomDropdown
-      options={inputElement.options}
-      value={inputElement.value}
+      options={inputElement?.options}
+      value={inputElement?.value}
       onChange={onChange}
     />
   );
@@ -97,8 +97,8 @@ const Search = ({ inputElement, fieldVariableName, setInputs }: { inputElement: 
   return (
     <CustomSelect
       placeholder="Type here to start search"
-      options={inputElement.options}
-      value={inputElement.value}
+      options={inputElement?.options}
+      value={inputElement?.value}
       onInputChange={onInputChange}
       onChange={onChange}
     />
@@ -149,6 +149,8 @@ const useInputFields = (
             setInputs={setInputs}
           />
         );
+      case 'date_range':
+        return <></>;
       default:
         return (
           <div> Not Implemented </div>
