@@ -6,6 +6,7 @@ import { Box, FormControl, FormLabel, NumberDecrementStepper, NumberIncrementSte
 
 // Custom Components
 import CustomDropdown from 'react-dropdown';
+import CustomSelect from 'react-select';
 
 import { QUERY_GET_BLOCK_METADATA } from '../../Modals/BlockSelection/gql';
 import { BlockType, Inputs, SetInputs } from '../../index.types';
@@ -74,6 +75,35 @@ const Dropdown = ({ inputElement, fieldVariableName, setInputs }: { inputElement
     />
   );
 };
+
+const Search = ({ inputElement, fieldVariableName, setInputs }: { inputElement: any, fieldVariableName: string, setInputs: SetInputs }) => {
+  const onInputChange = (query: string) => { console.log(query); };
+  
+  const onChange = (selectedItem: any) => {
+    setInputs((inputs: Inputs) => {
+      const newData = {
+        [fieldVariableName]: {
+          value: selectedItem.value,
+        },
+      };
+
+      return _.merge(
+        newData,
+        inputs,
+      );
+    });
+  };
+
+  return (
+    <CustomSelect
+      placeholder="Type here to start search"
+      options={inputElement.options}
+      value={inputElement.value}
+      onInputChange={onInputChange}
+      onChange={onChange}
+    />
+  );
+};
   
 /**
  * Provide the block ID that has been selected to be edited
@@ -84,7 +114,6 @@ const useInputFields = (
   { id: string, blockType: BlockType, blockId: number, inputs: Inputs, setInputs: SetInputs },
 ) => {
   const [fields, setFields] = useState<Array<ReactNode>>([]);
-  // const { inputs, setInputs } =  useContext(CanvasContext);
   const { data, error } = useQuery(QUERY_GET_BLOCK_METADATA, { variables: { blockType, blockId } });
 
   const renderField = (field: any) => {
@@ -112,13 +141,17 @@ const useInputFields = (
             setInputs={setInputs}
           />
         );
+      case 'search':
+        return (
+          <Search
+            inputElement={value}
+            fieldVariableName={fieldVariableName}
+            setInputs={setInputs}
+          />
+        );
       default:
         return (
-          <NumberInput
-              inputElement={value}
-              fieldVariableName={fieldVariableName}
-              setInputs={setInputs}
-          />
+          <div> Not Implemented </div>
         );
     }
   };
