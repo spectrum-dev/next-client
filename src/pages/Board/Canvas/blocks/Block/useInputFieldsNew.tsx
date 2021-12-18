@@ -52,11 +52,53 @@ const NumberInput = ({ inputElement, fieldVariableName, setInputs }: { inputElem
 /**
  * Dropdown that handles custom renders
  */
-const Dropdown = ({ id, inputElement, fieldVariableName, setInputs }: { id: string, inputElement: any, fieldVariableName: string, setInputs: SetInputs }) => {
+const Dropdown = ({ id, inputElement, fieldVariableName, blockType, blockId, fieldData, setInputs, setAdditionalFields }: { id: string, inputElement: any, fieldVariableName: string, blockType: BlockType, blockId: number, fieldData: any, setInputs: SetInputs, setAdditionalFields: any }) => {
   const onChange = (selectedItem: any) => {
     if (inputElement.hasOwnProperty('onChange')) {
-      // TODO: Implement util to handle onChange events
-      console.log('Handle onChange Event');
+      const { onChange } = fieldData;
+
+      const onChangeResponse = fetcher(`/orchestration/${blockType}/${blockId}/${onChange}${selectedItem.value}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      });
+
+      onChangeResponse.then((res) => {
+        setInputs((inp: any) => {
+          // eslint-disable-next-line @typescript-eslint/no-shadow
+          let additionalInputs = {};
+
+          for (const inputValue of res.data.response) {
+            // eslint-disable-next-line no-prototype-builtins
+            if (inputValue.hasOwnProperty('fieldData') && inputValue?.fieldData.hasOwnProperty('options')) {
+              additionalInputs = {
+                ...additionalInputs,
+                [inputValue?.fieldVariableName]: {
+                  options: inputValue?.fieldData?.options,
+                  value: '',
+                },
+              };
+            } else {
+              additionalInputs = {
+                ...additionalInputs,
+                [inputValue?.fieldVariableName]: {
+                  value: '',
+                },
+              };
+            }
+          }
+
+          setAdditionalFields(res.data.response);
+
+          return {
+            ...inp,
+            [id]: {
+              ...inp?.[id],
+              ...additionalInputs,
+            },
+          };
+        });
+      })
     }
 
     setInputs((inputs: Inputs) => {
@@ -195,6 +237,8 @@ const useInputFields = (
   { id, blockType, blockId, inputs, setInputs }:
   { id: string, blockType: BlockType, blockId: number, inputs: Inputs, setInputs: SetInputs },
 ) => {
+  const [rawFieldMetadata, setRawFieldMetadata] = useState([]);
+  const [additionalFields, setAdditionalFields] = useState([]);
   const [fields, setFields] = useState<Array<ReactNode>>([]);
   const { data, error } = useQuery(QUERY_GET_BLOCK_METADATA, { variables: { blockType, blockId } });
 
@@ -221,7 +265,11 @@ const useInputFields = (
             id={id}
             inputElement={value}
             fieldVariableName={fieldVariableName}
+            blockType={blockType}
+            blockId={blockId}
+            fieldData={fieldData}
             setInputs={setInputs}
+            setAdditionalFields={setAdditionalFields}
           />
         );
       case 'search':
@@ -302,9 +350,16 @@ const useInputFields = (
       return;
     }
 
-    renderFields(blockInputs);
+    setRawFieldMetadata(blockInputs);
+  }, [id, blockType, blockId, data, error, inputs])
+
+  useEffect(() => {
+    const merged = _.merge(_.keyBy(rawFieldMetadata, 'fieldName'), _.keyBy(additionalFields, 'fieldName'));
+    const values = _.values(merged);
+    
+    renderFields(values);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, blockType, blockId, data, error, inputs]);  
+  }, [rawFieldMetadata, additionalFields, setRawFieldMetadata, setAdditionalFields]);  
 
   return { fields };
 };

@@ -43,7 +43,7 @@ const BlockSelection = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => v
 
     for (const [blockType] of Object.entries(blockMetadataFromRetriever)) {
       blockName.push(
-            <Box width="100%">
+            <Box width="100%" key={blockType}>
                 <Button
                     borderRadius="1rem"
                     color={selectedBlockType === blockType ? 'white' : ''}
@@ -70,7 +70,7 @@ const BlockSelection = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => v
       for (const [blockId, blockData] of Object.entries(blockMetadata)) {
         if (selectedBlockType === blockType) {
           blockList.push(
-                <BlockInformation blockName={blockData.blockName}>
+                <BlockInformation blockName={blockData.blockName} key={blockData.blockName}>
                     <GenericBlock
                         key={`${blockType}-${blockId}`}
                         blockName={blockData.blockName}
