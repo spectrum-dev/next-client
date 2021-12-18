@@ -1,15 +1,19 @@
 import { useEffect, useState, ReactNode } from 'react';
 import _ from 'lodash';
-import { Box, FormControl, FormLabel, NumberDecrementStepper, NumberIncrementStepper, NumberInput as ChakraNumberInput, NumberInputField, NumberInputStepper } from '@chakra-ui/react';
+
 import { useQuery } from '@apollo/client';
+import { Box, FormControl, FormLabel, NumberDecrementStepper, NumberIncrementStepper, NumberInput as ChakraNumberInput, NumberInputField, NumberInputStepper } from '@chakra-ui/react';
+
+// Custom Components
+import CustomDropdown from 'react-dropdown';
 
 import { QUERY_GET_BLOCK_METADATA } from '../../Modals/BlockSelection/gql';
 import { BlockType, Inputs, SetInputs } from '../../index.types';
 
 /**
- * Block Specific Number Input
+ * Free Number Input
  */
-const NumberInput = ({ value, fieldVariableName, setInputs }: { value: any, fieldVariableName: string, setInputs: SetInputs }) => {
+const NumberInput = ({ inputElement, fieldVariableName, setInputs }: { inputElement: any, fieldVariableName: string, setInputs: SetInputs }) => {
   const onChange = (tempValue: string) => {
     setInputs((inputs: Inputs) => {
       const newData = {
@@ -24,17 +28,50 @@ const NumberInput = ({ value, fieldVariableName, setInputs }: { value: any, fiel
   };
   
   return (
-          <ChakraNumberInput
-              min={0}
-              value={value}
-              onChange={onChange}
-          >
-              <NumberInputField />
-              <NumberInputStepper>
-                  <NumberIncrementStepper />
-                  <NumberDecrementStepper />
-              </NumberInputStepper>
-          </ChakraNumberInput>
+    <ChakraNumberInput
+        min={0}
+        value={inputElement.value}
+        onChange={onChange}
+    >
+        <NumberInputField />
+        <NumberInputStepper>
+            <NumberIncrementStepper />
+            <NumberDecrementStepper />
+        </NumberInputStepper>
+    </ChakraNumberInput>
+  );
+};
+
+/**
+ * Dropdown that handles custom renders
+ */
+const Dropdown = ({ inputElement, fieldVariableName, setInputs }: { inputElement: any, fieldVariableName: string, setInputs: SetInputs }) => {
+  const onChange = (selectedItem: any) => {
+    if (inputElement.hasOwnProperty('onChange')) {
+      // TODO: Implement util to handle onChange events
+      console.log('Handle onChange Event');
+    }
+
+    setInputs((inputs: Inputs) => {
+      const newData = {
+        [fieldVariableName]: {
+          value: selectedItem.value,
+        },
+      };
+
+      return _.merge(
+        inputs,
+        newData,
+      );
+    });
+  };
+
+  return (
+    <CustomDropdown
+      options={inputElement.options}
+      value={inputElement.value}
+      onChange={onChange}
+    />
   );
 };
   
@@ -56,24 +93,32 @@ const useInputFields = (
     }
         
     const { fieldType, fieldVariableName } = field;
-    const value = inputs?.[id]?.[fieldVariableName]?.value;
+    const value = inputs?.[id]?.[fieldVariableName];
 
     switch (fieldType) {
       case 'input':
         return (
-                    <NumberInput
-                        value={value}
-                        fieldVariableName={fieldVariableName}
-                        setInputs={setInputs}
-                    />
+          <NumberInput
+              inputElement={value}
+              fieldVariableName={fieldVariableName}
+              setInputs={setInputs}
+          />
+        );
+      case 'dropdown':
+        return (
+          <Dropdown
+            inputElement={value}
+            fieldVariableName={fieldVariableName}
+            setInputs={setInputs}
+          />
         );
       default:
         return (
-                    <NumberInput
-                        value={value}
-                        fieldVariableName={fieldVariableName}
-                        setInputs={setInputs}
-                    />
+          <NumberInput
+              inputElement={value}
+              fieldVariableName={fieldVariableName}
+              setInputs={setInputs}
+          />
         );
     }
   };
