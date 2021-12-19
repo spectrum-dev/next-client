@@ -54,7 +54,6 @@ const NumberInput = ({ id, inputElement, fieldVariableName, setInputs }: { id: s
  * Dropdown that handles custom renders
  */
 const Dropdown = ({ id, inputElement, fieldVariableName, blockType, blockId, fieldData, setInputs, setAdditionalFields }: { id: string, inputElement: any, fieldVariableName: string, blockType: BlockType, blockId: number, fieldData: any, setInputs: SetInputs, setAdditionalFields: any }) => {
-  
   const handleOnChangeEvent = (inputValue: string) => {
       const { onChange } = fieldData;
 
