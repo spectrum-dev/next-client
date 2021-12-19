@@ -45,7 +45,7 @@ import useValidateStrategy from './Hooks/useValidateStrategy';
 import useRunStrategy from './Hooks/useRunStrategy';
 import useVisualizationEngine from './Hooks/useVisualizationEngine';
 import useGenerateInputDependencyGraph from './Hooks/useGenerateInputDependencyGraph';
-import useInputFields from './blocks/Block/useInputFieldsNew';
+import useInputFields from './blocks/Block/useInputFields';
 
 // Types
 import {
