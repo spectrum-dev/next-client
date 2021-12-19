@@ -176,7 +176,7 @@ const Search = ({ id, inputElement, fieldVariableName, blockType, blockId, field
 
   return (
     <CustomSelect
-      placeholder="Type here to start search"
+      placeholder="Search"
       options={options}
       value={value}
       onInputChange={onInputChange}
@@ -432,6 +432,10 @@ const useInputFields = (
   };
 
   useEffect(() => {
+    setAdditionalFields([]);
+  }, [id, blockType, blockId])
+
+  useEffect(() => {
     // Error fetching block metadata
     if (error) {
       return;
@@ -457,7 +461,6 @@ const useInputFields = (
       // TODO: Determine what this return type should be
       return;
     }
-
     setRawFieldMetadata(blockInputs);
   }, [id, blockType, blockId, data, error, inputs, inputDependencyGraph, renderField])
 
