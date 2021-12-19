@@ -40,7 +40,6 @@ const Block = memo((
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
   const updateNodeInternals = useUpdateNodeInternals();
   const {
-    isSideDrawerOpen,
     onSideDrawerOpen,
     setSelectedBlock,
   } = useContext(CanvasContext);
@@ -74,8 +73,8 @@ const Block = memo((
           width="350px"
           height="160px"
           borderRadius="25px"
-          border={isSideDrawerOpen ? '3px solid #ed8936;' : '1px solid #1a202c;'}
-          background="linear-gradient(0deg, #151a23 0% 40%, #1a202c 40% 100%)"
+          border='1px solid #1a202c;'
+          background="linear-gradient(0deg, #808080 0% 40%, #E6E6E6 40% 100%)"
           textAlign="center"
         >
           {
@@ -90,11 +89,11 @@ const Block = memo((
               />
             ) : <></>
           }
-          <Text color="white" marginTop="20px" fontSize="32px">
+          <Text marginTop="20px" fontSize="32px">
             { blockName }
           </Text>
 
-          <Text color="white" marginTop="35px" fontWeight="bold" fontSize="27px">
+          <Text marginTop="35px" fontWeight="bold" fontSize="27px">
             { blockType.replace('_', ' ') }
           </Text>
           {
