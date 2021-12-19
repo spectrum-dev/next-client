@@ -198,15 +198,17 @@ const Canvas = () => {
                   display: isSideDrawerOpen ? 'block' : 'none',
                   visibility: isSideDrawerOpen ? 'visible' : 'hidden'
                 }}
-                minSize={400}
+                minSize={300}
+                maxSize={300}
+                size={300}
                 >
-                <GenericSidebar title="Form Data" onClose={onSideDrawerClose}>
+                <GenericSidebar title="Block Inputs" onClose={onSideDrawerClose}>
                   { fields }
                 </GenericSidebar>
               </ReflexElement>
             )
           }
-          
+
           <ReflexSplitter style={{ display: isSideDrawerOpen ? 'block' : 'none' }} />
 
           <ReflexElement className="middle-pane" minSize={1000}>
