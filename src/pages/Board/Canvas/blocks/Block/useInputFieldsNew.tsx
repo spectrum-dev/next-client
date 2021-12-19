@@ -54,11 +54,11 @@ const NumberInput = ({ id, inputElement, fieldVariableName, setInputs }: { id: s
  * Dropdown that handles custom renders
  */
 const Dropdown = ({ id, inputElement, fieldVariableName, blockType, blockId, fieldData, setInputs, setAdditionalFields }: { id: string, inputElement: any, fieldVariableName: string, blockType: BlockType, blockId: number, fieldData: any, setInputs: SetInputs, setAdditionalFields: any }) => {
-  const onChange = (selectedItem: any) => {
-    if (inputElement.hasOwnProperty('onChange')) {
+  
+  const handleOnChangeEvent = (inputValue: string) => {
       const { onChange } = fieldData;
 
-      const onChangeResponse = fetcher(`/orchestration/${blockType}/${blockId}/${onChange}${selectedItem.value}`, {
+      const onChangeResponse = fetcher(`/orchestration/${blockType}/${blockId}/${onChange}${inputValue}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
         },
@@ -68,38 +68,49 @@ const Dropdown = ({ id, inputElement, fieldVariableName, blockType, blockId, fie
         setInputs((inp: any) => {
           // eslint-disable-next-line @typescript-eslint/no-shadow
           let additionalInputs = {};
-
-          for (const inputValue of res.data.response) {
-            // eslint-disable-next-line no-prototype-builtins
-            if (inputValue.hasOwnProperty('fieldData') && inputValue?.fieldData.hasOwnProperty('options')) {
-              additionalInputs = {
-                ...additionalInputs,
-                [inputValue?.fieldVariableName]: {
-                  options: inputValue?.fieldData?.options,
-                  value: '',
-                },
-              };
-            } else {
-              additionalInputs = {
-                ...additionalInputs,
-                [inputValue?.fieldVariableName]: {
-                  value: '',
-                },
-              };
-            }
+          
+          if (res.status !== 200) {
+            return;
           }
-
-          setAdditionalFields(res.data.response);
-
-          return {
-            ...inp,
-            [id]: {
-              ...inp?.[id],
-              ...additionalInputs,
-            },
-          };
+          
+          if (res.data.response) {
+            for (const inputValue of res.data.response) {
+              // eslint-disable-next-line no-prototype-builtins
+              if (inputValue.hasOwnProperty('fieldData') && inputValue?.fieldData.hasOwnProperty('options')) {
+                additionalInputs = {
+                  ...additionalInputs,
+                  [inputValue?.fieldVariableName]: {
+                    options: inputValue?.fieldData?.options,
+                    value: '',
+                  },
+                };
+              } else {
+                additionalInputs = {
+                  ...additionalInputs,
+                  [inputValue?.fieldVariableName]: {
+                    value: '',
+                  },
+                };
+              }
+            }
+  
+            setAdditionalFields(res.data.response);
+  
+            return {
+              ...inp,
+              [id]: {
+                ...inp?.[id],
+                ...additionalInputs,
+              },
+            };
+          }
         });
       })
+  }
+  
+  const onChange = (selectedItem: any) => {
+    if (inputElement.hasOwnProperty('onChange')) {
+      handleOnChangeEvent(selectedItem.value)
     }
 
     setInputs((inp: Inputs) => ({
