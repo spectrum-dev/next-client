@@ -200,7 +200,6 @@ const Canvas = () => {
                 }}
                 minSize={300}
                 maxSize={300}
-                size={300}
                 >
                 <GenericSidebar title="Block Inputs" onClose={onSideDrawerClose}>
                   { fields }
@@ -211,7 +210,7 @@ const Canvas = () => {
 
           <ReflexSplitter style={{ display: isSideDrawerOpen ? 'block' : 'none' }} />
 
-          <ReflexElement className="middle-pane" minSize={1000}>
+          <ReflexElement className="middle-pane" minSize={1000} flex={1}>
             <Box minH="100vh" h="100vh" as="section">
               <ReactFlow
                 elements={elements}
