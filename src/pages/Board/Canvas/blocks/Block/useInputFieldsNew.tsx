@@ -20,24 +20,25 @@ import { formatDate } from 'app/utils';
 /**
  * Free Number Input
  */
-const NumberInput = ({ inputElement, fieldVariableName, setInputs }: { inputElement: any, fieldVariableName: string, setInputs: SetInputs }) => {
-  const onChange = (tempValue: string) => {
-    setInputs((inputs: Inputs) => {
-      const newData = {
-        [fieldVariableName]: { value: tempValue },
-      };
-              
-      return _.merge(
-        inputs,
-        newData,
-      );
-    });        
-  };
+const NumberInput = ({ id, inputElement, fieldVariableName, setInputs }: { id: string, inputElement: any, fieldVariableName: string, setInputs: SetInputs }) => {
+  const [value, setValue] = useState(inputElement?.value || '')
   
+  const onChange = (value: string) => {
+    setInputs((inp: any) => ({
+      ...inp,
+      [id]: {
+        ...inp?.[id],
+        [fieldVariableName]: { value },
+      },
+    }));
+
+    setValue(value);      
+  };
+
   return (
     <ChakraNumberInput
         min={0}
-        value={inputElement?.value}
+        value={value}
         onChange={onChange}
     >
         <NumberInputField />
@@ -244,6 +245,13 @@ const InputsFromConnection = ({ id, inputDependencyGraph, fieldVariableName, inp
 
   const numConnections = Object.keys(inputDependencyGraph?.[id]).length
 
+  if (numConnections === 0) {
+    return (
+      <Box>
+        Please connect the block
+      </Box>
+    )
+  }
   if (numConnections === 1) {
     return (
       <Box>
@@ -342,9 +350,10 @@ const useInputFields = (
       case 'input':
         return (
           <NumberInput
-              inputElement={value}
-              fieldVariableName={fieldVariableName}
-              setInputs={setInputs}
+            id={id}
+            inputElement={value}
+            fieldVariableName={fieldVariableName}
+            setInputs={setInputs}
           />
         );
       case 'dropdown':
@@ -449,7 +458,7 @@ const useInputFields = (
     }
 
     setRawFieldMetadata(blockInputs);
-  }, [id, blockType, blockId, data, error, inputs, inputDependencyGraph])
+  }, [id, blockType, blockId, data, error, inputs, inputDependencyGraph, renderField])
 
   useEffect(() => {
     const merged = _.merge(_.keyBy(rawFieldMetadata, 'fieldName'), _.keyBy(additionalFields, 'fieldName'));
