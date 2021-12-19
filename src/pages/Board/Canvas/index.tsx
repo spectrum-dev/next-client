@@ -163,7 +163,7 @@ const Canvas = () => {
     }));
   };
 
-  const [selectedBlock, setSelectedBlock] = useState<SelectedBlock>({ id: '1', blockType: 'DATA_BLOCK', blockId: 0 })
+  const [selectedBlock, setSelectedBlock] = useState<SelectedBlock>({ id: '1', blockType: 'DATA_BLOCK', blockId: 1 })
   const { fields } = useInputFields({ ...selectedBlock, inputs, setInputs, inputDependencyGraph });
 
   // if (isStrategyLoaded && !hasAccess) {
