@@ -1,6 +1,6 @@
 /* eslint-disable */ 
 import { useState, useContext } from 'react';
-import { Box, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, useDisclosure } from '@chakra-ui/react';
 import ReactFlow, {
   ReactFlowProvider, Background, addEdge,
   Connection, OnLoadParams, BackgroundVariant,
@@ -271,7 +271,9 @@ const Canvas = () => {
                 minSize={300}
                 >
                 <GenericSidebar title="Form Data"  onClose={onBacktestClose}>
-                  <div> Placeholder </div>
+                  <Button colorScheme="green" disabled={!isValid || isRunStrategyLoading} onClick={() => invokeRun()}>
+                    Run
+                  </Button>
                 </GenericSidebar>
               </ReflexElement>
             )

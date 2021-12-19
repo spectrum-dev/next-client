@@ -204,23 +204,23 @@ export default memo(({ id, data: rawData }: NodeProps) => {
       height="800px"
       rounded="8px"
       shadow="base"
-      bg="#1a202c"
+      bg="#E6E6E6"
       textAlign="center"
     >
       <Flex>
         <Box w="10px" marginTop="-10px" marginLeft="-10px">
-          <IconButton aria-label="Edit" align="flex-end" icon={<GiExpand />} rounded="full" size="md" fontSize="30px" textColor="white" background="#1a202c" onClick={onVisualizationOpen} />
+          <IconButton aria-label="Edit" align="flex-end" icon={<GiExpand />} rounded="full" size="md" fontSize="30px" background="#E6E6E6" onClick={onVisualizationOpen} />
         </Box>
         <Spacer />
 
         <Box marginLeft="10px">
-          <Text color="white" fontSize="2xl" fontWeight="bold" textTransform="uppercase" letterSpacing="wide">
+          <Text fontSize="2xl" fontWeight="bold" textTransform="uppercase" letterSpacing="wide">
             { title }
           </Text>
         </Box>
         <Spacer />
         <Box w="30px" marginTop="-15px">
-          <IconButton aria-label="Edit" icon={<BsGear />} rounded="full" size="lg" fontSize="30px" textColor="white" background="#1a202c" onClick={onSettingsOpen} />
+          <IconButton aria-label="Edit" icon={<BsGear />} rounded="full" size="lg" fontSize="30px" background="#E6E6E6" onClick={onSettingsOpen} />
         </Box>
       </Flex>
 
