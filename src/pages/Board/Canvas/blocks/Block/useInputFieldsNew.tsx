@@ -102,20 +102,16 @@ const Dropdown = ({ id, inputElement, fieldVariableName, blockType, blockId, fie
       })
     }
 
-    setInputs((inputs: Inputs) => {
-      const newData = {
-        [id]: {
-          [fieldVariableName]: {
-            value: selectedItem.value,
-          },
+    setInputs((inp: Inputs) => ({
+      ...inp,
+      [id]: {
+        ...inp[id],
+        [fieldVariableName]: {
+          ...inp[id][fieldVariableName],
+          value: selectedItem.value,
         },
-      };
-
-      return _.merge(
-        newData,
-        inputs,
-      );
-    });
+      },
+    }));
   };
 
   return (
@@ -131,6 +127,9 @@ const Dropdown = ({ id, inputElement, fieldVariableName, blockType, blockId, fie
  * Search field
  */
 const Search = ({ id, inputElement, fieldVariableName, blockType, blockId, fieldData, setInputs }: { id: string, inputElement: any, fieldVariableName: string, blockType: BlockType, blockId: number, fieldData: any, setInputs: SetInputs }) => {
+  const [value, setValue] = useState(inputElement?.value || '');
+  const [options, setOptions] = useState([]);
+
   const onInputChange = (query: string) => {
     if (query === '') {
       return
@@ -155,6 +154,7 @@ const Search = ({ id, inputElement, fieldVariableName, blockType, blockId, field
           },
         },
       }));
+      setOptions(resp.status === 200 ? resp.data.response : []);
     }).catch((err) => {
       console.error(err);
     })
@@ -171,13 +171,14 @@ const Search = ({ id, inputElement, fieldVariableName, blockType, blockId, field
         },
       },
     }));
+    setValue(selectedItem.value);
   };
 
   return (
     <CustomSelect
       placeholder="Type here to start search"
-      options={inputElement?.options}
-      value={inputElement?.value}
+      options={options}
+      value={value}
       onInputChange={onInputChange}
       onChange={onChange}
     />
@@ -187,43 +188,42 @@ const Search = ({ id, inputElement, fieldVariableName, blockType, blockId, field
 /**
  * Date Range Pickers
  */
-const DateRangePicker = ({ startDate, endDate, fieldVariableNames, setInputs }: { startDate: any, endDate: any, fieldVariableNames: Array<string>, setInputs: SetInputs }) => {
+const DateRangePicker = ({ id, startDate, endDate, fieldVariableNames, setInputs }: { id: string, startDate: any, endDate: any, fieldVariableNames: Array<string>, setInputs: SetInputs }) => {
+  const [componentStartDate, setComponentStartDate] = useState(startDate || '');
+  const [componentEndDate, setComponentEndDate] = useState(endDate || '');
+
   const onStartChange = (value: any) => {
-    setInputs((inputs: Inputs) => {
-      const newData = {
+    setInputs((inp: Inputs) => ({
+      ...inp,
+      [id]: {
+        ...inp?.[id],
         [fieldVariableNames[0]]: {
           rawValue: value,
           value: formatDate(value),
         },
-      };
-
-      return _.merge(
-        newData,
-        inputs,
-      );
-    });
+      },
+    }));
+    setComponentStartDate(value);
   };
 
   const onEndChange = (value: any) => {
-    setInputs((inputs: Inputs) => {
-      const newData = {
+    setInputs((inp: Inputs) => ({
+      ...inp,
+      [id]: {
+        ...inp?.[id],
         [fieldVariableNames[1]]: {
           rawValue: value,
           value: formatDate(value),
         },
-      };
-      
-      return _.merge(
-        newData,
-        inputs,
-      );
-    });
+      },
+    }));
+    setComponentEndDate(value);
   };
 
   return (
     <CustomDatePicker
-      startDate={startDate}
-      endDate={endDate}
+      startDate={componentStartDate}
+      endDate={componentEndDate}
       onStartChange={onStartChange}
       onEndChange={onEndChange}
     />
@@ -386,7 +386,8 @@ const useInputFields = (
         const endDate = inputs?.[id]?.[fieldVariableNames[1]]?.rawValue;
 
         return (
-          <DateRangePicker 
+          <DateRangePicker
+            id={id}
             startDate={startDate}
             endDate={endDate}
             fieldVariableNames={fieldVariableNames}
