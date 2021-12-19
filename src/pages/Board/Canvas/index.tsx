@@ -22,6 +22,7 @@ import ResultsDrawer from '../../../containers/Board/Canvas/ResultsDrawer';
 import UserOptions from './UserOptions';
 import GenericSidebar from './Sidebars/GenericSidebar';
 import BlockSelection from './Modals/BlockSelection';
+import Sharing from './Modals/Sharing';
 
 // Blocks
 import Block from './blocks/Block';
@@ -122,6 +123,12 @@ const Canvas = () => {
   } = useDisclosure();
 
   const {
+    isOpen: isSharingOpen,
+    onOpen: onSharingOpen,
+    onClose: onSharingClose,
+  } = useDisclosure();
+
+  const {
     isOpen: isBacktestOpen,
     onClose: onBacktestClose,
     onToggle: onBacktestToggle,
@@ -186,6 +193,7 @@ const Canvas = () => {
         isSideDrawerOpen,
         onSideDrawerOpen,
         onSideDrawerToggle,
+        onSharingOpen,
         setSelectedBlock,
       }}
       >          
@@ -270,6 +278,7 @@ const Canvas = () => {
           }
       </ReflexContainer>
       <BlockSelection isOpen={isBlockSelectionOpen} onClose={onBlockSelectionClose} />
+      <Sharing isOpen={isSharingOpen} onClose={onSharingClose} />
     </CanvasContext.Provider>
   </ReactFlowProvider>
   );

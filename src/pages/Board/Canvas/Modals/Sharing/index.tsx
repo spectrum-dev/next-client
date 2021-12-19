@@ -38,7 +38,7 @@ const SharedUsers = ({ email, permission }: { email: string, permission: string 
     <Input value={`${email} (${permission === '2' ? 'Write' : 'Read'})`} disabled marginBottom="1rem" />
 );
 
-const SharingModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
+const Sharing = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
   const [email, setEmail] = useState('');
   const [permissions, setPermissions] = useState('');
   
@@ -83,13 +83,13 @@ const SharingModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => voi
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
-      <ModalContent backgroundColor="#212838" color="white">
+      <ModalContent>
         <ModalHeader>Sharing Preferences</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
             <InputGroup size="sm" marginBottom="1rem">
                 <Input placeholder="Add people" value={email} onChange={(e) => setEmail(e.target.value)}/>
-                <InputRightAddon children={<ReadWrite permissions={permissions} setPermissions={setPermissions}/>} backgroundColor="#212838" border="none" size="xs"/>
+                <InputRightAddon children={<ReadWrite permissions={permissions} setPermissions={setPermissions}/>} border="none" backgroundColor="white" size="xs"/>
             </InputGroup>
             {
                 sharedUserData && sharedUserData.sharedUsers.map((item: SharedUser) => (
@@ -112,4 +112,4 @@ const SharingModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => voi
   );
 };
 
-export default SharingModal;
+export default Sharing;
