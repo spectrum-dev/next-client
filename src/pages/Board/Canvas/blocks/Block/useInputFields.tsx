@@ -1,385 +1,488 @@
-// @ts-nocheck
-/* eslint-disable no-prototype-builtins */
-import { useState, useContext } from 'react';
-import {
-  Box,
-  FormControl,
-  FormLabel,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
-} from '@chakra-ui/react';
+/* eslint-disable */ 
+import { useEffect, useState, ReactNode } from 'react';
+import _ from 'lodash';
+
+import { useQuery } from '@apollo/client';
+import { Box, FormControl, FormLabel, NumberDecrementStepper, NumberIncrementStepper, NumberInput as ChakraNumberInput, NumberInputField, NumberInputStepper, Text } from '@chakra-ui/react';
 
 // Custom Components
-import Select from 'components/Select';
-import DateRangePicker from 'components/DateRangePicker';
-import Dropdown from 'components/Dropdown';
+import CustomDropdown from 'react-dropdown';
+import CustomSelect from 'components/Select';
+import CustomDatePicker from 'components/DateRangePicker';
 
-// Utils
+import { QUERY_GET_BLOCK_METADATA } from '../../Modals/BlockSelection/gql';
+import { BlockType, InputDependencyGraph, Inputs, SetInputs } from '../../index.types';
+
 import fetcher from 'app/fetcher';
 import { formatDate } from 'app/utils';
 
-// Contexts
-import CanvasContext from 'app/contexts/canvas';
 
-export default function useInputFields({ id }: { id: string }) {
-  const [additionalInputs, setAdditionalInputs] = useState([]);
+/**
+ * Free Number Input
+ */
+const NumberInput = ({ id, inputElement, fieldVariableName, setInputs }: { id: string, inputElement: any, fieldVariableName: string, setInputs: SetInputs }) => {
+  const [value, setValue] = useState(inputElement?.value || '')
+  
+  const onChange = (value: string) => {
+    setInputs((inp: any) => ({
+      ...inp,
+      [id]: {
+        ...inp?.[id],
+        [fieldVariableName]: { value },
+      },
+    }));
 
-  const { inputs, setInputs, inputDependencyGraph } = useContext(CanvasContext);
+    setValue(value);      
+  };
 
-  const handleOnSearchEvent = async (
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    id: string,
-    blockType: string,
-    blockId: string,
-    url: string,
-    fieldVariableName: string,
-    parameter: string,
-  ) => {
-    try {
-      const onSearchResponse = await fetcher(`/orchestration/${blockType}/${blockId}${url}${parameter}`, {
+  return (
+    <ChakraNumberInput
+        min={0}
+        value={value}
+        onChange={onChange}
+    >
+        <NumberInputField />
+        <NumberInputStepper>
+            <NumberIncrementStepper />
+            <NumberDecrementStepper />
+        </NumberInputStepper>
+    </ChakraNumberInput>
+  );
+};
+
+/**
+ * Dropdown that handles custom renders
+ */
+const Dropdown = ({ id, inputElement, fieldVariableName, blockType, blockId, fieldData, setInputs, setAdditionalFields }: { id: string, inputElement: any, fieldVariableName: string, blockType: BlockType, blockId: number, fieldData: any, setInputs: SetInputs, setAdditionalFields: any }) => {
+  const handleOnChangeEvent = (inputValue: string) => {
+      const { onChange } = fieldData;
+
+      const onChangeResponse = fetcher(`/orchestration/${blockType}/${blockId}/${onChange}${inputValue}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
         },
       });
 
-      setInputs((inp: any) => ({
+      onChangeResponse.then((res) => {
+        setInputs((inp: any) => {
+          // eslint-disable-next-line @typescript-eslint/no-shadow
+          let additionalInputs = {};
+          
+          if (res.status !== 200) {
+            return;
+          }
+          
+          if (res.data.response) {
+            for (const inputValue of res.data.response) {
+              // eslint-disable-next-line no-prototype-builtins
+              if (inputValue.hasOwnProperty('fieldData') && inputValue?.fieldData.hasOwnProperty('options')) {
+                additionalInputs = {
+                  ...additionalInputs,
+                  [inputValue?.fieldVariableName]: {
+                    options: inputValue?.fieldData?.options,
+                    value: '',
+                  },
+                };
+              } else {
+                additionalInputs = {
+                  ...additionalInputs,
+                  [inputValue?.fieldVariableName]: {
+                    value: '',
+                  },
+                };
+              }
+            }
+  
+            setAdditionalFields(res.data.response);
+  
+            return {
+              ...inp,
+              [id]: {
+                ...inp?.[id],
+                ...additionalInputs,
+              },
+            };
+          }
+        });
+      })
+  }
+  
+  const onChange = (selectedItem: any) => {
+    if (inputElement.hasOwnProperty('onChange')) {
+      handleOnChangeEvent(selectedItem.value)
+    }
+
+    setInputs((inp: Inputs) => ({
+      ...inp,
+      [id]: {
+        ...inp[id],
+        [fieldVariableName]: {
+          ...inp[id][fieldVariableName],
+          value: selectedItem.value,
+        },
+      },
+    }));
+  };
+
+  return (
+    <CustomDropdown
+      options={inputElement?.options}
+      value={inputElement?.value}
+      onChange={onChange}
+    />
+  );
+};
+
+/**
+ * Search field
+ */
+const Search = ({ id, inputElement, fieldVariableName, blockType, blockId, fieldData, setInputs }: { id: string, inputElement: any, fieldVariableName: string, blockType: BlockType, blockId: number, fieldData: any, setInputs: SetInputs }) => {
+  const [value, setValue] = useState(inputElement?.value || '');
+  const [options, setOptions] = useState([]);
+
+  const onInputChange = (query: string) => {
+    if (query === '') {
+      return
+    }
+    
+    const { base } = fieldData;
+
+    const onSearchResponse = fetcher(`/orchestration/${blockType}/${blockId}${base}${query}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+    });
+
+    onSearchResponse.then((resp) => {
+      setInputs((inp: Inputs) => ({
         ...inp,
         [id]: {
           ...inp?.[id],
           [fieldVariableName]: {
             ...inp?.[id]?.[fieldVariableName],
-            options: onSearchResponse.status === 200 ? onSearchResponse.data.response : [],
+            options: resp.status === 200 ? resp.data.response : [],
           },
         },
       }));
-    } catch (e) {
-      console.error(e);
-    }
-  };
+      setOptions(resp.status === 200 ? resp.data.response : []);
+    }).catch((err) => {
+      console.error(err);
+    })
+  }
 
-  const handleOnChangeEvent = async (
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    id: string,
-    blockType: string,
-    blockId: string,
-    url: string,
-    parameter: string,
-  ) => {
-    try {
-      const onChangeResponse = await fetcher(`/orchestration/${blockType}/${blockId}/${url}${parameter}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+  const onChange = (selectedItem: any) => {
+    setInputs((inp: Inputs) => ({
+      ...inp,
+      [id]: {
+        ...inp[id],
+        [fieldVariableName]: {
+          ...inp[id][fieldVariableName],
+          value: selectedItem.value,
         },
-      });
-
-      if (onChangeResponse.status === 200) {
-        setInputs((inp: any) => {
-          // eslint-disable-next-line @typescript-eslint/no-shadow
-          let additionalInputs = {};
-
-          for (const inputValue of onChangeResponse?.data?.response) {
-            // eslint-disable-next-line no-prototype-builtins
-            if (inputValue.hasOwnProperty('fieldData') && inputValue?.fieldData.hasOwnProperty('options')) {
-              additionalInputs = {
-                ...additionalInputs,
-                [inputValue?.fieldVariableName]: {
-                  options: inputValue?.fieldData?.options,
-                  value: '',
-                },
-              };
-            } else {
-              additionalInputs = {
-                ...additionalInputs,
-                [inputValue?.fieldVariableName]: {
-                  value: '',
-                },
-              };
-            }
-          }
-
-          return {
-            ...inp,
-            [id]: {
-              ...inp?.[id],
-              ...additionalInputs,
-            },
-          };
-        });
-        setAdditionalInputs(onChangeResponse?.data?.response);
-      }
-    } catch (e) {
-      console.error(e);
-    }
+      },
+    }));
+    setValue(selectedItem.value);
   };
 
-  const renderInputField = (inputField: any) => {
-    if (
-      (!inputField && !inputField.fieldType)
-      || (inputs && Object.keys(inputs).length === 0)
-    ) {
+  return (
+    <CustomSelect
+      placeholder="Search"
+      options={options}
+      value={value}
+      onInputChange={onInputChange}
+      onChange={onChange}
+    />
+  );
+};
+
+/**
+ * Date Range Pickers
+ */
+const DateRangePicker = ({ id, startDate, endDate, fieldVariableNames, setInputs }: { id: string, startDate: any, endDate: any, fieldVariableNames: Array<string>, setInputs: SetInputs }) => {
+  const [componentStartDate, setComponentStartDate] = useState(startDate || '');
+  const [componentEndDate, setComponentEndDate] = useState(endDate || '');
+
+  const onStartChange = (value: any) => {
+    setInputs((inp: Inputs) => ({
+      ...inp,
+      [id]: {
+        ...inp?.[id],
+        [fieldVariableNames[0]]: {
+          rawValue: value,
+          value: formatDate(value),
+        },
+      },
+    }));
+    setComponentStartDate(value);
+  };
+
+  const onEndChange = (value: any) => {
+    setInputs((inp: Inputs) => ({
+      ...inp,
+      [id]: {
+        ...inp?.[id],
+        [fieldVariableNames[1]]: {
+          rawValue: value,
+          value: formatDate(value),
+        },
+      },
+    }));
+    setComponentEndDate(value);
+  };
+
+  return (
+    <CustomDatePicker
+      startDate={componentStartDate}
+      endDate={componentEndDate}
+      onStartChange={onStartChange}
+      onEndChange={onEndChange}
+    />
+  );
+};
+
+/**
+ * Inputs From Connection
+ */
+const InputsFromConnection = ({ id, inputDependencyGraph, fieldVariableName, inputElement, setInputs }: { id: string, inputDependencyGraph: any, fieldVariableName: string, inputElement: any, setInputs: SetInputs }) => {
+  if (!inputDependencyGraph || !inputDependencyGraph?.[id]) {
+    return (
+      <Text fontSize="md"> Please add a connection to the block </Text>
+    )
+  }
+
+  const inputFromConnectionValue = inputElement?.inputFromConnectionValue;
+  const dataKeyOptions = inputFromConnectionValue ? inputDependencyGraph?.[id]?.[inputFromConnectionValue]?.outputInterface : [];
+
+  const numConnections = Object.keys(inputDependencyGraph?.[id]).length
+
+  if (numConnections === 0) {
+    return (
+      <Box>
+        Please connect the block
+      </Box>
+    )
+  }
+  if (numConnections === 1) {
+    return (
+      <Box>
+        <CustomDropdown
+          options={inputDependencyGraph?.[id]?.[
+            Object.keys(inputDependencyGraph?.[id])[0]
+          ]?.outputInterface}
+          value={inputElement?.value}
+          onChange={(selectedItem: any) => {
+            setInputs((inp: any) => ({
+              ...inp,
+              [id]: {
+                ...inp[id],
+                [fieldVariableName]: {
+                  ...inp[id][fieldVariableName],
+                  value: selectedItem.value,
+                },
+              },
+            }));
+          }}
+        />
+      </Box>
+    )
+  }
+
+  return (
+    <>
+      <FormLabel textColor="white" fontSize={15}>
+        Block ID
+      </FormLabel>
+      <Box>
+        <CustomDropdown
+          options={Object.keys(inputDependencyGraph?.[id])}
+          value={inputFromConnectionValue}
+          onChange={(selectedItem: any) => {
+            setInputs((inp: any) => ({
+              ...inp,
+              [id]: {
+                ...inp[id],
+                [fieldVariableName]: {
+                  ...inp[id][fieldVariableName],
+                  inputFromConnectionValue: selectedItem.value,
+                },
+              },
+            }));
+          }}
+        />
+      </Box>
+      <FormLabel textColor="white" fontSize={15} marginTop={2}>
+        Selected Data
+      </FormLabel>
+      <Box>
+        <CustomDropdown
+          options={dataKeyOptions}
+          value={inputElement?.value}
+          onChange={(selectedItem: any) => {
+            setInputs((inp: any) => ({
+              ...inp,
+              [id]: {
+                ...inp[id],
+                [fieldVariableName]: {
+                  ...inp[id][fieldVariableName],
+                  value: selectedItem.value,
+                },
+              },
+            }));
+          }}
+        />
+      </Box>
+    </>
+  );
+};
+
+/**
+ * Provide the block ID that has been selected to be edited
+ * (maximum one at a time) and 
+ */
+const useInputFields = (
+  { id, blockType, blockId, inputs, setInputs, inputDependencyGraph }:
+  { id: string, blockType: BlockType, blockId: number, inputs: Inputs, setInputs: SetInputs, inputDependencyGraph: InputDependencyGraph },
+) => {
+  const [rawFieldMetadata, setRawFieldMetadata] = useState([]);
+  const [additionalFields, setAdditionalFields] = useState([]);
+  const [fields, setFields] = useState<Array<ReactNode>>([]);
+  const { data, error } = useQuery(QUERY_GET_BLOCK_METADATA, { variables: { blockType, blockId } });
+
+  const renderField = (field: any) => {
+    if (!field && !field?.fieldType) {
       return <></>;
     }
-
-    if (!inputs?.[id]) {
-      return <></>;
-    }
-
-    switch (inputField.fieldType) {
+        
+    const { fieldType, fieldVariableName, fieldVariableNames, fieldData } = field;
+    const value = inputs?.[id]?.[fieldVariableName];
+    
+    switch (fieldType) {
       case 'input':
         return (
           <NumberInput
-            value={inputs?.[id]?.[inputField.fieldVariableName]?.value}
-            onChange={(value: String) => {
-              setInputs((inp: any) => ({
-                ...inp,
-                [id]: {
-                  ...inp?.[id],
-                  [inputField?.fieldVariableName]: { value },
-                },
-              }));
-            }}
-            min={0}
-            backgroundColor="#2D3748"
-            borderColor="#2D3748"
-            textColor="white"
-          >
-            <NumberInputField />
-            <NumberInputStepper>
-              <NumberIncrementStepper />
-              <NumberDecrementStepper />
-            </NumberInputStepper>
-          </NumberInput>
+            id={id}
+            inputElement={value}
+            fieldVariableName={fieldVariableName}
+            setInputs={setInputs}
+          />
         );
       case 'dropdown':
-        // eslint-disable-next-line no-case-declarations
-        const options = [];
-        // Used as in transition, as sometimes the options
-        // won't exist as the metric used doesn't have any options
-        if (inputs?.[id]?.[inputField?.fieldVariableName].options) {
-          for (const elem of inputs?.[id]?.[inputField?.fieldVariableName].options) {
-            options.push(
-              <option value={elem}>
-                { elem }
-              </option>,
-            );
-          }
-        }
-
         return (
           <Dropdown
-            options={inputs?.[id]?.[inputField?.fieldVariableName].options}
-            value={inputs?.[id]?.[inputField?.fieldVariableName].value}
-            onChange={(selectedItem: any) => {
-              // TODO: Retrieve additional metadata fields from orchestrator
-              // TODO: Render those form fields inside as additional form inputs
-              if (inputs?.[id]?.[inputField?.fieldVariableName]?.hasOwnProperty('onChange')) {
-                handleOnChangeEvent(
-                  id,
-                  inputs?.[id].blockType,
-                  inputs?.[id].blockId,
-                  inputs?.[id]?.[inputField?.fieldVariableName]?.onChange,
-                  selectedItem.value,
-                );
-              }
-
-              setInputs((inp: any) => ({
-                ...inp,
-                [id]: {
-                  ...inp[id],
-                  [inputField?.fieldVariableName]: {
-                    ...inp[id][inputField?.fieldVariableName],
-                    value: selectedItem.value,
-                  },
-                },
-              }));
-            }}
+            id={id}
+            inputElement={value}
+            fieldVariableName={fieldVariableName}
+            blockType={blockType}
+            blockId={blockId}
+            fieldData={fieldData}
+            setInputs={setInputs}
+            setAdditionalFields={setAdditionalFields}
           />
         );
       case 'search':
         return (
-          <Select
-            placeholder="Type here to start search"
-            options={inputs?.[id]?.[inputField?.fieldVariableName].options}
-            value={inputs?.[id]?.[inputField?.fieldVariableName].value}
-            onInputChange={(inputtedQuery: any) => {
-              if (inputtedQuery !== '') {
-                handleOnSearchEvent(
-                  id,
-                  inputs?.[id].blockType,
-                  inputs?.[id].blockId,
-                  inputField?.fieldData?.base,
-                  inputField?.fieldVariableName,
-                  inputtedQuery,
-                );
-              }
-            }}
-            onChange={(selectedItem: any) => {
-              setInputs((inp: any) => ({
-                ...inp,
-                [id]: {
-                  ...inp[id],
-                  [inputField?.fieldVariableName]: {
-                    ...inp[id][inputField?.fieldVariableName],
-                    value: selectedItem.value,
-                  },
-                },
-              }));
-            }}
+          <Search
+            id={id}
+            inputElement={value}
+            fieldVariableName={fieldVariableName}
+            blockType={blockType}
+            blockId={blockId}
+            fieldData={fieldData}
+            setInputs={setInputs}
           />
         );
       case 'date_range':
+        const startDate = inputs?.[id]?.[fieldVariableNames[0]]?.rawValue;
+        const endDate = inputs?.[id]?.[fieldVariableNames[1]]?.rawValue;
+
         return (
           <DateRangePicker
-            startDate={inputs?.[id]?.[inputField?.fieldVariableNames[0]]?.rawValue}
-            endDate={inputs?.[id]?.[inputField?.fieldVariableNames[1]]?.rawValue}
-            onStartChange={(value: any) => {
-              setInputs((inp: any) => ({
-                ...inp,
-                [id]: {
-                  ...inp?.[id],
-                  [inputField?.fieldVariableNames[0]]: {
-                    rawValue: value,
-                    value: formatDate(value),
-                  },
-                },
-              }));
-            }}
-            onEndChange={(value: any) => {
-              setInputs((inp: any) => ({
-                ...inp,
-                [id]: {
-                  ...inp?.[id],
-                  [inputField?.fieldVariableNames[1]]: {
-                    rawValue: value,
-                    value: formatDate(value),
-                  },
-                },
-              }));
-            }}
+            id={id}
+            startDate={startDate}
+            endDate={endDate}
+            fieldVariableNames={fieldVariableNames}
+            setInputs={setInputs}
           />
         );
       case 'inputs_from_connection':
-        if (!inputDependencyGraph || !inputDependencyGraph?.[id]) {
-          return (
-            <div>
-              Connect a block to populate this field
-            </div>
-          );
-        }
-
-        // eslint-disable-next-line no-case-declarations
-        const { inputFromConnectionValue } = inputs?.[id]?.[
-          inputField?.fieldVariableName
-        ];
-
-        // eslint-disable-next-line no-case-declarations
-        const dataKeyOptions = inputFromConnectionValue
-          ? inputDependencyGraph?.[id]?.[inputFromConnectionValue]?.outputInterface : [];
-
-        if (Object.keys(inputDependencyGraph?.[id]).length === 1) {
-          return (
-            <Box>
-              <Dropdown
-                options={
-                  inputDependencyGraph?.[id]?.[
-                    Object.keys(inputDependencyGraph?.[id])[0]
-                  ]?.outputInterface
-                }
-                value={inputs?.[id]?.[inputField?.fieldVariableName].value}
-                onChange={(selectedItem: any) => {
-                  setInputs((inp: any) => ({
-                    ...inp,
-                    [id]: {
-                      ...inp[id],
-                      [inputField?.fieldVariableName]: {
-                        ...inp[id][inputField?.fieldVariableName],
-                        value: selectedItem.value,
-                      },
-                    },
-                  }));
-                }}
-              />
-            </Box>
-          );
-        }
-
         return (
-          <>
-            <FormLabel textColor="white" fontSize={15}>
-              Block ID
-            </FormLabel>
-            <Box>
-              <Dropdown
-                options={Object.keys(inputDependencyGraph?.[id])}
-                value={inputs?.[id]?.[inputField?.fieldVariableName].inputFromConnectionValue}
-                onChange={(selectedItem: any) => {
-                  setInputs((inp: any) => ({
-                    ...inp,
-                    [id]: {
-                      ...inp[id],
-                      [inputField?.fieldVariableName]: {
-                        ...inp[id][inputField?.fieldVariableName],
-                        inputFromConnectionValue: selectedItem.value,
-                      },
-                    },
-                  }));
-                }}
-              />
-            </Box>
-            <FormLabel textColor="white" fontSize={15} marginTop={2}>
-              Selected Data
-            </FormLabel>
-            <Box>
-              <Dropdown
-                options={dataKeyOptions}
-                value={inputs?.[id]?.[inputField?.fieldVariableName].value}
-                onChange={(selectedItem: any) => {
-                  setInputs((inp: any) => ({
-                    ...inp,
-                    [id]: {
-                      ...inp[id],
-                      [inputField?.fieldVariableName]: {
-                        ...inp[id][inputField?.fieldVariableName],
-                        value: selectedItem.value,
-                      },
-                    },
-                  }));
-                }}
-              />
-            </Box>
-          </>
+          <InputsFromConnection
+            id={id}
+            inputDependencyGraph={inputDependencyGraph}
+            fieldVariableName={fieldVariableName}
+            inputElement={value}
+            setInputs={setInputs}
+          />
         );
       default:
         return (
-          <div>
-            Field Type Not Supported
-          </div>
+          <div> Not Implemented </div>
         );
     }
   };
 
-  const renderInputFields = (selectedInputFields: any) => {
-    const formList = [];
-    for (const selectedInputField of selectedInputFields) {
-      formList.push(
-        <FormControl key={`${id}_${selectedInputField.fieldName}_${selectedInputField.fieldName}`}>
-          <FormLabel textColor="white">
-            { selectedInputField.fieldName }
-          </FormLabel>
-          <Box>
-            {renderInputField(selectedInputField)}
-          </Box>
-        </FormControl>,
+  // Main Runner - Takes in a list of inputs to populate the block metadata
+  const renderFields = (blockInputs: any) => {
+    const tempFields = [];
+    for (const field of blockInputs) {
+      const { fieldName } = field;
+      tempFields.push(
+                <FormControl key={`${id}_${fieldName}_${fieldName}`}>
+                    <FormLabel>
+                        { fieldName }
+                    </FormLabel>
+                    <Box>
+                        {renderField(field)}
+                    </Box>
+                </FormControl>,
       );
     }
-    return formList;
+
+    setFields(tempFields);
   };
 
-  return {
-    renderInputFields,
-    additionalInputs,
-  };
-}
+  useEffect(() => {
+    setAdditionalFields([]);
+  }, [id, blockType, blockId])
+
+  useEffect(() => {
+    // Error fetching block metadata
+    if (error) {
+      return;
+    }
+
+    if (!data) {
+      return; 
+    }
+
+    const { blockMetadata } = data;
+    if (!blockMetadata) {
+      return;
+    }
+
+    const { inputs: blockInputs } = blockMetadata;
+
+    if (inputs && Object.keys(inputs).length === 0) {
+      return;
+    }
+
+    // The inputs object does not have the specified ID
+    if (!inputs?.[id]) {
+      // TODO: Determine what this return type should be
+      return;
+    }
+    setRawFieldMetadata(blockInputs);
+  }, [id, blockType, blockId, data, error, inputs, inputDependencyGraph, renderField])
+
+  useEffect(() => {
+    const merged = _.merge(_.keyBy(rawFieldMetadata, 'fieldName'), _.keyBy(additionalFields, 'fieldName'));
+    const values = _.values(merged);
+    
+    renderFields(values);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rawFieldMetadata, additionalFields, setRawFieldMetadata, setAdditionalFields]);  
+
+  return { fields };
+};
+
+export default useInputFields;

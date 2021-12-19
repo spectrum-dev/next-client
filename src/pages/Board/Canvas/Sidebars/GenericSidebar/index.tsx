@@ -28,9 +28,9 @@ const GenericSidebar = ({ title, onClose, children }: { title: string, onClose: 
             </Flex>
         </Flex>
 
-        <Box margin="1rem 2rem">
+        <Flex margin="1rem 2rem" flexDirection="column" rowGap="1.5rem">
             {children}
-        </Box>
+        </Flex>
     </Box>
   );
 };

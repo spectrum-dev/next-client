@@ -5,7 +5,6 @@ import {
 import {
   Box,
   Text,
-  useDisclosure,
 } from '@chakra-ui/react';
 
 import {
@@ -19,12 +18,10 @@ import CanvasContext from 'app/contexts/canvas';
 
 // Hooks
 import useHandles from './useHandles';
-import useInputField from './useInputFields';
 import useOnDeleteBlock from './useOnDeleteBlock';
 
 // UI Component
 import ContextMenu from './ContextMenu';
-import SettingsDrawer from './SettingsDrawer';
 
 const Handle = styled(RawHandle)`
   /* Overrides for .react-flow__handle */
@@ -37,20 +34,22 @@ const Block = memo((
   { id, data }: NodeProps,
 ) => {
   const {
-    blockName, blockType, inputs, validation, isMenuVisible,
+    blockName, blockId, blockType, validation, isMenuVisible,
   } = data.metadata;
 
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
-
   const updateNodeInternals = useUpdateNodeInternals();
-  const { onOpen, onClose, isOpen } = useDisclosure();
-
-  const { inputs: managedInputs, inputDependencyGraph } = useContext(CanvasContext);
-
-  const [renderedInputFields, setRenderedInputFields] = useState<Array<React.ReactNode>>([]);
+  const {
+    onSideDrawerOpen,
+    setSelectedBlock,
+  } = useContext(CanvasContext);
+  
+  const onOpen = () => {
+    setSelectedBlock({ id, blockId, blockType });
+    onSideDrawerOpen();
+  };
 
   const { inputHandle, outputHandle } = useHandles({ validationData: validation });
-  const { renderInputFields, additionalInputs } = useInputField({ id });
   const { onDeleteBlock } = useOnDeleteBlock({ id });
 
   useEffect(() => {
@@ -61,13 +60,6 @@ const Block = memo((
   useEffect(() => {
     setIsContextMenuOpen(isMenuVisible);
   }, [isMenuVisible]);
-
-  useEffect(() => {
-    const normalFields = renderInputFields(inputs);
-    const additionalFields = renderInputFields(additionalInputs);
-    setRenderedInputFields(normalFields.concat(additionalFields));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, managedInputs?.[id], additionalInputs, inputDependencyGraph]);
 
   return (
     <>
@@ -81,8 +73,8 @@ const Block = memo((
           width="350px"
           height="160px"
           borderRadius="25px"
-          border={isOpen ? '3px solid #ed8936;' : '1px solid #1a202c;'}
-          background="linear-gradient(0deg, #151a23 0% 40%, #1a202c 40% 100%)"
+          border='1px solid #1a202c;'
+          background="linear-gradient(0deg, #808080 0% 40%, #E6E6E6 40% 100%)"
           textAlign="center"
         >
           {
@@ -97,11 +89,11 @@ const Block = memo((
               />
             ) : <></>
           }
-          <Text color="white" marginTop="20px" fontSize="32px">
+          <Text marginTop="20px" fontSize="32px">
             { blockName }
           </Text>
 
-          <Text color="white" marginTop="35px" fontWeight="bold" fontSize="27px">
+          <Text marginTop="35px" fontWeight="bold" fontSize="27px">
             { blockType.replace('_', ' ') }
           </Text>
           {
@@ -118,11 +110,6 @@ const Block = memo((
           }
         </Box>
       </ContextMenu>
-      <SettingsDrawer
-        isOpen={isOpen}
-        onClose={onClose}
-        renderedInputFields={renderedInputFields}
-      />
     </>
   );
 });

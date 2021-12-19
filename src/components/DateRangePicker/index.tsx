@@ -1,7 +1,7 @@
 // @ts-nocheck
-import { forwardRef } from 'react';
+import { useState, useEffect, forwardRef } from 'react';
 
-import { Box, FormLabel } from '@chakra-ui/react';
+import { Button, Box, FormLabel } from '@chakra-ui/react';
 import DatePicker from 'react-datepicker';
 
 import 'react-datepicker/dist/react-datepicker.css';
@@ -9,12 +9,20 @@ import 'react-datepicker/dist/react-datepicker.css';
 import styles from './index.module.css';
 
 // eslint-disable-next-line react/prop-types
-const CustomInput = forwardRef(({ value, onClick }, ref) => (
-  // eslint-disable-next-line react/button-has-type
-  <button className={styles.dateInputButton} onClick={onClick} ref={ref}>
-    {value}
-  </button>
-));
+const CustomInput = forwardRef(({ value, onClick }, ref) => {
+  const [dateValue, setDateValue] = useState(value ? new Date(value) : new Date());
+
+  useEffect(() => {
+    setDateValue(value ? new Date(value) : '');
+  }, [value]);
+  
+  return (
+    // eslint-disable-next-line react/button-has-type
+    <Button onClick={onClick} ref={ref} width="100%">
+      {dateValue.toDateString()}
+    </Button>
+  );
+});
 
 const DateRangePicker = (
   {
@@ -29,40 +37,45 @@ const DateRangePicker = (
     onStartChange: any;
     onEndChange: any;
   },
-) => (
-  <>
-    <Box>
-      <FormLabel textColor="white">
-        Start Date
-      </FormLabel>
-      <DatePicker
-        selected={new Date(startDate)}
-        onChange={onStartChange}
-        selectsStart
-        startDate={new Date(startDate)}
-        endDate={new Date(endDate)}
-        customInput={<CustomInput />}
-        popperPlacement="bottom"
-        popperClassName={styles.popperCustomerClass}
-      />
-    </Box>
-    <Box>
-      <FormLabel textColor="white">
-        End Date
-      </FormLabel>
-      <DatePicker
-        selected={new Date(endDate)}
-        onChange={onEndChange}
-        selectsEnd
-        startDate={new Date(startDate)}
-        endDate={new Date(endDate)}
-        minDate={new Date(startDate)}
-        customInput={<CustomInput />}
-        popperPlacement="bottom"
-        popperClassName={styles.popperCustomerClass}
-      />
-    </Box>
-  </>
-);
+) => {
+  const componentStartDate = startDate ? new Date(startDate) : new Date();
+  const componentEndDate = endDate ? new Date(endDate) : new Date();
+
+  return (
+    <>
+      <Box>
+        <FormLabel fontSize="sm">
+          Start Date
+        </FormLabel>
+        <DatePicker
+          selected={componentStartDate}
+          onChange={onStartChange}
+          selectsStart
+          startDate={componentStartDate}
+          endDate={componentEndDate}
+          customInput={<CustomInput />}
+          popperPlacement="bottom"
+          popperClassName={styles.popperCustomerClass}
+        />
+      </Box>
+      <Box marginTop="1rem">
+        <FormLabel fontSize="sm">
+          End Date
+        </FormLabel>
+        <DatePicker
+          selected={componentEndDate}
+          onChange={onEndChange}
+          selectsEnd
+          startDate={componentStartDate}
+          endDate={componentEndDate}
+          minDate={componentStartDate}
+          customInput={<CustomInput />}
+          popperPlacement="bottom"
+          popperClassName={styles.popperCustomerClass}
+        />
+      </Box>
+    </>
+  );
+};
 
 export default DateRangePicker;
