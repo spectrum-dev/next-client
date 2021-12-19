@@ -100,8 +100,8 @@ const CandlestickGraph = (
       </Chart>
       <Chart id={1} yExtents={yExtents}>
         <CandlestickSeries />
-        <XAxis strokeStyle="white" tickLabelFill="white" tickStrokeStyle="white" tickStrokeWidth={2} zoomEnabled={false} fontSize={fontSize || 10} />
-        <YAxis strokeStyle="white" tickLabelFill="white" tickStrokeStyle="white" tickStrokeWidth={2} zoomEnabled={false} fontSize={fontSize || 10} tickFormat={pricesDisplayFormat} />
+        <XAxis tickStrokeWidth={2} zoomEnabled={false} fontSize={fontSize || 10} />
+        <YAxis tickStrokeWidth={2} zoomEnabled={false} fontSize={fontSize || 10} tickFormat={pricesDisplayFormat} />
         {!disableInteraction && (
           <>
             <MouseCoordinateX displayFormat={timeDisplayFormat} />
@@ -110,7 +110,7 @@ const CandlestickGraph = (
               fontSize={fontSize || 10}
             />
             <ZoomButtons />
-            <OHLCTooltip origin={[8, 16]} textFill="white" labelFill="gray" fontSize={18} />
+            <OHLCTooltip origin={[8, 16]} labelFill="gray" fontSize={18} />
           </>
         )}
       </Chart>

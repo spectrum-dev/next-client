@@ -86,8 +86,8 @@ const LineGraph = (
     >
       <Chart id={1} yExtents={yExtents}>
         <LineSeries yAccessor={yAccessor} />
-        <XAxis strokeStyle="white" tickLabelFill="white" tickStrokeStyle="white" tickStrokeWidth={2} zoomEnabled={false} fontSize={fontSize || 10} />
-        <YAxis strokeStyle="white" tickLabelFill="white" tickStrokeStyle="white" tickStrokeWidth={2} zoomEnabled={false} fontSize={fontSize || 10} tickFormat={pricesDisplayFormat} />
+        <XAxis tickStrokeWidth={2} zoomEnabled={false} fontSize={fontSize || 10} />
+        <YAxis tickStrokeWidth={2} zoomEnabled={false} fontSize={fontSize || 10} tickFormat={pricesDisplayFormat} />
         {!disableInteraction && (
           <>
             <MouseCoordinateX displayFormat={timeDisplayFormat} />
