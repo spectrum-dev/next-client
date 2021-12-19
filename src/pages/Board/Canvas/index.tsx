@@ -107,10 +107,6 @@ const Canvas = () => {
   const { saveStrategy } = useSaveStrategy({ elements, inputs, outputs });
 
   const { onNodeContextMenu } = useOnNodeContextMenu({ setElements });
-
-  const [selectedBlock, setSelectedBlock] = useState<SelectedBlock>({ id: '1', blockType: 'DATA_BLOCK', blockId: 0 })
-
-  const { fields } = useInputFields({ ...selectedBlock, inputs, setInputs });
     
   const {
     isOpen: isBlockSelectionOpen,
@@ -159,6 +155,9 @@ const Canvas = () => {
       return el;
     }));
   };
+
+  const [selectedBlock, setSelectedBlock] = useState<SelectedBlock>({ id: '1', blockType: 'DATA_BLOCK', blockId: 0 })
+  const { fields } = useInputFields({ ...selectedBlock, inputs, setInputs, inputDependencyGraph });
 
   // if (isStrategyLoaded && !hasAccess) {
   //   return (

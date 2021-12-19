@@ -3,7 +3,7 @@ import { useEffect, useState, ReactNode } from 'react';
 import _ from 'lodash';
 
 import { useQuery } from '@apollo/client';
-import { Box, FormControl, FormLabel, NumberDecrementStepper, NumberIncrementStepper, NumberInput as ChakraNumberInput, NumberInputField, NumberInputStepper } from '@chakra-ui/react';
+import { Box, FormControl, FormLabel, NumberDecrementStepper, NumberIncrementStepper, NumberInput as ChakraNumberInput, NumberInputField, NumberInputStepper, Text } from '@chakra-ui/react';
 
 // Custom Components
 import CustomDropdown from 'react-dropdown';
@@ -11,7 +11,7 @@ import CustomSelect from 'components/Select';
 import CustomDatePicker from 'components/DateRangePicker';
 
 import { QUERY_GET_BLOCK_METADATA } from '../../Modals/BlockSelection/gql';
-import { BlockType, Inputs, SetInputs } from '../../index.types';
+import { BlockType, InputDependencyGraph, Inputs, SetInputs } from '../../index.types';
 
 import fetcher from 'app/fetcher';
 import { formatDate } from 'app/utils';
@@ -228,14 +228,102 @@ const DateRangePicker = ({ startDate, endDate, fieldVariableNames, setInputs }: 
     />
   );
 };
-  
+
+/**
+ * Inputs From Connection
+ */
+const InputsFromConnection = ({ id, inputDependencyGraph, fieldVariableName, inputElement, setInputs }: { id: string, inputDependencyGraph: any, fieldVariableName: string, inputElement: any, setInputs: SetInputs }) => {
+  if (!inputDependencyGraph || !inputDependencyGraph?.[id]) {
+    return (
+      <Text fontSize="md"> Please add a connection to the block </Text>
+    )
+  }
+
+  const inputFromConnectionValue = inputElement?.inputFromConnectionValue;
+  const dataKeyOptions = inputFromConnectionValue ? inputDependencyGraph?.[id]?.[inputFromConnectionValue]?.outputInterface : [];
+
+  const numConnections = Object.keys(inputDependencyGraph?.[id]).length
+
+  if (numConnections === 1) {
+    return (
+      <Box>
+        <CustomDropdown
+          options={inputDependencyGraph?.[id]?.[
+            Object.keys(inputDependencyGraph?.[id])[0]
+          ]?.outputInterface}
+          value={inputElement?.value}
+          onChange={(selectedItem: any) => {
+            setInputs((inp: any) => ({
+              ...inp,
+              [id]: {
+                ...inp[id],
+                [fieldVariableName]: {
+                  ...inp[id][fieldVariableName],
+                  value: selectedItem.value,
+                },
+              },
+            }));
+          }}
+        />
+      </Box>
+    )
+  }
+
+  return (
+    <>
+      <FormLabel textColor="white" fontSize={15}>
+        Block ID
+      </FormLabel>
+      <Box>
+        <CustomDropdown
+          options={Object.keys(inputDependencyGraph?.[id])}
+          value={inputFromConnectionValue}
+          onChange={(selectedItem: any) => {
+            setInputs((inp: any) => ({
+              ...inp,
+              [id]: {
+                ...inp[id],
+                [fieldVariableName]: {
+                  ...inp[id][fieldVariableName],
+                  inputFromConnectionValue: selectedItem.value,
+                },
+              },
+            }));
+          }}
+        />
+      </Box>
+      <FormLabel textColor="white" fontSize={15} marginTop={2}>
+        Selected Data
+      </FormLabel>
+      <Box>
+        <CustomDropdown
+          options={dataKeyOptions}
+          value={inputElement?.value}
+          onChange={(selectedItem: any) => {
+            setInputs((inp: any) => ({
+              ...inp,
+              [id]: {
+                ...inp[id],
+                [fieldVariableName]: {
+                  ...inp[id][fieldVariableName],
+                  value: selectedItem.value,
+                },
+              },
+            }));
+          }}
+        />
+      </Box>
+    </>
+  );
+};
+
 /**
  * Provide the block ID that has been selected to be edited
  * (maximum one at a time) and 
  */
 const useInputFields = (
-  { id, blockType, blockId, inputs, setInputs }:
-  { id: string, blockType: BlockType, blockId: number, inputs: Inputs, setInputs: SetInputs },
+  { id, blockType, blockId, inputs, setInputs, inputDependencyGraph }:
+  { id: string, blockType: BlockType, blockId: number, inputs: Inputs, setInputs: SetInputs, inputDependencyGraph: InputDependencyGraph },
 ) => {
   const [rawFieldMetadata, setRawFieldMetadata] = useState([]);
   const [additionalFields, setAdditionalFields] = useState([]);
@@ -296,6 +384,16 @@ const useInputFields = (
             setInputs={setInputs}
           />
         );
+      case 'inputs_from_connection':
+        return (
+          <InputsFromConnection
+            id={id}
+            inputDependencyGraph={inputDependencyGraph}
+            fieldVariableName={fieldVariableName}
+            inputElement={value}
+            setInputs={setInputs}
+          />
+        );
       default:
         return (
           <div> Not Implemented </div>
@@ -351,7 +449,7 @@ const useInputFields = (
     }
 
     setRawFieldMetadata(blockInputs);
-  }, [id, blockType, blockId, data, error, inputs])
+  }, [id, blockType, blockId, data, error, inputs, inputDependencyGraph])
 
   useEffect(() => {
     const merged = _.merge(_.keyBy(rawFieldMetadata, 'fieldName'), _.keyBy(additionalFields, 'fieldName'));
