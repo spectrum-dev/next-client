@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { useToast } from '@chakra-ui/react';
+import { Box, useToast } from '@chakra-ui/react';
 import { useQuery, useMutation } from '@apollo/client';
 import { useParams } from 'react-router-dom';
 import {
@@ -93,7 +93,9 @@ const Sharing = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) 
             </InputGroup>
             {
                 sharedUserData && sharedUserData.sharedUsers.map((item: SharedUser) => (
-                    <SharedUsers email={item.email} permission={item.permissions} />
+                    <Box key={item.email}>
+                      <SharedUsers email={item.email} permission={item.permissions} />
+                    </Box>
                 ))
             }
         </ModalBody>
