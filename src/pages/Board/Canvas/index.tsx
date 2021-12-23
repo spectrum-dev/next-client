@@ -63,6 +63,8 @@ const Canvas = () => {
     outputs: loadedOutputs,
     isLoaded: isStrategyLoaded,
     strategyName,
+    strategyId,
+    commitId,
   } = useLoadStrategy();
 
   const [reactFlowInstance, setReactFlowInstance] = useState<OnLoadParams>();
@@ -105,7 +107,7 @@ const Canvas = () => {
     outputs, setElements, reactFlowInstance,
   });
 
-  const { saveStrategy } = useSaveStrategy({ elements, inputs, outputs });
+  useSaveStrategy({ elements, inputs, outputs, strategyId, commitId });
 
   const { onNodeContextMenu } = useOnNodeContextMenu({ setElements });
     

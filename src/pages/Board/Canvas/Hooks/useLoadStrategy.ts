@@ -20,6 +20,8 @@ interface State {
   inputs: Inputs;
   outputs: Outputs;
   strategyName: string;
+  strategyId: string;
+  commitId: string;
 }
 
 interface GetStrategyResponse {
@@ -29,7 +31,9 @@ interface GetStrategyResponse {
     output: Outputs;
     strategy: {
       strategyName: string;
+      strategyId: string;
     }
+    commitId: string;
   }
 }
 
@@ -41,6 +45,8 @@ export default function useLoadStrategy() {
     inputs: {},
     outputs: {},
     strategyName: '',
+    strategyId: '',
+    commitId: '',
   });
   const toast = useToast();
   const { strategyId } = useParams<URLParams>();
@@ -55,6 +61,8 @@ export default function useLoadStrategy() {
       inputs: writeableData.strategy.input,
       outputs: writeableData.strategy.output,
       strategyName: writeableData.strategy.strategy.strategyName,
+      strategyId: writeableData.strategy.strategy.strategyId,
+      commitId: writeableData.strategy.commitId,
     });
   };
 
@@ -66,6 +74,8 @@ export default function useLoadStrategy() {
       inputs: {},
       outputs: {},
       strategyName: '',
+      strategyId,
+      commitId: '',
     });
 
     toast({
