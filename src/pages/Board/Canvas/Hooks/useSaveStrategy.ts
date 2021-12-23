@@ -1,33 +1,19 @@
+import { useEffect } from 'react';
 import { useMutation, ApolloError } from '@apollo/client';
 import { useToast } from '@chakra-ui/react';
-import { useParams } from 'react-router-dom';
 
 
 import {
-  URLParams, Inputs, Outputs, Elements,
+  Inputs, Outputs, Elements,
 } from '../index.types';
 
 import { MUTATION_SAVE_STRATEGY } from '../gql';
 
-const STRATEGY_SAVE_SUCCESS = 'Your strategy has been saved successfully';
-
 export default function useSaveStrategy(
-  { inputs, outputs, elements }:
-  { inputs: Inputs, outputs: Outputs, elements: Elements },
+  { inputs, outputs, elements, strategyId, commitId }:
+  { inputs: Inputs, outputs: Outputs, elements: Elements, strategyId: string, commitId: string },
 ) {
   const toast = useToast();
-
-  const { strategyId } = useParams<URLParams>();
-
-  const onCompleted = () => {
-    toast({
-      title: STRATEGY_SAVE_SUCCESS,
-      status: 'success',
-      duration: 3000,
-      isClosable: true,
-      position: 'top',
-    });
-  };
 
   const onError = ({ graphQLErrors }: ApolloError) => {
     toast({
@@ -42,14 +28,18 @@ export default function useSaveStrategy(
   const [saveStrategy] = useMutation(MUTATION_SAVE_STRATEGY, {
     variables: {
       strategyId,
-      commitId: null,
+      commitId,
       metadata: elements,
       inputs,
       outputs,
     },
-    onCompleted,
     onError,
   });
 
-  return { saveStrategy };
+  useEffect(() => {
+    if (strategyId) {
+      saveStrategy();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inputs, outputs, elements]);
 }
